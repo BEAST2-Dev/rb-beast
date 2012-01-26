@@ -1,0 +1,42 @@
+<beast version='2.0'      namespace='beast.app.beauti:beast.core:beast.evolution.branchratemodel:beast.evolution.speciation:beast.evolution.tree.coalescent:beast.core.util:beast.evolution.nuc:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.likelihood:beast.evolution:beast.math.distributions'>
+
+<mergewith point='substModelTemplates'>
+<!-- RB substitution model -->
+        <subtemplate id='RB' class='beast.evolution.substitutionmodel.RB' mainid='RB.$(n)'
+		suppressInputs='beast.evolution.substitutionmodel.RB.eigenSystem,
+						beast.evolution.substitutionmodel.RB.count,
+						beast.evolution.substitutionmodel.RB.rates,
+						beast.evolution.substitutionmodel.RB.frequencies'>
+<![CDATA[
+    <substModel spec='RB' id='RB.$(n)'> 
+        <count spec='parameter.IntegerParameter' id='RBcount.$(n)' value='5' lower='0' upper='5'/>
+        <rates spec='parameter.RealParameter' id='RBrates.$(n)' value='1' dimension='5' lower='0.01' upper='100.0'/>
+        <frequencies id='freqs.$(n)' spec='Frequencies'>
+            <data idref='$(n)'/>
+        </frequencies>
+    </substModel>
+
+    <distribution id='RBprior.$(n)' spec='beast.math.distributions.RBPrior' count='@RBcount.$(n)' x='@RBrates.$(n)'>
+        <distr spec="beast.math.distributions.Gamma" alpha='0.2' beta='5.0'/>
+    </distribution>
+
+    <operator id='RBOperator.$(n)' spec='RBOperator' scaleFactor="0.5" weight="1" rates="@RBrates.$(n)" count='@RBcount.$(n)'/>
+    <operator id='RBratescaler.$(n)' spec='RBScaleOperator' scaleFactor="0.5" weight="1" parameter="@RBrates.$(n)" count='@RBcount.$(n)'/>
+
+]]>
+
+            <connect srcID='RBcount.$(n)'             targetID='state' inputName='stateNode' if='inposterior(RB.$(n))'/>
+            <connect srcID='RBrates.$(n)'             targetID='state' inputName='stateNode' if='inposterior(RB.$(n))'/>
+
+            <connect srcID='RBOperator.$(n)'          targetID='mcmc' inputName='operator' if='inposterior(RB.$(n))'>Reversible jump operator for dimension of RB of partition $(n)</connect>
+            <connect srcID='RBratescaler.$(n)'        targetID='mcmc' inputName='operator' if='inposterior(RB.$(n))'>Scale RB rate parameter of partition $(n)</connect>
+
+            <connect srcID='RBcount.$(n)'             targetID='tracelog' inputName='log'  if='inposterior(RB.$(n))'/>
+            <connect srcID='RBrates.$(n)'             targetID='tracelog' inputName='log'  if='inposterior(RB.$(n))'/>
+
+            <connect srcID='RBprior.$(n)'             targetID='prior' inputName='distribution' if='inposterior(RB.$(n))'>RB rate parameter of partition $(n)</connect>
+        </subtemplate>
+</mergewith>
+
+</beast>
+
