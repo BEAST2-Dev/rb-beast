@@ -26,13 +26,11 @@
 
 package beast.evolution.likelihood;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
 
 import beast.app.BeastMCMC;
@@ -53,16 +51,20 @@ import beast.evolution.tree.Tree;
 @Description("Calculates the likelihood of sequence data on a beast.tree given a site and substitution model using " +
         "a variant of the 'peeling algorithm'. For details, see" +
         "Felsenstein, Joseph (1981). Evolutionary trees from DNA sequences: a maximum likelihood approach. J Mol Evol 17 (6): 368-376.")
-public class PartitionedTreeLikelihood extends Distribution {
+//public class PartitionedTreeLikelihood extends Distribution {
+public class PartitionedTreeLikelihood extends TreeLikelihood {
 
-    public Input<Alignment> m_data = new Input<Alignment>("data", "sequence data for the beast.tree", Validate.REQUIRED);
-    public Input<Tree> m_tree = new Input<Tree>("tree", "phylogenetic beast.tree with sequence data in the leafs", Validate.REQUIRED);
-    public Input<BranchRateModel.Base> m_pBranchRateModel = new Input<BranchRateModel.Base>("branchRateModel",
-            "A model describing the rates on the branches of the beast.tree.");
-    public Input<Boolean> m_useAmbiguities = new Input<Boolean>("useAmbiguities", "flag to indicate leafs that sites containing ambigue states should be handled instead of ignored (the default)", false);
+//    public Input<Alignment> m_data = new Input<Alignment>("data", "sequence data for the beast.tree", Validate.REQUIRED);
+//    public Input<Tree> m_tree = new Input<Tree>("tree", "phylogenetic beast.tree with sequence data in the leafs", Validate.REQUIRED);
+//    public Input<BranchRateModel.Base> m_pBranchRateModel = new Input<BranchRateModel.Base>("branchRateModel",
+//            "A model describing the rates on the branches of the beast.tree.");
+//    public Input<Boolean> m_useAmbiguities = new Input<Boolean>("useAmbiguities", "flag to indicate leafs that sites containing ambigue states should be handled instead of ignored (the default)", false);
 
     public Input<PartitionProvider> partitionProviderInput = new Input<PartitionProvider>("partitionProvider", "provides information on how to split the alignment into partitions", Validate.REQUIRED);
     
+    public PartitionedTreeLikelihood() {
+    	m_pSiteModel.setRule(Validate.OPTIONAL);
+    }
     
     /**
      * calculation engine *
@@ -95,8 +97,8 @@ public class PartitionedTreeLikelihood extends Distribution {
      * reasons as well...).
      * These lengths take branch rate models in account.
      */
-    double[] m_branchLengths;
-    double[] m_StoredBranchLengths;
+//    double[] m_branchLengths;
+//    double[] m_StoredBranchLengths;
 
     /**
      * memory allocation for likelihoods for each of the patterns *
@@ -140,7 +142,22 @@ public class PartitionedTreeLikelihood extends Distribution {
         // No Beagle instance was found, so we use the good old java likelihood core
         m_beagle = null;
 
+        if (m_pBranchRateModel.get() != null) {
+            m_branchRateModel = m_pBranchRateModel.get();
+        } else {
+            m_branchRateModel = new StrictClockModel();
+        }
+
+        if (m_pSiteModel.get() != null) {
+        	m_pSiteModel.get().setDataType(m_data.get().getDataType());
+        }
+        
         partitionProvider = partitionProviderInput.get();
+        if (partitionProvider.delayInitialisation()) {
+            m_siteModel = new SiteModel[0];
+            m_substitutionModel = new SubstitutionModel.Base[0];
+        	return;
+        }
         
         int nodeCount = m_tree.get().getNodeCount();
         partitionCount = partitionProvider.getPartitionCount();
@@ -152,11 +169,6 @@ public class PartitionedTreeLikelihood extends Distribution {
             m_substitutionModel[i] = m_siteModel[i].m_pSubstModel.get();
         }
 
-        if (m_pBranchRateModel.get() != null) {
-            m_branchRateModel = m_pBranchRateModel.get();
-        } else {
-            m_branchRateModel = new StrictClockModel();
-        }
         m_branchLengths = new double[nodeCount];
         m_StoredBranchLengths = new double[nodeCount];
 
@@ -281,7 +293,7 @@ public class PartitionedTreeLikelihood extends Distribution {
             return logP;
         }
         Tree tree = m_tree.get();
-
+        
 //        for (int i = 0; i < partitionCount; i++) {
 //        	List<Integer> partitionIndicator = partitionProvider.getPatternIndicators(i);
 //        	if (partitionIndicator.size() > 0) {
@@ -516,7 +528,7 @@ public class PartitionedTreeLikelihood extends Distribution {
         	}
         }
         super.store();
-        System.arraycopy(m_branchLengths, 0, m_StoredBranchLengths, 0, m_branchLengths.length);
+ //       System.arraycopy(m_branchLengths, 0, m_StoredBranchLengths, 0, m_branchLengths.length);
     }
 
     @Override
@@ -532,9 +544,9 @@ public class PartitionedTreeLikelihood extends Distribution {
         	}
         }
         super.restore();
-        double[] tmp = m_branchLengths;
-        m_branchLengths = m_StoredBranchLengths;
-        m_StoredBranchLengths = tmp;
+//        double[] tmp = m_branchLengths;
+//        m_branchLengths = m_StoredBranchLengths;
+//        m_StoredBranchLengths = tmp;
     }
 
     /**
