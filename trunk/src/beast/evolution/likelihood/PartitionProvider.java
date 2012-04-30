@@ -228,11 +228,8 @@ public class PartitionProvider extends CalculationNode implements StateNodeIniti
 		}
 		m_pSiteModel.get().add(siteModel);
 		for (int i = 1; i < numPartitions.get(); i++) {
-			partition.clockModel = sPartition + i;
-			partition.siteModel = sPartition + i;
-			partition.tree = sPartition + i;
-			partition.partition = sPartition + i;
-			Plugin plugin = BeautiDoc.deepCopyPlugin(siteModel, this, mcmc, partition, null);
+			String partitionContext = sPartition + i + ":" + sPartition + i + ":" + sPartition + i + ":" + sPartition + i;
+			Plugin plugin = BeautiDoc.deepCopyPlugin(siteModel, this, mcmc, partitionContext, null);
 			m_pSiteModel.get().add((SiteModel.Base) plugin);
 		}
 		if (siteModel instanceof SiteModel) {
