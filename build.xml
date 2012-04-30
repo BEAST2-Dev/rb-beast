@@ -183,6 +183,7 @@
 		</copy>
 		<copy todir="${Add_on_dir}/templates">
 			<fileset file="templates/RBS.xml" />
+			<fileset file="templates/AutoPartition.xml" />
 		</copy>
 
 		<jar jarfile="${dist}/RBS.addon.zip">
