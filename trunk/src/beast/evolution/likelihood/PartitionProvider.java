@@ -215,7 +215,6 @@ public class PartitionProvider extends CalculationNode implements StateNodeIniti
 			}
 		}
 		
-		PartitionContext partition = new PartitionContext();
 		String sPartition = BeautiDoc.parsePartition(getID());
 		Set<Plugin> ancestors = new HashSet<Plugin>();
 		BeautiDoc.collectAncestors(this, ancestors, new HashSet<Plugin>());
@@ -228,8 +227,8 @@ public class PartitionProvider extends CalculationNode implements StateNodeIniti
 		}
 		m_pSiteModel.get().add(siteModel);
 		for (int i = 1; i < numPartitions.get(); i++) {
-			String partitionContext = sPartition + i + ":" + sPartition + i + ":" + sPartition + i + ":" + sPartition + i;
-			Plugin plugin = BeautiDoc.deepCopyPlugin(siteModel, this, mcmc, partitionContext, null);
+			PartitionContext context = new PartitionContext(sPartition);
+			Plugin plugin = BeautiDoc.deepCopyPlugin(siteModel, this, mcmc, context, null);
 			m_pSiteModel.get().add((SiteModel.Base) plugin);
 		}
 		if (siteModel instanceof SiteModel) {
