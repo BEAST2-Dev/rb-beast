@@ -241,8 +241,9 @@ public class PartitionedTreeLikelihood extends TreeLikelihood {
         if (node.isLeaf()) {
             int i;
             int[] states = new int[patternCount];
+            int iTaxon = m_data.get().getTaxonIndex(node.getID());
             for (i = 0; i < patternCount; i++) {
-                states[i] = m_data.get().getPattern(node.getNr(), i);
+                states[i] = m_data.get().getPattern(iTaxon, i);
             }
             m_likelihoodCore[partition].setNodeStates(node.getNr(), states);
 
@@ -262,8 +263,9 @@ public class PartitionedTreeLikelihood extends TreeLikelihood {
             double[] partials = new double[patternCount * nStates];
 
             int k = 0;
+            int iTaxon = m_data.get().getTaxonIndex(node.getID());
             for (int iPattern = 0; iPattern < patternCount; iPattern++) {
-                int nState = data.getPattern(node.getNr(), iPattern);
+                int nState = data.getPattern(iTaxon, iPattern);
                 boolean[] stateSet = data.getStateSet(nState);
                 for (int iState = 0; iState < nStates; iState++) {
                     partials[k++] = (stateSet[iState] ? 1.0 : 0.0);
