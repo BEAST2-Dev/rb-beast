@@ -35,7 +35,6 @@ import java.util.concurrent.RejectedExecutionException;
 
 import beast.app.BeastMCMC;
 import beast.core.Description;
-import beast.core.Distribution;
 import beast.core.Input;
 import beast.core.Input.Validate;
 import beast.core.State;
