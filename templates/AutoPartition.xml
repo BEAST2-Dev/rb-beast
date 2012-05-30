@@ -222,6 +222,8 @@
 			<operator id='StrictClockRateScaler.c:$(n)' spec='ScaleOperator' scaleFactor="0.75" weight="3" parameter='@clockRate.c:$(n)'/>
 			<!-- need updown operator for clockRate?!? Also in SubstModel.xml -->
 
+			<log id='PartitionPositionLogger.$(n)' spec='beast.evolution.likelihood.PartitionPositionLogger' partitionLengths='@partitionLengths.$(n)'/>
+
 ]]>
             <connect srcID='treeLikelihood.$(n)'              targetID='likelihood' inputName='distribution' if="isInitializing"/>
             <connect srcID='YuleModel.t:$(n)'                 targetID='prior' inputName='distribution' if="isInitializing"/>
@@ -267,7 +269,9 @@
             <connect srcID='clockRate.c:$(n)'                 targetID='tracelog' inputName='log' if='inposterior(clockRate.c:$(n)) and clockRate.c:$(n)/estimate=true'/>
             <connect srcID='YuleModel.t:$(n)'                 targetID='tracelog' inputName='log' if='inposterior(YuleModel.t:$(n)) and Tree.t:$(n)/estimate=true'/>
             <connect srcID='birthRate.t:$(n)'                 targetID='tracelog' inputName='log' if='inposterior(YuleModel.t:$(n)) and birthRate.t:$(n)/estimate=true'/>
-            <connect srcID='partitionLengths:$(n)'            targetID='tracelog' inputName='log' if='inposterior(partitionLengths.$(n)) and partitionLengths.$(n)/estimate=true'/>
+            <connect srcID='partitionLengths.$(n)'            targetID='tracelog' inputName='log' if='inposterior(partitionLengths.$(n)) and partitionLengths.$(n)/estimate=true'/>
+            <connect srcID='PartitionPositionLogger.$(n)'     targetID='tracelog' inputName='log' if='inposterior(partitionLengths.$(n)) and partitionLengths.$(n)/estimate=true'/>
+
 
             <connect srcID='GammaShapePrior.s:$(n)'           targetID='prior' inputName='distribution' if='inposterior(gammaShape.s:$(n)) and gammaShape.s:$(n)/estimate=true'/>
             <connect srcID='YuleBirthRatePrior.t:$(n)'        targetID='prior' inputName='distribution' if='inposterior(YuleModel.t:$(n)) and birthRate.t:$(n)/estimate=true'/>
