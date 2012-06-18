@@ -28,13 +28,13 @@
             <connect srcID='RBcount.s:$(n)'             targetID='state' inputName='stateNode' if='inlikelihood(RBcount.s:$(n))'/>
             <connect srcID='RBrates.s:$(n)'             targetID='state' inputName='stateNode' if='inlikelihood(RBrates.s:$(n))'/>
 
-            <connect srcID='RBOperator.s:$(n)'          targetID='mcmc' inputName='operator' if='inlikelihood(RBcount.s:$(n)) and inlikelihood(RBrates.s:$(n)) '>Reversible jump operator for dimension of RB of partition $(n)</connect>
-            <connect srcID='RBratescaler.s:$(n)'        targetID='mcmc' inputName='operator' if='inlikelihood(RBrates.s:$(n))'>Scale RB rate parameter of partition $(n)</connect>
+            <connect srcID='RBOperator.s:$(n)'          targetID='mcmc' inputName='operator' if='inlikelihood(RBcount.s:$(n)) and inlikelihood(RBrates.s:$(n)) '>Reversible jump operator for dimension of RB of partition s:$(n)</connect>
+            <connect srcID='RBratescaler.s:$(n)'        targetID='mcmc' inputName='operator' if='inlikelihood(RBrates.s:$(n))'>Scale RB rate parameter of partition s:$(n)</connect>
 
             <connect srcID='RBcount.s:$(n)'             targetID='tracelog' inputName='log'  if='inlikelihood(RBcount.s:$(n))'/>
             <connect srcID='RBrates.s:$(n)'             targetID='tracelog' inputName='log'  if='inlikelihood(RBrates.s:$(n))'/>
 
-            <connect srcID='RBprior.s:$(n)'             targetID='prior' inputName='distribution' if='inlikelihood(RB.s:$(n))'>RB rate parameter of partition $(n)</connect>
+            <connect srcID='RBprior.s:$(n)'             targetID='prior' inputName='distribution' if='inlikelihood(RB.s:$(n))'>RB rate parameter of partition s:$(n)</connect>
         </subtemplate>
 </mergewith>
 
