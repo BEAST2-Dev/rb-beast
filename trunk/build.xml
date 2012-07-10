@@ -107,11 +107,11 @@
 				<include name="beast/**/*.xsl" />
 			</fileset>
         </jar>
-		<jar jarfile="${dist}/RBS.addon.jar">
+		<jar jarfile="${distRBS}/RBS.addon.jar">
 			<manifest>
 				<attribute name="Built-By" value="${user.name}" />
 			</manifest>
-			<fileset dir="${build}">
+			<fileset dir="${buildRBS}">
 				<include name="beast/**/*.class" />
 				<include name="util/**/*.class" />
 				<include name="**/*.properties" />
