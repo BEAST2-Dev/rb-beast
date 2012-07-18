@@ -5,8 +5,9 @@
         <subtemplate id='RB' class='beast.evolution.substitutionmodel.RB' mainid='RB.s:$(n)'
 		suppressInputs='beast.evolution.substitutionmodel.RB.eigenSystem,
 						beast.evolution.substitutionmodel.RB.count,
-						beast.evolution.substitutionmodel.RB.rates,
-						beast.evolution.substitutionmodel.RB.frequencies'>
+						beast.evolution.substitutionmodel.RB.rates'>
+<!--,
+						beast.evolution.substitutionmodel.RB.frequencies'>-->
 <![CDATA[
     <substModel spec='RB' id='RB.s:$(n)'> 
         <count spec='parameter.IntegerParameter' id='RBcount.s:$(n)' value='5' lower='0' upper='5'/>
@@ -20,7 +21,7 @@
         <distr spec="beast.math.distributions.Gamma" alpha='0.2' beta='5.0'/>
     </distribution>
 
-    <operator id='RBOperator.s:$(n)' spec='RBOperator' scaleFactor="0.5" weight="1" rates="@RBrates.s:$(n)" count='@RBcount.s:$(n)'/>
+    <operator id='RBOperator.s:$(n)' spec='RBOperator' weight="1" rates="@RBrates.s:$(n)" count='@RBcount.s:$(n)'/>
     <operator id='RBratescaler.s:$(n)' spec='RBScaleOperator' scaleFactor="0.5" weight="1" parameter="@RBrates.s:$(n)" count='@RBcount.s:$(n)'/>
 
 ]]>

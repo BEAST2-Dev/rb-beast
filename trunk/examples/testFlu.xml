@@ -101,7 +101,7 @@
 
     <operator id="WilsonBalding.Flu" spec="WilsonBalding" tree="@Tree.Flu" weight="1.0"/>
 
-    <operator count="@RBScount.Flu" id="RBSOperator.Flu" rates="@RBSrates.Flu" scaleFactor="0.5" spec="RBOperator" weight="1.0"/>
+    <operator count="@RBScount.Flu" id="RBSOperator.Flu" rates="@RBSrates.Flu" spec="RBOperator" weight="1.0"/>
 
     <operator count="@RBScount.Flu" degreesOfFreedom="1" id="RBSrateScaler.Flu" optimise="true" parameter="@RBSrates.Flu" rootOnly="false" scaleAll="false" scaleAllIndependently="false" scaleFactor="0.5" spec="RBScaleOperator" weight="1.0"/>
 

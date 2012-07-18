@@ -133,7 +133,7 @@
     <operator id="WilsonBalding.HIV" spec="WilsonBalding" tree="@Tree.HIV" weight="1.0"/>
 
 	<plate range='1,2,3' var='n'>
-		<operator count="@RBScount.HIV.$(n)" id="RBSOperator.HIV.$(n)" rates="@RBSrates.HIV.$(n)" scaleFactor="0.5" spec="RBOperator" weight="1.0"/>
+		<operator count="@RBScount.HIV.$(n)" id="RBSOperator.HIV.$(n)" rates="@RBSrates.HIV.$(n)" spec="RBOperator" weight="1.0"/>
 
 		<operator count="@RBScount.HIV.$(n)" degreesOfFreedom="1" id="RBSrateScaler.HIV.$(n)" optimise="true" parameter="@RBSrates.HIV.$(n)" rootOnly="false" scaleAll="false" scaleAllIndependently="false" scaleFactor="0.5" spec="RBScaleOperator" weight="1.0"/>
 	</plate>

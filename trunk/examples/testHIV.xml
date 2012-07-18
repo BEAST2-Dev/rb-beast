@@ -126,7 +126,7 @@
 
     <operator id="WilsonBalding.HIV" spec="WilsonBalding" tree="@Tree.HIV" weight="1.0"/>
 
-    <operator count="@RBScount.HIV" id="RBSOperator.HIV" rates="@RBSrates.HIV" scaleFactor="0.5" spec="RBOperator" weight="1.0"/>
+    <operator count="@RBScount.HIV" id="RBSOperator.HIV" rates="@RBSrates.HIV" spec="RBOperator" weight="1.0"/>
 
     <operator count="@RBScount.HIV" degreesOfFreedom="1" id="RBSrateScaler.HIV" optimise="true" parameter="@RBSrates.HIV" rootOnly="false" scaleAll="false" scaleAllIndependently="false" scaleFactor="0.5" spec="RBScaleOperator" weight="1.0"/>
 
