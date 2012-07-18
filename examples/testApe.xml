@@ -73,7 +73,7 @@
 
     <operator id="WilsonBalding.alignment" spec="WilsonBalding" tree="@Tree.alignment" weight="1.0"/>
 
-    <operator count="@RBScount.alignment" id="RBSOperator.alignment" rates="@RBSrates.alignment" scaleFactor="0.5" spec="RBOperator" weight="1.0"/>
+    <operator count="@RBScount.alignment" id="RBSOperator.alignment" rates="@RBSrates.alignment" spec="RBOperator" weight="1.0"/>
 
     <operator count="@RBScount.alignment" degreesOfFreedom="1" id="RBSrateScaler.alignment" optimise="true" parameter="@RBSrates.alignment" rootOnly="false" scaleAll="false" scaleAllIndependently="false" scaleFactor="0.5" spec="RBScaleOperator" weight="1.0"/>
 

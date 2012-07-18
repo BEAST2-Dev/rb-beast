@@ -155,7 +155,7 @@
 
     <operator id="WilsonBalding.HCV" spec="WilsonBalding" tree="@Tree.HCV" weight="1.0"/>
 
-    <operator count="@RBScount.HCV" id="RBSOperator.HCV" rates="@RBSrates.HCV" scaleFactor="0.5" spec="RBOperator" weight="1.0"/>
+    <operator count="@RBScount.HCV" id="RBSOperator.HCV" rates="@RBSrates.HCV" spec="RBOperator" weight="1.0"/>
 
     <operator count="@RBScount.HCV" degreesOfFreedom="1" id="RBSrateScaler.HCV" optimise="true" parameter="@RBSrates.HCV" rootOnly="false" scaleAll="false" scaleAllIndependently="false" scaleFactor="0.5" spec="RBScaleOperator" weight="1.0"/>
 

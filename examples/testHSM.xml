@@ -92,7 +92,7 @@
         <operator id='invarScaler' spec='ScaleOperator' scaleFactor="0.5" weight="1" parameter="@propInvar"/>
 -->
 
-        <operator id='RBOperator' spec='RBOperator' scaleFactor="0.5" weight="1" rates="@rates" count='@count'/>
+        <operator id='RBOperator' spec='RBOperator' weight="1" rates="@rates" count='@count'/>
         <operator id='rateScaler' spec='RBScaleOperator' scaleFactor="0.5" weight="1" parameter="@rates" count='@count'/>
 
         <operator id="PopSizeScaler" parameter="@popSize" scaleFactor="0.75" spec="ScaleOperator" weight="3.0"/>
