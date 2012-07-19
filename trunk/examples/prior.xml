@@ -54,7 +54,7 @@
             <log idref="prior"/>
     	    <ESS spec='ESS' name='log' arg="@prior"/>
             <log idref='count'/>
-    	    <log spec='Mean' arg="@count"/>
+    	    <!--log spec='Mean' arg="@count"/-->
         </logger>
     </run>
 
