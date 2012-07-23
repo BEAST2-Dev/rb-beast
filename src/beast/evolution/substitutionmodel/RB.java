@@ -11,7 +11,7 @@ import beast.core.parameter.IntegerParameter;
 import beast.evolution.datatype.DataType;
 import beast.evolution.datatype.Nucleotide;
 
-@Description("Reversible-jump Based substitution model for nucleotides that changes where the count input " +
+@Description("Substitution model for nucleotides that changes where the count input " +
 		"determines the number of parameters used in a hierarchy of models")
 public class RB extends GeneralSubstitutionModel {
 	public Input<IntegerParameter> m_countInput = new Input<IntegerParameter>("count", "model number used 0 = JC, 5 and higher if GTR (default 0)", Validate.REQUIRED);
@@ -106,7 +106,6 @@ public class RB extends GeneralSubstitutionModel {
     	relativeRates[9] = relativeRates[2]; // T->A
     	relativeRates[10] = 1; //T->C
     	relativeRates[11] = relativeRates[8]; //T->G
-
 	}
 	
 	@Override
@@ -116,4 +115,5 @@ public class RB extends GeneralSubstitutionModel {
 		}
 		throw new Exception("Can only handle nucleotide data");
 	}
+	
 }
