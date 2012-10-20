@@ -26,10 +26,10 @@
 
 package beast.evolution.likelihood;
 
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.RejectedExecutionException;
 
@@ -37,7 +37,6 @@ import beast.app.BeastMCMC;
 import beast.core.Description;
 import beast.core.Input;
 import beast.core.Input.Validate;
-import beast.core.State;
 import beast.evolution.alignment.Alignment;
 import beast.evolution.alignment.AscertainedAlignment;
 import beast.evolution.branchratemodel.BranchRateModel;
@@ -229,9 +228,9 @@ public class PartitionedTreeLikelihood extends TreeLikelihood {
     /**
      * This method samples the sequences based on the tree and site model.
      */
-    public void sample(State state, Random random) {
-        throw new UnsupportedOperationException("Can't sample a fixed alignment!");
-    }
+//    public void sample(State state, Random random) {
+//        throw new UnsupportedOperationException("Can't sample a fixed alignment!");
+//    }
 
     /**
      * set leaf states in likelihood core *

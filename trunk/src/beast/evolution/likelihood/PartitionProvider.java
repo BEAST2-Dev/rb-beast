@@ -21,6 +21,7 @@ import beast.core.parameter.IntegerParameter;
 import beast.core.parameter.RealParameter;
 import beast.evolution.alignment.Alignment;
 import beast.evolution.sitemodel.SiteModel;
+import beast.util.Randomizer;
 
 @Description("Provides dynamic partitioning of an alignment, splitting it in several parts with its own substitution models")
 public class PartitionProvider extends CalculationNode implements StateNodeInitialiser {
@@ -44,7 +45,7 @@ public class PartitionProvider extends CalculationNode implements StateNodeIniti
 	boolean needsInitilising = false;
     
     @Override
-    public void initAndValidate() throws Exception {
+    public void initAndValidate() throws Exception {    	
     	if (numPartitions.get() > 0) {
     	    /** we have to wait to initialise till everything is parsed, 
     	     * so that the outputs of all plug-ins are properly set up */
@@ -197,6 +198,7 @@ public class PartitionProvider extends CalculationNode implements StateNodeIniti
      */
 	@Override
 	public void initStateNodes() throws Exception {
+    	System.err.println(Randomizer.getSeed());
 		PartitionedTreeLikelihood likelihood = null;
 		for (Plugin plugin : outputs) {
 			if (plugin instanceof PartitionedTreeLikelihood) {
@@ -226,10 +228,12 @@ public class PartitionProvider extends CalculationNode implements StateNodeIniti
 			}
 		}
 		m_pSiteModel.get().add(siteModel);
-		BeautiDoc doc = new BeautiDoc();
+		List<Plugin> tabuList = new ArrayList<Plugin>();
+		tabuList.add(this);
 		for (int i = 1; i < numPartitions.get(); i++) {
+			BeautiDoc doc = new BeautiDoc();
 			PartitionContext context = new PartitionContext(sPartition+i);
-			Plugin plugin = BeautiDoc.deepCopyPlugin(siteModel, this, mcmc, context, doc);
+			Plugin plugin = BeautiDoc.deepCopyPlugin(siteModel, this, mcmc, context, doc, tabuList);
 			m_pSiteModel.get().add((SiteModel.Base) plugin);
 		}
 		if (siteModel instanceof SiteModel) {
