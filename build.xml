@@ -176,17 +176,17 @@
 			<fileset dir="examples" />
 		</copy>
 		<copy todir="${Add_on_dir}/lib">
-			<fileset dir="${dist}" includes="RBS.addon.jar" />
+			<fileset dir="${distRBS}" includes="RBS.addon.jar" />
 		</copy>
 		<copy todir="${Add_on_dir}">
-			<fileset dir="${dist}" includes="RBS.src.jar" />
+			<fileset dir="${distRBS}" includes="RBS.src.jar" />
 		</copy>
 		<copy todir="${Add_on_dir}/templates">
 			<fileset file="templates/RBS.xml" />
 			<fileset file="templates/AutoPartition.xml" />
 		</copy>
 
-		<jar jarfile="${dist}/RBS.addon.zip">
+		<jar jarfile="${distRBS}/RBS.addon.zip">
 			<fileset dir="${Add_on_dir}">
 				<include name="**/*" />
 			</fileset>
