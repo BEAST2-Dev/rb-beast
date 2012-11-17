@@ -208,7 +208,7 @@ public class PartitionProvider extends CalculationNode implements StateNodeIniti
 		if (likelihood == null) {
 			throw new Exception("PartitionProvider must have PartitionedTreeLikelihood as output");
 		}
-		SiteModel.Base siteModel = likelihood.m_pSiteModel.get();
+		SiteModel.Base siteModel = (SiteModel.Base) likelihood.m_pSiteModel.get();
 		
 		if (siteModel instanceof SiteModel) {
 			RealParameter mu = ((SiteModel) siteModel).muParameterInput.get();
