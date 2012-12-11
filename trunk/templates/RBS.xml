@@ -39,6 +39,7 @@
 
 
 <!-- Variable Selection substitution model -->
+<!--
         <subtemplate id='VS' class='beast.evolution.substitutionmodel.RB' mainid='VS.s:$(n)'
 		suppressInputs='beast.evolution.substitutionmodel.RB.eigenSystem,
 						beast.evolution.substitutionmodel.RB.count,
@@ -75,6 +76,6 @@
         </subtemplate>
 
 </mergewith>
-
+-->
 </beast>
 
