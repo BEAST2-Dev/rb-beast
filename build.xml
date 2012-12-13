@@ -18,6 +18,7 @@
 	<property name="srcBeast2" location="${beast2path}/src" />
 	<property name="beast2classpath" location="${beast2path}/build" />
 	<property name="Add_on_dir" value="${release_dir}/add-on" />
+	<property name="version" value="1.0.1" />
 
     <import file="${beast2path}/build.xml" />
 
@@ -186,12 +187,12 @@
 			<fileset file="templates/AutoPartition.xml" />
 		</copy>
 
-		<jar jarfile="${distRBS}/RBS.addon.zip">
+		<jar jarfile="${distRBS}/RBS.addon.v${version}.zip">
 			<fileset dir="${Add_on_dir}">
 				<include name="**/*" />
 			</fileset>
         </jar>
-		<echo message="Add-on version release is finished." />
+		<echo message="Add-on version v${version} release is finished." />
 	</target>
 
 </project>
