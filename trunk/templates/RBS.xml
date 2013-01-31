@@ -75,7 +75,7 @@
             <connect srcID='VSprior.s:$(n)'             targetID='prior' inputName='distribution' if='inlikelihood(VS.s:$(n))'>VS rate parameter of partition s:$(n)</connect>
         </subtemplate>
 
-</mergewith>
 -->
+</mergewith>
 </beast>
 
