@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import beast.core.Description;
 import beast.evolution.alignment.AscertainedAlignment;
 import beast.evolution.branchratemodel.StrictClockModel;
 import beast.evolution.sitemodel.DefaultMixtureSiteModel;
@@ -14,6 +15,7 @@ import beast.evolution.substitutionmodel.SubstitutionModel;
 import beast.evolution.tree.Node;
 import beast.evolution.tree.Tree;
 
+@Description("Tree likelihood that can handle a general mixture model efficiently")
 public class MixtureTreeLikelihood extends TreeLikelihood {
 	
 	
