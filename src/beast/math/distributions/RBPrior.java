@@ -13,9 +13,9 @@ public class RBPrior extends Prior {
 	private IntegerParameter counts;
 	
 	@Override
-	public void initAndValidate() {
-		super.initAndValidate();
+	public void initAndValidate() throws Exception {
 		counts = countInput.get();
+		super.initAndValidate();
 	}
 	
 	@Override
