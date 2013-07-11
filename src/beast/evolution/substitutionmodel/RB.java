@@ -3,6 +3,7 @@ package beast.evolution.substitutionmodel;
 
 import java.util.Arrays;
 
+import beast.core.Citation;
 import beast.core.Description;
 import beast.core.Input;
 import beast.core.Input.Validate;
@@ -13,6 +14,7 @@ import beast.evolution.datatype.Nucleotide;
 
 @Description("Substitution model for nucleotides that changes where the count input " +
 		"determines the number of parameters used in a hierarchy of models")
+@Citation("Bouckaert, Remco, M—nica V. Alvarado-Mora, and J. R. Pinho. Evolutionary rates and HBV: issues of rate estimation with Bayesian molecular methods. Antiviral therapy 18.3 Pt B (2012): 497-503.")
 public class RB extends GeneralSubstitutionModel {
 	public Input<IntegerParameter> m_countInput = new Input<IntegerParameter>("count", "model number used 0 = JC, 5 and higher if GTR (default 0)", Validate.REQUIRED);
 	
