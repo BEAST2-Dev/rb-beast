@@ -5,12 +5,14 @@ import java.io.PrintStream;
 import beast.core.Description;
 import beast.core.Input;
 import beast.core.Loggable;
-import beast.core.Plugin;
+import beast.core.BEASTObject;
 import beast.core.Input.Validate;
 import beast.core.parameter.IntegerParameter;
 
+
+
 @Description("Logs the position of partion boundaries based on partition lengths")
-public class PartitionPositionLogger extends Plugin implements Loggable {
+public class PartitionPositionLogger extends BEASTObject implements Loggable {
     public Input<IntegerParameter> partitionLengthsInput = new Input<IntegerParameter>("partitionLengths", "consecutive length of partitions", Validate.REQUIRED);
     
     IntegerParameter partitionLengths;

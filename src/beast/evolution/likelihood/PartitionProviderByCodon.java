@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import beast.core.Description;
 
+
+
 @Description("Splits alignment into partititions by lengths, and subdivides these partitions by codon position")
 public class PartitionProviderByCodon extends PartitionProvider {
 

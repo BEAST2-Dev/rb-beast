@@ -11,17 +11,19 @@ import beast.app.beauti.PartitionContext;
 import beast.core.CalculationNode;
 import beast.core.Description;
 import beast.core.Input;
+import beast.core.MCMC;
 import beast.core.State;
 import beast.core.StateNode;
 import beast.core.StateNodeInitialiser;
+import beast.core.BEASTObject;
 import beast.core.Input.Validate;
-import beast.core.MCMC;
-import beast.core.Plugin;
 import beast.core.parameter.IntegerParameter;
 import beast.core.parameter.RealParameter;
 import beast.evolution.alignment.Alignment;
 import beast.evolution.sitemodel.SiteModel;
 import beast.util.Randomizer;
+
+
 
 @Description("Provides dynamic partitioning of an alignment, splitting it in several parts with its own substitution models")
 public class PartitionProvider extends CalculationNode implements StateNodeInitialiser {
@@ -200,7 +202,7 @@ public class PartitionProvider extends CalculationNode implements StateNodeIniti
 	public void initStateNodes() throws Exception {
     	System.err.println(Randomizer.getSeed());
 		PartitionedTreeLikelihood likelihood = null;
-		for (Plugin plugin : outputs) {
+		for (BEASTObject plugin : outputs) {
 			if (plugin instanceof PartitionedTreeLikelihood) {
 				likelihood = (PartitionedTreeLikelihood) plugin;
 			}
@@ -208,47 +210,47 @@ public class PartitionProvider extends CalculationNode implements StateNodeIniti
 		if (likelihood == null) {
 			throw new Exception("PartitionProvider must have PartitionedTreeLikelihood as output");
 		}
-		SiteModel.Base siteModel = (SiteModel.Base) likelihood.m_pSiteModel.get();
+		SiteModel.Base siteModel = (SiteModel.Base) likelihood.siteModelInput.get();
 		
 		if (siteModel instanceof SiteModel) {
 			RealParameter mu = ((SiteModel) siteModel).muParameterInput.get();
-			if (!mu.m_bIsEstimated.get()) {
+			if (!mu.isEstimatedInput.get()) {
 				System.err.println("Warning: sitemodel mutation rates are NOT estimated. This is probably not what you want");
 			}
 		}
 		
 		String sPartition = BeautiDoc.parsePartition(getID());
-		Set<Plugin> ancestors = new HashSet<Plugin>();
-		BeautiDoc.collectAncestors(this, ancestors, new HashSet<Plugin>());
+		Set<BEASTObject> ancestors = new HashSet<BEASTObject>();
+		BeautiDoc.collectAncestors(this, ancestors, new HashSet<BEASTObject>());
 		MCMC mcmc = null;
-		for (Plugin plugin : ancestors) {
+		for (BEASTObject plugin : ancestors) {
 			if (plugin instanceof MCMC) {
 				mcmc = (MCMC) plugin;
 				break;
 			}
 		}
 		m_pSiteModel.get().add(siteModel);
-		List<Plugin> tabuList = new ArrayList<Plugin>();
+		List<BEASTObject> tabuList = new ArrayList<BEASTObject>();
 		tabuList.add(this);
 		for (int i = 1; i < numPartitions.get(); i++) {
 			BeautiDoc doc = new BeautiDoc();
 			PartitionContext context = new PartitionContext(sPartition+i);
-			Plugin plugin = BeautiDoc.deepCopyPlugin(siteModel, this, mcmc, context, doc, tabuList);
+			BEASTObject plugin = BeautiDoc.deepCopyPlugin(siteModel, this, mcmc, context, doc, tabuList);
 			m_pSiteModel.get().add((SiteModel.Base) plugin);
 		}
 		if (siteModel instanceof SiteModel) {
 			RealParameter mu = ((SiteModel) siteModel).muParameterInput.get();
-			mu.m_bIsEstimated.setValue(false, mu);
+			mu.isEstimatedInput.setValue(false, mu);
 			mu.initByName("lower", ""+mu.getValue(), "upper" , "" + mu.getValue());
 		}
-		State state = mcmc.m_startState.get();
+		State state = mcmc.startStateInput.get();
 		state.initialise();
         state.setPosterior(mcmc.posteriorInput.get());
 		needsInitilising = false;
 		initAndValidate();
 
-		Set<Plugin> plugins = new HashSet<Plugin>();
-		for (Plugin plugin : mcmc.listActivePlugins()) {
+		Set<BEASTObject> plugins = new HashSet<BEASTObject>();
+		for (BEASTObject plugin : mcmc.listActivePlugins()) {
 			reinitialise(plugin, plugins);
 		}
 //		
@@ -260,8 +262,8 @@ public class PartitionProvider extends CalculationNode implements StateNodeIniti
 //		}
 	}
 
-	private void reinitialise(Plugin plugin, Set<Plugin> plugins) throws Exception {
-		for (Plugin plugin2 : plugin.listActivePlugins()) {
+	private void reinitialise(BEASTObject plugin, Set<BEASTObject> plugins) throws Exception {
+		for (BEASTObject plugin2 : plugin.listActivePlugins()) {
 			if (!plugins.contains(plugin2)) {
 				plugins.add(plugin2);
 				reinitialise(plugin2, plugins);

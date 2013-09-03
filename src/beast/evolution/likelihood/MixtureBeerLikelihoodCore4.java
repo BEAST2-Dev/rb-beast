@@ -2,29 +2,32 @@ package beast.evolution.likelihood;
 
 import java.util.List;
 
+import beast.evolution.likelihood.BeerLikelihoodCore4;
+
+
 public class MixtureBeerLikelihoodCore4 extends BeerLikelihoodCore4 implements MixtureLikelihoodCore {
 
 	@Override
 	public void integratePartialsMixture(int iNodeIndex, double[] fProportions, double[] fOutPartials,
 			double[][] frequencies, double[] fPatternLogLikelihoods) {
 
-		double[] fInPartials = m_fPartials[m_iCurrentPartials[iNodeIndex]][iNodeIndex];
+		double[] fInPartials = partials[currentPartialsIndex[iNodeIndex]][iNodeIndex];
         int u = 0;
         int v = 0;
-        for (int k = 0; k < m_nPatterns; k++) {
+        for (int k = 0; k < nrOfPatterns; k++) {
         	double [] freqs = frequencies[0];
-            for (int i = 0; i < m_nStates; i++) {
+            for (int i = 0; i < nrOfStates; i++) {
                 fOutPartials[u] = fInPartials[v] * fProportions[0] * freqs[i];
                 u++;
                 v++;
             }
         }
 
-        for (int l = 1; l < m_nMatrices; l++) {
+        for (int l = 1; l < nrOfMatrices; l++) {
         	double [] freqs = frequencies[l];
             u = 0;
-            for (int k = 0; k < m_nPatterns; k++) {
-                for (int i = 0; i < m_nStates; i++) {
+            for (int k = 0; k < nrOfPatterns; k++) {
+                for (int i = 0; i < nrOfStates; i++) {
                     fOutPartials[u] += fInPartials[v] * fProportions[l] * freqs[i];
                     u++;
                     v++;
@@ -33,9 +36,9 @@ public class MixtureBeerLikelihoodCore4 extends BeerLikelihoodCore4 implements M
         }
 	
         v = 0;
-        for (int k = 0; k < m_nPatterns; k++) {
+        for (int k = 0; k < nrOfPatterns; k++) {
             double sum = 0.0;
-            for (int i = 0; i < m_nStates; i++) {
+            for (int i = 0; i < nrOfStates; i++) {
                 sum += fOutPartials[v];
                 v++;
             }
@@ -52,14 +55,14 @@ public class MixtureBeerLikelihoodCore4 extends BeerLikelihoodCore4 implements M
 	{
 
 		for (int l : classes) {
-			int v = 4 * l * m_nPatterns;
+			int v = 4 * l * nrOfPatterns;
 
-			for (int k = 0; k < m_nPatterns; k++) {
+			for (int k = 0; k < nrOfPatterns; k++) {
 
 				int state1 = iStates1[k];
 				int state2 = iStates2[k];
 
-				int w = l * m_nMatrixSize;
+				int w = l * matrixSize;
 
 				if (state1 < 4 && state2 < 4) {
 
@@ -123,13 +126,13 @@ public class MixtureBeerLikelihoodCore4 extends BeerLikelihoodCore4 implements M
 
 
 		for (int l : classes) {
-			int v = 4 * l * m_nPatterns;
+			int v = 4 * l * nrOfPatterns;
 			int u = v;
-			for (int k = 0; k < m_nPatterns; k++) {
+			for (int k = 0; k < nrOfPatterns; k++) {
 
 				int state1 = iStates1[k];
 
-                int w = l * m_nMatrixSize;
+                int w = l * matrixSize;
 
 				if (state1 < 4) {
 
@@ -206,12 +209,12 @@ public class MixtureBeerLikelihoodCore4 extends BeerLikelihoodCore4 implements M
 
 
 		for (int l : classes) {
-			int v = 4 * l * m_nPatterns;
+			int v = 4 * l * nrOfPatterns;
 			int u = v;
 
-			for (int k = 0; k < m_nPatterns; k++) {
+			for (int k = 0; k < nrOfPatterns; k++) {
 
-                int w = l * m_nMatrixSize;
+                int w = l * matrixSize;
 
 				sum1 = fMatrices1[w] * fPartials1[v];
 				sum2 = fMatrices2[w] * fPartials2[v];
@@ -260,35 +263,35 @@ public class MixtureBeerLikelihoodCore4 extends BeerLikelihoodCore4 implements M
 
 	@Override
 	public void calculatePartials(int iNodeIndex1, int iNodeIndex2, int iNodeIndex3, List<Integer> classes) {
-        m_iCurrentPartials[iNodeIndex3] = 1 - m_iStoredPartials[iNodeIndex3];
+        currentPartialsIndex[iNodeIndex3] = 1 - storedPartialsIndex[iNodeIndex3];
         
-        System.arraycopy(m_fPartials[1-m_iCurrentPartials[iNodeIndex3]][iNodeIndex3], 0,
-        		m_fPartials[m_iCurrentPartials[iNodeIndex3]][iNodeIndex3], 0, m_fPartials[1-m_iCurrentPartials[iNodeIndex3]][iNodeIndex3].length);
+        System.arraycopy(partials[1-currentPartialsIndex[iNodeIndex3]][iNodeIndex3], 0,
+        		partials[currentPartialsIndex[iNodeIndex3]][iNodeIndex3], 0, partials[1-currentPartialsIndex[iNodeIndex3]][iNodeIndex3].length);
 
-        if (m_iStates[iNodeIndex1] != null) {
-            if (m_iStates[iNodeIndex2] != null) {
+        if (states[iNodeIndex1] != null) {
+            if (states[iNodeIndex2] != null) {
                 calculateStatesStatesPruning(
-                        m_iStates[iNodeIndex1], m_fMatrices[m_iCurrentMatrices[iNodeIndex1]][iNodeIndex1],
-                        m_iStates[iNodeIndex2], m_fMatrices[m_iCurrentMatrices[iNodeIndex2]][iNodeIndex2],
-                        m_fPartials[m_iCurrentPartials[iNodeIndex3]][iNodeIndex3], classes);
+                        states[iNodeIndex1], matrices[currentMatrixIndex[iNodeIndex1]][iNodeIndex1],
+                        states[iNodeIndex2], matrices[currentMatrixIndex[iNodeIndex2]][iNodeIndex2],
+                        partials[currentPartialsIndex[iNodeIndex3]][iNodeIndex3], classes);
             } else {
-                calculateStatesPartialsPruning(m_iStates[iNodeIndex1], m_fMatrices[m_iCurrentMatrices[iNodeIndex1]][iNodeIndex1],
-                        m_fPartials[m_iCurrentPartials[iNodeIndex2]][iNodeIndex2], m_fMatrices[m_iCurrentMatrices[iNodeIndex2]][iNodeIndex2],
-                        m_fPartials[m_iCurrentPartials[iNodeIndex3]][iNodeIndex3], classes);
+                calculateStatesPartialsPruning(states[iNodeIndex1], matrices[currentMatrixIndex[iNodeIndex1]][iNodeIndex1],
+                        partials[currentPartialsIndex[iNodeIndex2]][iNodeIndex2], matrices[currentMatrixIndex[iNodeIndex2]][iNodeIndex2],
+                        partials[currentPartialsIndex[iNodeIndex3]][iNodeIndex3], classes);
             }
         } else {
-            if (m_iStates[iNodeIndex2] != null) {
-                calculateStatesPartialsPruning(m_iStates[iNodeIndex2], m_fMatrices[m_iCurrentMatrices[iNodeIndex2]][iNodeIndex2],
-                        m_fPartials[m_iCurrentPartials[iNodeIndex1]][iNodeIndex1], m_fMatrices[m_iCurrentMatrices[iNodeIndex1]][iNodeIndex1],
-                        m_fPartials[m_iCurrentPartials[iNodeIndex3]][iNodeIndex3], classes);
+            if (states[iNodeIndex2] != null) {
+                calculateStatesPartialsPruning(states[iNodeIndex2], matrices[currentMatrixIndex[iNodeIndex2]][iNodeIndex2],
+                        partials[currentPartialsIndex[iNodeIndex1]][iNodeIndex1], matrices[currentMatrixIndex[iNodeIndex1]][iNodeIndex1],
+                        partials[currentPartialsIndex[iNodeIndex3]][iNodeIndex3], classes);
             } else {
-                calculatePartialsPartialsPruning(m_fPartials[m_iCurrentPartials[iNodeIndex1]][iNodeIndex1], m_fMatrices[m_iCurrentMatrices[iNodeIndex1]][iNodeIndex1],
-                        m_fPartials[m_iCurrentPartials[iNodeIndex2]][iNodeIndex2], m_fMatrices[m_iCurrentMatrices[iNodeIndex2]][iNodeIndex2],
-                        m_fPartials[m_iCurrentPartials[iNodeIndex3]][iNodeIndex3], classes);
+                calculatePartialsPartialsPruning(partials[currentPartialsIndex[iNodeIndex1]][iNodeIndex1], matrices[currentMatrixIndex[iNodeIndex1]][iNodeIndex1],
+                        partials[currentPartialsIndex[iNodeIndex2]][iNodeIndex2], matrices[currentMatrixIndex[iNodeIndex2]][iNodeIndex2],
+                        partials[currentPartialsIndex[iNodeIndex3]][iNodeIndex3], classes);
             }
         }
 
-        if (m_bUseScaling) {
+        if (useScaling) {
             scalePartials(iNodeIndex3);
         }
     }

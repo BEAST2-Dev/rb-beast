@@ -155,8 +155,8 @@
             
                 <!--substModel will be automatically detected /-->
                 <component id='component.s:$(n)' spec='MixtureSubstModel'>
-					<weight spec='RealParameter'>1.0</weight>
-					<rate spec='RealParameter'>1.0</rate>
+					<weight spec='parameter.RealParameter'>1.0</weight>
+					<rate spec='parameter.RealParameter'>1.0</rate>
                 	<substModel id='JC69.s:$(n)' spec='JukesCantor'/>
                 </component>
                 

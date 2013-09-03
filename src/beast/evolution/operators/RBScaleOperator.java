@@ -2,12 +2,13 @@ package beast.evolution.operators;
 
 import beast.core.Description;
 import beast.core.Input;
-
 import beast.core.Input.Validate;
 import beast.core.parameter.BooleanParameter;
 import beast.core.parameter.IntegerParameter;
 import beast.core.parameter.RealParameter;
+import beast.evolution.operators.ScaleOperator;
 import beast.util.Randomizer;
+
 
 @Description("Scale operator for the RB-Substitution model, which scales only those ratest that are in use")
 public class RBScaleOperator extends ScaleOperator {
@@ -18,7 +19,7 @@ public class RBScaleOperator extends ScaleOperator {
 	@Override
 	public void initAndValidate() throws Exception {
 		count = countInput.get();
-		if (m_pTree.get() != null) {
+		if (treeInput.get() != null) {
 			throw new Exception("A parameter (not a tree) should not be specified");
 		}
 		super.initAndValidate();
@@ -31,11 +32,11 @@ public class RBScaleOperator extends ScaleOperator {
             double hastingsRatio;
             final double scale = getScaler();
 
-            final boolean bScaleAll = m_pScaleAll.get();
-            final int nDegreesOfFreedom = m_pDegreesOfFreedom.get();
-            final boolean bScaleAllIndependently = m_pScaleAllIndependently.get();
+            final boolean bScaleAll = scaleAllInput.get();
+            final int nDegreesOfFreedom = degreesOfFreedomInput.get();
+            final boolean bScaleAllIndependently = scaleAllIndependentlyInput.get();
 
-            final RealParameter param = m_pParameter.get(this);
+            final RealParameter param = parameterInput.get(this);
 
             assert param.getLower() != null  && param.getUpper() != null;
 
@@ -78,7 +79,7 @@ public class RBScaleOperator extends ScaleOperator {
 
                 // which position to scale
                 int index;
-                final BooleanParameter indicators = m_indicator.get();
+                final BooleanParameter indicators = ndicatorInput.get();
                 if ( indicators != null ) {
                     final int nDim = indicators.getDimension();
                     Boolean [] indicator = indicators.getValues();
