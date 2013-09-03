@@ -5,15 +5,17 @@ import org.apache.commons.math.MathException;
 
 import beast.core.Description;
 import beast.core.Input;
-import beast.core.Input.Validate;
 import beast.core.Operator;
-import beast.core.Plugin;
+import beast.core.BEASTObject;
+import beast.core.Input.Validate;
 import beast.core.parameter.IntegerParameter;
 import beast.core.parameter.RealParameter;
 import beast.math.distributions.Exponential;
 import beast.math.distributions.ParametricDistribution;
 import beast.math.distributions.RBPrior;
 import beast.util.Randomizer;
+
+
 
 @Description("Operator for RB-SubstitutionModel to jump between states in the hierarchy")
 public class RBOperator extends Operator {
@@ -33,10 +35,10 @@ public class RBOperator extends Operator {
 	public void initAndValidate() throws Exception {
 		rates = rateInput.get();
 		distr = new Exponential();
-		for (Plugin plugin : rates.outputs) {
+		for (BEASTObject plugin : rates.outputs) {
 			if (plugin instanceof RBPrior) {
 				RBPrior prior = (RBPrior) plugin;
-				distr = prior.m_distInput.get();
+				distr = prior.distInput.get();
 			}
 		}
 		counts = countInput.get();

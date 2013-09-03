@@ -5,41 +5,44 @@ import java.util.Arrays;
 
 import beast.core.Citation;
 import beast.core.Description;
+import beast.core.Function;
 import beast.core.Input;
 import beast.core.Input.Validate;
-import beast.core.Valuable;
 import beast.core.parameter.IntegerParameter;
 import beast.evolution.datatype.DataType;
 import beast.evolution.datatype.Nucleotide;
+import beast.evolution.substitutionmodel.GeneralSubstitutionModel;
+
+
 
 @Description("Substitution model for nucleotides that changes where the count input " +
 		"determines the number of parameters used in a hierarchy of models")
-@Citation("Bouckaert, Remco, M—nica V. Alvarado-Mora, and J. R. Pinho. Evolutionary rates and HBV: issues of rate estimation with Bayesian molecular methods. Antiviral therapy 18.3 Pt B (2012): 497-503.")
+@Citation("Bouckaert, Remco, Monica V. Alvarado-Mora, and J. R. Pinho. Evolutionary rates and HBV: issues of rate estimation with Bayesian molecular methods. Antiviral therapy 18.3 Pt B (2012): 497-503.")
 public class RB extends GeneralSubstitutionModel {
 	public Input<IntegerParameter> m_countInput = new Input<IntegerParameter>("count", "model number used 0 = JC, 5 and higher if GTR (default 0)", Validate.REQUIRED);
 	
-	Valuable m_rate;
+	Function m_rate;
 	IntegerParameter m_count;
 	
 	@Override
 	public void initAndValidate() throws Exception {
 		m_count = m_countInput.get();
-		m_rate = m_rates.get();
+		m_rate = ratesInput.get();
 		if (m_rate.getDimension() != 5) {
 			throw new Exception("rate input must have dimension 5");
 		}
 		
-    	m_frequencies = frequenciesInput.get();
+    	frequencies = frequenciesInput.get();
         updateMatrix = true;
-        m_nStates = m_frequencies.getFreqs().length;
-    	if (m_nStates != 4) {
-    		throw new Exception("Frequencies has wrong size. Expected 4, but got " + m_nStates);
+        nrOfStates = frequencies.getFreqs().length;
+    	if (nrOfStates != 4) {
+    		throw new Exception("Frequencies has wrong size. Expected 4, but got " + nrOfStates);
     	}
 
         eigenSystem = createEigenSystem();
-        m_rateMatrix = new double[m_nStates][m_nStates];
-        relativeRates = new double[m_nStates * (m_nStates - 1)];
-        storedRelativeRates = new double[m_nStates * (m_nStates - 1)];
+        rateMatrix = new double[nrOfStates][nrOfStates];
+        relativeRates = new double[nrOfStates * (nrOfStates - 1)];
+        storedRelativeRates = new double[nrOfStates * (nrOfStates - 1)];
 	}
 
 	@Override

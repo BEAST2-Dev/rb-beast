@@ -7,6 +7,7 @@ import java.util.List;
 import beast.core.Description;
 import beast.evolution.alignment.AscertainedAlignment;
 import beast.evolution.branchratemodel.StrictClockModel;
+import beast.evolution.likelihood.TreeLikelihood;
 import beast.evolution.sitemodel.DefaultMixtureSiteModel;
 import beast.evolution.sitemodel.MixtureSiteModel;
 import beast.evolution.sitemodel.MixtureSubstModel;
@@ -14,6 +15,8 @@ import beast.evolution.sitemodel.SiteModel;
 import beast.evolution.substitutionmodel.SubstitutionModel;
 import beast.evolution.tree.Node;
 import beast.evolution.tree.Tree;
+
+
 
 @Description("Tree likelihood that can handle a general mixture model efficiently")
 public class MixtureTreeLikelihood extends TreeLikelihood {
@@ -29,36 +32,36 @@ public class MixtureTreeLikelihood extends TreeLikelihood {
 	@Override
 	public void initAndValidate() throws Exception {
         // sanity check: alignment should have same #taxa as tree
-        if (m_data.get().getNrTaxa() != m_tree.get().getLeafNodeCount()) {
+        if (dataInput.get().getNrTaxa() != treeInput.get().getLeafNodeCount()) {
             throw new Exception("The number of nodes in the tree does not match the number of sequences");
         }
         // No Beagle instance was found, so we use the good old java likelihood core
-        m_beagle = null;
+        beagle = null;
 
-        int nodeCount = m_tree.get().getNodeCount();
-        if (!(m_pSiteModel.get() instanceof SiteModel.Base)) {
+        int nodeCount = treeInput.get().getNodeCount();
+        if (!(siteModelInput.get() instanceof SiteModel.Base)) {
         	throw new Exception ("siteModel input should be of type SiteModel.Base");
         }
-        m_siteModel = (SiteModel.Base) m_pSiteModel.get();
-        m_siteModel.setDataType(m_data.get().getDataType());
-        m_substitutionModel = (SubstitutionModel.Base) m_siteModel.m_pSubstModel.get();
+        m_siteModel = (SiteModel.Base) siteModelInput.get();
+        m_siteModel.setDataType(dataInput.get().getDataType());
+        substitutionModel = (SubstitutionModel.Base) m_siteModel.substModelInput.get();
 
-        if (m_pBranchRateModel.get() != null) {
-            m_branchRateModel = m_pBranchRateModel.get();
+        if (branchRateModelInput.get() != null) {
+            branchRateModel = branchRateModelInput.get();
         } else {
-            m_branchRateModel = new StrictClockModel();
+            branchRateModel = new StrictClockModel();
         }
         m_branchLengths = new double[nodeCount];
-        m_StoredBranchLengths = new double[nodeCount];
+        storedBranchLengths = new double[nodeCount];
 
-        int nStateCount = m_data.get().getMaxStateCount();
-        int nPatterns = m_data.get().getPatternCount();
+        int nStateCount = dataInput.get().getMaxStateCount();
+        int nPatterns = dataInput.get().getPatternCount();
         if (nStateCount == 4) {
-            m_likelihoodCore = new MixtureBeerLikelihoodCore4();
+            likelihoodCore = new MixtureBeerLikelihoodCore4();
         } else {
-            m_likelihoodCore = new MixtureBeerLikelihoodCore(nStateCount);
+            likelihoodCore = new MixtureBeerLikelihoodCore(nStateCount);
         }
-        System.out.println("TreeLikelihood uses " + m_likelihoodCore.getClass().getName());
+        System.out.println("TreeLikelihood uses " + likelihoodCore.getClass().getName());
 
 //        m_fProportionInvariant = m_siteModel.getProportianInvariant();
 //        m_siteModel.setPropInvariantIsCategory(false);
@@ -68,18 +71,18 @@ public class MixtureTreeLikelihood extends TreeLikelihood {
 
         initCore();
 
-        m_fPatternLogLikelihoods = new double[nPatterns];
+        patternLogLikelihoods = new double[nPatterns];
         m_fRootPartials = new double[nPatterns * nStateCount];
-        m_nMatrixSize = (nStateCount + 1) * (nStateCount + 1);
-        m_fProbabilities = new double[(nStateCount + 1) * (nStateCount + 1)];
-        Arrays.fill(m_fProbabilities, 1.0);
+        matrixSize = (nStateCount + 1) * (nStateCount + 1);
+        probabilities = new double[(nStateCount + 1) * (nStateCount + 1)];
+        Arrays.fill(probabilities, 1.0);
 
-        if (m_data.get() instanceof AscertainedAlignment) {
-            m_bAscertainedSitePatterns = true;
+        if (dataInput.get() instanceof AscertainedAlignment) {
+            useAscertainedSitePatterns = true;
         }
 
-        siteModel = (DefaultMixtureSiteModel) m_pSiteModel.get();
-        mixtureLikelihoodCore = (MixtureLikelihoodCore) m_likelihoodCore;
+        siteModel = (DefaultMixtureSiteModel) siteModelInput.get();
+        mixtureLikelihoodCore = (MixtureLikelihoodCore) likelihoodCore;
         ALL = new ArrayList<Integer>();
         for (int i = 0; i < siteModel.getCategoryCount(); i++) {
         	ALL.add(i);
@@ -91,22 +94,22 @@ public class MixtureTreeLikelihood extends TreeLikelihood {
 	@Override
     int traverse(final Node node) throws Exception {
 
-        int update = (node.isDirty() | m_nHasDirt);
+        int update = (node.isDirty() | hasDirt);
 
         final int iNode = node.getNr();
 
-        final double branchRate = m_branchRateModel.getRateForBranch(node);
+        final double branchRate = branchRateModel.getRateForBranch(node);
         final double branchTime = node.getLength() * branchRate;
         m_branchLengths[iNode] = branchTime;
 
         // First update the transition probability matrix(ices) for this branch
-        if (!node.isRoot() && (update != Tree.IS_CLEAN || branchTime != m_StoredBranchLengths[iNode])) {
+        if (!node.isRoot() && (update != Tree.IS_CLEAN || branchTime != storedBranchLengths[iNode])) {
             final Node parent = node.getParent();
-            m_likelihoodCore.setNodeMatrixForUpdate(iNode);
+            likelihoodCore.setNodeMatrixForUpdate(iNode);
             for (int i = 0; i < siteModel.getCategoryCount(); i++) {
                 final double jointBranchRate = siteModel.getRateForCategory(i, node) * branchRate;
-                siteModel.getTransitionProbabilities(node, parent.getHeight(), node.getHeight(), jointBranchRate, m_fProbabilities, i);
-                m_likelihoodCore.setNodeMatrix(iNode, i, m_fProbabilities);
+                siteModel.getTransitionProbabilities(node, parent.getHeight(), node.getHeight(), jointBranchRate, probabilities, i);
+                likelihoodCore.setNodeMatrix(iNode, i, probabilities);
             }
             update |= Tree.IS_DIRTY;
         }
@@ -127,10 +130,10 @@ public class MixtureTreeLikelihood extends TreeLikelihood {
                 final int childNum1 = child1.getNr();
                 final int childNum2 = child2.getNr();
 
-                m_likelihoodCore.setNodePartialsForUpdate(iNode);
+                likelihoodCore.setNodePartialsForUpdate(iNode);
                 update |= (update1 | update2);
                 if (update >= Tree.IS_FILTHY) {
-                    m_likelihoodCore.setNodeStatesForUpdate(iNode);
+                    likelihoodCore.setNodeStatesForUpdate(iNode);
                 }
 
                 if (siteModel.integrateAcrossCategories()) {
@@ -150,7 +153,7 @@ public class MixtureTreeLikelihood extends TreeLikelihood {
                     }
 
                     final double[] proportions = siteModel.getCategoryProportions(node);
-                    ((MixtureLikelihoodCore)m_likelihoodCore).integratePartialsMixture(node.getNr(), proportions, m_fRootPartials, frequencies, m_fPatternLogLikelihoods);
+                    ((MixtureLikelihoodCore)likelihoodCore).integratePartialsMixture(node.getNr(), proportions, m_fRootPartials, frequencies, patternLogLikelihoods);
 
 //                    if (m_iConstantPattern != null) { // && !SiteModel.g_bUseOriginal) {
 //                        m_fProportionInvariant = siteModel.getProportianInvariant();
@@ -172,25 +175,25 @@ public class MixtureTreeLikelihood extends TreeLikelihood {
 	
 	@Override
 	protected boolean requiresRecalculation() {
-        m_nHasDirt = Tree.IS_CLEAN;
+        hasDirt = Tree.IS_CLEAN;
     	classes = new ArrayList<Integer>();
 
-        if (m_data.get().isDirtyCalculation()) {
-            m_nHasDirt = Tree.IS_FILTHY;
+        if (dataInput.get().isDirtyCalculation()) {
+            hasDirt = Tree.IS_FILTHY;
         	classes = ALL;
             return true;
         }
-        if (m_branchRateModel != null && m_branchRateModel.isDirtyCalculation()) {
-            m_nHasDirt = Tree.IS_DIRTY;
+        if (branchRateModel != null && branchRateModel.isDirtyCalculation()) {
+            hasDirt = Tree.IS_DIRTY;
         	classes = ALL;
             return true;
         }
-        if (m_tree.get().somethingIsDirty()) {
+        if (treeInput.get().somethingIsDirty()) {
         	classes = ALL;
         	return true;
         }
         if (siteModel.isDirtyCalculation()) {
-            m_nHasDirt = Tree.IS_DIRTY;
+            hasDirt = Tree.IS_DIRTY;
     		for (int k = 0; k < siteModel.getCategoryCount(); k++) {
     			if (siteModel.hasDirtySubstModel(k)) {
     				classes.add(k);

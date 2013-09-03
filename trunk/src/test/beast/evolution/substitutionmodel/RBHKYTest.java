@@ -1,11 +1,11 @@
 package test.beast.evolution.substitutionmodel;
 
-import test.beast.evolution.substmodel.HKYTest;
 import beast.core.Description;
 import beast.core.parameter.IntegerParameter;
 import beast.core.parameter.RealParameter;
 import beast.evolution.substitutionmodel.Frequencies;
 import beast.evolution.substitutionmodel.RB;
+import test.beast.evolution.substmodel.HKYTest;
 
 @Description("Test HKY matrix exponentiation")
 public class RBHKYTest extends HKYTest {

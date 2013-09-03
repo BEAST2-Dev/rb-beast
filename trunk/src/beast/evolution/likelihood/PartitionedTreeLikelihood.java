@@ -27,6 +27,7 @@
 package beast.evolution.likelihood;
 
 
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -41,10 +42,14 @@ import beast.evolution.alignment.Alignment;
 import beast.evolution.alignment.AscertainedAlignment;
 import beast.evolution.branchratemodel.BranchRateModel;
 import beast.evolution.branchratemodel.StrictClockModel;
+import beast.evolution.likelihood.BeagleTreeLikelihood;
+import beast.evolution.likelihood.TreeLikelihood;
 import beast.evolution.sitemodel.SiteModel;
 import beast.evolution.substitutionmodel.SubstitutionModel;
 import beast.evolution.tree.Node;
 import beast.evolution.tree.Tree;
+
+
 
 @Description("Calculates the likelihood of sequence data on a beast.tree given a site and substitution model using " +
         "a variant of the 'peeling algorithm'. For details, see" +
@@ -61,7 +66,7 @@ public class PartitionedTreeLikelihood extends TreeLikelihood {
     public Input<PartitionProvider> partitionProviderInput = new Input<PartitionProvider>("partitionProvider", "provides information on how to split the alignment into partitions", Validate.REQUIRED);
     
     public PartitionedTreeLikelihood() {
-    	m_pSiteModel.setRule(Validate.OPTIONAL);
+    	siteModelInput.setRule(Validate.OPTIONAL);
     }
     
     /**
@@ -127,7 +132,7 @@ public class PartitionedTreeLikelihood extends TreeLikelihood {
     @Override
     public void initAndValidate() throws Exception {
         // sanity check: alignment should have same #taxa as tree
-        if (m_data.get().getNrTaxa() != m_tree.get().getLeafNodeCount()) {
+        if (dataInput.get().getNrTaxa() != treeInput.get().getLeafNodeCount()) {
             throw new Exception("The number of nodes in the tree does not match the number of sequences");
         }
         m_beagle = null;
@@ -140,14 +145,14 @@ public class PartitionedTreeLikelihood extends TreeLikelihood {
         // No Beagle instance was found, so we use the good old java likelihood core
         m_beagle = null;
 
-        if (m_pBranchRateModel.get() != null) {
-            m_branchRateModel = m_pBranchRateModel.get();
+        if (branchRateModelInput.get() != null) {
+            m_branchRateModel = branchRateModelInput.get();
         } else {
             m_branchRateModel = new StrictClockModel();
         }
 
-        if (m_pSiteModel.get() != null) {
-        	m_pSiteModel.get().setDataType(m_data.get().getDataType());
+        if (siteModelInput.get() != null) {
+        	siteModelInput.get().setDataType(dataInput.get().getDataType());
         }
         
         partitionProvider = partitionProviderInput.get();
@@ -157,21 +162,21 @@ public class PartitionedTreeLikelihood extends TreeLikelihood {
         	return;
         }
         
-        int nodeCount = m_tree.get().getNodeCount();
+        int nodeCount = treeInput.get().getNodeCount();
         partitionCount = partitionProvider.getPartitionCount();
         m_siteModel = new SiteModel[partitionCount];
         m_substitutionModel = new SubstitutionModel.Base[partitionCount];
         for (int i = 0; i < partitionCount; i++) {
             m_siteModel[i] = partitionProvider.m_pSiteModel.get().get(i);        	
-            m_siteModel[i].setDataType(m_data.get().getDataType());
-            m_substitutionModel[i] = m_siteModel[i].m_pSubstModel.get();
+            m_siteModel[i].setDataType(dataInput.get().getDataType());
+            m_substitutionModel[i] = m_siteModel[i].substModelInput.get();
         }
 
         m_branchLengths = new double[nodeCount];
-        m_StoredBranchLengths = new double[nodeCount];
+        storedBranchLengths = new double[nodeCount];
 
-        int nStateCount = m_data.get().getMaxStateCount();
-        int nPatterns = m_data.get().getPatternCount();
+        int nStateCount = dataInput.get().getMaxStateCount();
+        int nPatterns = dataInput.get().getPatternCount();
         m_likelihoodCore = new PartitionedBeerLikelihoodCore[partitionCount];
         for (int i = 0; i < partitionCount; i++) {
 	        if (nStateCount == 4) {
@@ -194,7 +199,7 @@ public class PartitionedTreeLikelihood extends TreeLikelihood {
         	Arrays.fill(m_fProbabilities[i], 1.0);
         }
         
-        if (m_data.get() instanceof AscertainedAlignment) {
+        if (dataInput.get() instanceof AscertainedAlignment) {
             m_bAscertainedSitePatterns = true;
         }
     }
@@ -202,22 +207,22 @@ public class PartitionedTreeLikelihood extends TreeLikelihood {
 
 
     void initCore(int partition) {
-        int nodeCount = m_tree.get().getNodeCount();
+        int nodeCount = treeInput.get().getNodeCount();
         int extNodeCount = nodeCount / 2 + 1;
         int intNodeCount = nodeCount / 2;
         
         m_likelihoodCore[partition].initialize(
                 nodeCount,
-                m_data.get().getPatternCount(),
+                dataInput.get().getPatternCount(),
                 m_siteModel[partition].getCategoryCount(),
                 true, m_useAmbiguities.get()
         );
 
 
         if (m_useAmbiguities.get()) {
-            setPartials(partition, m_tree.get().getRoot(), m_data.get().getPatternCount());
+            setPartials(partition, treeInput.get().getRoot(), dataInput.get().getPatternCount());
         } else {
-            setStates(partition, m_tree.get().getRoot(), m_data.get().getPatternCount());
+            setStates(partition, treeInput.get().getRoot(), dataInput.get().getPatternCount());
         }
         m_nHasDirt = Tree.IS_FILTHY;
         for (int j = 0; j < intNodeCount; j++) {
@@ -239,9 +244,9 @@ public class PartitionedTreeLikelihood extends TreeLikelihood {
         if (node.isLeaf()) {
             int i;
             int[] states = new int[patternCount];
-            int iTaxon = m_data.get().getTaxonIndex(node.getID());
+            int iTaxon = dataInput.get().getTaxonIndex(node.getID());
             for (i = 0; i < patternCount; i++) {
-                states[i] = m_data.get().getPattern(iTaxon, i);
+                states[i] = dataInput.get().getPattern(iTaxon, i);
             }
             m_likelihoodCore[partition].setNodeStates(node.getNr(), states);
 
@@ -256,12 +261,12 @@ public class PartitionedTreeLikelihood extends TreeLikelihood {
      */
     void setPartials(int partition, Node node, int patternCount) {
         if (node.isLeaf()) {
-            Alignment data = m_data.get();
+            Alignment data = dataInput.get();
             int nStates = data.getDataType().getStateCount();
             double[] partials = new double[patternCount * nStates];
 
             int k = 0;
-            int iTaxon = m_data.get().getTaxonIndex(node.getID());
+            int iTaxon = dataInput.get().getTaxonIndex(node.getID());
             for (int iPattern = 0; iPattern < patternCount; iPattern++) {
                 int nState = data.getPattern(iTaxon, iPattern);
                 boolean[] stateSet = data.getStateSet(nState);
@@ -292,7 +297,7 @@ public class PartitionedTreeLikelihood extends TreeLikelihood {
             logP = m_beagle.calculateLogP();
             return logP;
         }
-        Tree tree = m_tree.get();
+        Tree tree = treeInput.get();
         
 //        for (int i = 0; i < partitionCount; i++) {
 //        	List<Integer> partitionIndicator = partitionProvider.getPatternIndicators(i);
@@ -342,7 +347,7 @@ public class PartitionedTreeLikelihood extends TreeLikelihood {
         	for (int k = 0; k < partitionCount; k++) {
         		int [] weights = partitionProvider.getPatternWeights(k);
         		List<Integer> patternIndicators = partitionProvider.getPatternIndicators(k);
-	            double ascertainmentCorrection = ((AscertainedAlignment) m_data.get()).getAscertainmentCorrection(m_fPatternLogLikelihoods[k]);
+	            double ascertainmentCorrection = ((AscertainedAlignment) dataInput.get()).getAscertainmentCorrection(m_fPatternLogLikelihoods[k]);
 	            for (int i : patternIndicators) {
 	                logP += (m_fPatternLogLikelihoods[k][i] - ascertainmentCorrection) * weights[i];
 	            }
@@ -393,7 +398,7 @@ public class PartitionedTreeLikelihood extends TreeLikelihood {
 				// kick off the threads
 		    	for (int partition = 0; partition < partitionCount; partition++) {
 		    		CoreRunnable coreRunnable = new CoreRunnable(partition, root, partitionProvider.getPatternIndicators(partition));
-					BeastMCMC.g_exec.execute(coreRunnable);
+		    		BeastMCMC.g_exec.execute(coreRunnable);
 		    	}
 				m_nCountDown.await();
 			} else {
@@ -425,7 +430,7 @@ public class PartitionedTreeLikelihood extends TreeLikelihood {
         double branchRate = branchTime / node.getLength();
         
         // First update the transition probability matrix(ices) for this branch
-        if (!node.isRoot() && (update != Tree.IS_CLEAN || branchTime != m_StoredBranchLengths[iNode])) {
+        if (!node.isRoot() && (update != Tree.IS_CLEAN || branchTime != storedBranchLengths[iNode])) {
             Node parent = node.getParent();
             m_likelihoodCore[partition].setNodeMatrixForUpdate(iNode);
             for (int i = 0; i < m_siteModel[partition].getCategoryCount(); i++) {
@@ -494,7 +499,7 @@ public class PartitionedTreeLikelihood extends TreeLikelihood {
         }
         m_nHasDirt = Tree.IS_CLEAN;
 
-        if (m_data.get().isDirtyCalculation()) {
+        if (dataInput.get().isDirtyCalculation()) {
             m_nHasDirt = Tree.IS_FILTHY;
             return true;
         }
@@ -512,7 +517,7 @@ public class PartitionedTreeLikelihood extends TreeLikelihood {
             m_nHasDirt = Tree.IS_DIRTY;
             return true;
         }
-        return m_tree.get().somethingIsDirty();
+        return treeInput.get().somethingIsDirty();
     }
 
     @Override
@@ -553,7 +558,7 @@ public class PartitionedTreeLikelihood extends TreeLikelihood {
      * @return a list of unique ids for the state nodes that form the argument
      */
     public List<String> getArguments() {
-        return Collections.singletonList(m_data.get().getID());
+        return Collections.singletonList(dataInput.get().getID());
     }
 
     /**

@@ -8,6 +8,8 @@ import beast.core.MCMC;
 import beast.util.Randomizer;
 import beast.util.XMLParser;
 
+
+
 import junit.framework.TestCase;
 
 public class PartitionedLikelihoodTest extends TestCase {
@@ -25,7 +27,7 @@ public class PartitionedLikelihoodTest extends TestCase {
 			System.err.println(logP);
 			assertEquals(-4053.296578683104, logP, 1e-10);
 			
-			mcmc.m_oChainLength.setValue(1000, mcmc);
+			mcmc.chainLengthInput.setValue(1000, mcmc);
 			mcmc.run();
 			logP = mcmc.robustlyCalcPosterior(mcmc.posteriorInput.get());
 			System.err.println(logP);

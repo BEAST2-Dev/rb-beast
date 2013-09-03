@@ -3,12 +3,13 @@ package test.beast.evolution.substitutionmodel;
 
 import org.junit.Test;
 
-import test.beast.evolution.substmodel.GTRTest;
 import beast.core.Description;
 import beast.core.parameter.IntegerParameter;
 import beast.core.parameter.RealParameter;
 import beast.evolution.substitutionmodel.Frequencies;
 import beast.evolution.substitutionmodel.RB;
+
+import test.beast.evolution.substmodel.GTRTest;
 
 @Description("Test GTR matrix exponentiation")
 public class RBGTRTest extends GTRTest {
