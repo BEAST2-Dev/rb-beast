@@ -48,6 +48,7 @@ import beast.evolution.sitemodel.SiteModel;
 import beast.evolution.substitutionmodel.SubstitutionModel;
 import beast.evolution.tree.Node;
 import beast.evolution.tree.Tree;
+import beast.evolution.tree.TreeInterface;
 
 
 
@@ -297,7 +298,7 @@ public class PartitionedTreeLikelihood extends TreeLikelihood {
             logP = m_beagle.calculateLogP();
             return logP;
         }
-        Tree tree = treeInput.get();
+        TreeInterface tree = treeInput.get();
         
 //        for (int i = 0; i < partitionCount; i++) {
 //        	List<Integer> partitionIndicator = partitionProvider.getPatternIndicators(i);
