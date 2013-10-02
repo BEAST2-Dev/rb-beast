@@ -273,10 +273,8 @@ public class PartitionProvider extends CalculationNode implements StateNodeIniti
 	}
 
 	@Override
-	public List<StateNode> getInitialisedStateNodes() {
-		List<StateNode> stateNodes = new ArrayList<StateNode>();
+	public void getInitialisedStateNodes(List<StateNode> stateNodes) {
 		SiteModel siteModel = (SiteModel) m_pSiteModel.get().get(0);
 		stateNodes.add(siteModel.muParameterInput.get());
-		return stateNodes;
 	}
 }
