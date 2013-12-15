@@ -27,11 +27,11 @@ public class PartitionedLikelihoodTest extends TestCase {
 			System.err.println(logP);
 			assertEquals(-4053.296578683104, logP, 1e-10);
 			
-			mcmc.chainLengthInput.setValue(1000, mcmc);
+			mcmc.chainLengthInput.setValue(10000, mcmc);
 			mcmc.run();
 			logP = mcmc.robustlyCalcPosterior(mcmc.posteriorInput.get());
 			System.err.println(logP);
-			assertEquals(-1817.0926689847693, logP, 1e-10);
+			assertEquals(-1816.432973767088, logP, 1e-10);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
