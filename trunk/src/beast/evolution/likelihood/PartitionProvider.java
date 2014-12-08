@@ -8,6 +8,8 @@ import java.util.Set;
 
 import beast.app.beauti.BeautiDoc;
 import beast.app.beauti.PartitionContext;
+import beast.core.BEASTInterface;
+import beast.core.BEASTObject;
 import beast.core.CalculationNode;
 import beast.core.Description;
 import beast.core.Input;
@@ -15,7 +17,6 @@ import beast.core.MCMC;
 import beast.core.State;
 import beast.core.StateNode;
 import beast.core.StateNodeInitialiser;
-import beast.core.BEASTObject;
 import beast.core.Input.Validate;
 import beast.core.parameter.IntegerParameter;
 import beast.core.parameter.RealParameter;
@@ -220,22 +221,22 @@ public class PartitionProvider extends CalculationNode implements StateNodeIniti
 		}
 		
 		String sPartition = BeautiDoc.parsePartition(getID());
-		Set<BEASTObject> ancestors = new HashSet<BEASTObject>();
-		BeautiDoc.collectAncestors(this, ancestors, new HashSet<BEASTObject>());
+		Set<BEASTInterface> ancestors = new HashSet<BEASTInterface>();
+		BeautiDoc.collectAncestors(this, ancestors, new HashSet<BEASTInterface>());
 		MCMC mcmc = null;
-		for (BEASTObject plugin : ancestors) {
+		for (BEASTInterface plugin : ancestors) {
 			if (plugin instanceof MCMC) {
 				mcmc = (MCMC) plugin;
 				break;
 			}
 		}
 		m_pSiteModel.get().add(siteModel);
-		List<BEASTObject> tabuList = new ArrayList<BEASTObject>();
+		List<BEASTInterface> tabuList = new ArrayList<BEASTInterface>();
 		tabuList.add(this);
 		for (int i = 1; i < numPartitions.get(); i++) {
 			BeautiDoc doc = new BeautiDoc();
 			PartitionContext context = new PartitionContext(sPartition+i);
-			BEASTObject plugin = BeautiDoc.deepCopyPlugin(siteModel, this, mcmc, context, doc, tabuList);
+			BEASTInterface plugin = BeautiDoc.deepCopyPlugin(siteModel, this, mcmc, context, doc, tabuList);
 			m_pSiteModel.get().add((SiteModel.Base) plugin);
 		}
 		if (siteModel instanceof SiteModel) {
@@ -249,8 +250,8 @@ public class PartitionProvider extends CalculationNode implements StateNodeIniti
 		needsInitilising = false;
 		initAndValidate();
 
-		Set<BEASTObject> plugins = new HashSet<BEASTObject>();
-		for (BEASTObject plugin : mcmc.listActivePlugins()) {
+		Set<BEASTInterface> plugins = new HashSet<BEASTInterface>();
+		for (BEASTInterface plugin : mcmc.listActivePlugins()) {
 			reinitialise(plugin, plugins);
 		}
 //		
@@ -262,8 +263,8 @@ public class PartitionProvider extends CalculationNode implements StateNodeIniti
 //		}
 	}
 
-	private void reinitialise(BEASTObject plugin, Set<BEASTObject> plugins) throws Exception {
-		for (BEASTObject plugin2 : plugin.listActivePlugins()) {
+	private void reinitialise(BEASTInterface plugin, Set<BEASTInterface> plugins) throws Exception {
+		for (BEASTInterface plugin2 : plugin.listActivePlugins()) {
 			if (!plugins.contains(plugin2)) {
 				plugins.add(plugin2);
 				reinitialise(plugin2, plugins);
