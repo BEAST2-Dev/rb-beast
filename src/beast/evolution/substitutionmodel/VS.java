@@ -1,6 +1,5 @@
 package beast.evolution.substitutionmodel;
 
-
 import java.util.Arrays;
 
 import beast.core.Citation;
@@ -11,24 +10,21 @@ import beast.core.Input.Validate;
 import beast.core.parameter.IntegerParameter;
 import beast.evolution.datatype.DataType;
 import beast.evolution.datatype.Nucleotide;
-import beast.evolution.substitutionmodel.GeneralSubstitutionModel;
-
-
 
 @Description("Substitution model for nucleotides that changes where the count input " +
 		"determines the number of parameters used in a hierarchy of models")
-@Citation("Bouckaert, Remco, Monica V. Alvarado-Mora, and J. R. Pinho. Evolutionary rates and HBV: issues of rate estimation with Bayesian molecular methods. Antiviral therapy 18.3 Pt B (2012): 497-503.")
-public class RB extends GeneralSubstitutionModel {
-	public Input<IntegerParameter> m_countInput = new Input<IntegerParameter>("count", "model number used 0 = JC, 5 and higher if GTR (default 0)", Validate.REQUIRED);
+@Citation("Alexei J. Drummond and Remco R. Bouckaert. Bayesian evolutionary analysis with BEAST 2. CUP. 2014")
+public class VS extends GeneralSubstitutionModel {
+	public Input<IntegerParameter> countInput = new Input<IntegerParameter>("count", "model number used 0 = JC, 5 and higher if GTR", Validate.REQUIRED);
 	
-	Function m_rate;
-	IntegerParameter m_count;
+	Function rate;
+	IntegerParameter count;
 	
 	@Override
 	public void initAndValidate() throws Exception {
-		m_count = m_countInput.get();
-		m_rate = ratesInput.get();
-		if (m_rate.getDimension() != 5) {
+		count = countInput.get();
+		rate = ratesInput.get();
+		if (rate.getDimension() != 5) {
 			throw new Exception("rate input must have dimension 5");
 		}
 		
@@ -47,59 +43,59 @@ public class RB extends GeneralSubstitutionModel {
 
 	@Override
     protected void setupRelativeRates() {
-		switch (m_count.getValue()) {
+		switch (count.getValue()) {
 		case 0: // JC96
 			Arrays.fill(relativeRates, 1.0);
 			break;
 		case 1: // HKY
-	    	relativeRates[0] = m_rate.getArrayValue(0); // A->C
+	    	relativeRates[0] = rate.getArrayValue(0); // A->C
 	    	relativeRates[1] = 1; // A->G
-	    	relativeRates[2] = m_rate.getArrayValue(0); // A->T
+	    	relativeRates[2] = rate.getArrayValue(0); // A->T
 
-	    	relativeRates[4] = m_rate.getArrayValue(0); // C->G
+	    	relativeRates[4] = rate.getArrayValue(0); // C->G
 	    	relativeRates[5] = 1; // C->T
 
-	    	relativeRates[8] = m_rate.getArrayValue(0); // G->T
+	    	relativeRates[8] = rate.getArrayValue(0); // G->T
 			break;
 		case 2: // K3P
-	    	relativeRates[0] = m_rate.getArrayValue(0); // A->C
-	    	relativeRates[1] = m_rate.getArrayValue(1); // A->G
-	    	relativeRates[2] = m_rate.getArrayValue(0); // A->T
+	    	relativeRates[0] = rate.getArrayValue(0); // A->C
+	    	relativeRates[1] = rate.getArrayValue(1); // A->G
+	    	relativeRates[2] = rate.getArrayValue(0); // A->T
 
-	    	relativeRates[4] = m_rate.getArrayValue(0); // C->G
+	    	relativeRates[4] = rate.getArrayValue(0); // C->G
 	    	relativeRates[5] = 1; // C->T
 
-	    	relativeRates[8] = m_rate.getArrayValue(0); // G->T
+	    	relativeRates[8] = rate.getArrayValue(0); // G->T
 			break;
 		case 3: // TIM
-	    	relativeRates[0] = m_rate.getArrayValue(0); // A->C
-	    	relativeRates[1] = m_rate.getArrayValue(1); // A->G
-	    	relativeRates[2] = m_rate.getArrayValue(2); // A->T
+	    	relativeRates[0] = rate.getArrayValue(0); // A->C
+	    	relativeRates[1] = rate.getArrayValue(1); // A->G
+	    	relativeRates[2] = rate.getArrayValue(2); // A->T
 
-	    	relativeRates[4] = m_rate.getArrayValue(2); // C->G
+	    	relativeRates[4] = rate.getArrayValue(2); // C->G
 	    	relativeRates[5] = 1; // C->T
 
-	    	relativeRates[8] = m_rate.getArrayValue(0); // G->T
+	    	relativeRates[8] = rate.getArrayValue(0); // G->T
 			break;
 		case 4: // new model 
-	    	relativeRates[0] = m_rate.getArrayValue(0); // A->C
-	    	relativeRates[1] = m_rate.getArrayValue(1); // A->G
-	    	relativeRates[2] = m_rate.getArrayValue(2); // A->T
+	    	relativeRates[0] = rate.getArrayValue(0); // A->C
+	    	relativeRates[1] = rate.getArrayValue(1); // A->G
+	    	relativeRates[2] = rate.getArrayValue(2); // A->T
 
-	    	relativeRates[4] = m_rate.getArrayValue(3); // C->G
+	    	relativeRates[4] = rate.getArrayValue(3); // C->G
 	    	relativeRates[5] = 1; // C->T
 
-	    	relativeRates[8] = m_rate.getArrayValue(0); // G->T
+	    	relativeRates[8] = rate.getArrayValue(0); // G->T
 			break;
 		default: // GTR
-	    	relativeRates[0] = m_rate.getArrayValue(0); // A->C
-	    	relativeRates[1] = m_rate.getArrayValue(1); // A->G
-	    	relativeRates[2] = m_rate.getArrayValue(2); // A->T
+	    	relativeRates[0] = rate.getArrayValue(0); // A->C
+	    	relativeRates[1] = rate.getArrayValue(1); // A->G
+	    	relativeRates[2] = rate.getArrayValue(2); // A->T
 
-	    	relativeRates[4] = m_rate.getArrayValue(3); // C->G
+	    	relativeRates[4] = rate.getArrayValue(3); // C->G
 	    	relativeRates[5] = 1; // C->T
 
-	    	relativeRates[8] = m_rate.getArrayValue(4); // G->T
+	    	relativeRates[8] = rate.getArrayValue(4); // G->T
 			break;
 		}
 

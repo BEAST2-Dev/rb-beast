@@ -3,10 +3,10 @@ package beast.evolution.operators;
 
 import org.apache.commons.math.MathException;
 
+import beast.core.BEASTObject;
 import beast.core.Description;
 import beast.core.Input;
 import beast.core.Operator;
-import beast.core.BEASTObject;
 import beast.core.Input.Validate;
 import beast.core.parameter.IntegerParameter;
 import beast.core.parameter.RealParameter;
