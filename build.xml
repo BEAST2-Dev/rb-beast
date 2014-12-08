@@ -71,9 +71,9 @@
 		<javac srcdir="${srcRBS}" destdir="${buildRBS}" classpathref="classpath" 
 		       fork="true"
 		       memoryinitialsize="256m"
-		       memorymaximumsize="256m"
-			   source="1.6"
-		       target="1.6">
+		       memorymaximumsize="256m">
+			   <!--source="1.6"
+		       target="1.6"-->
 			<include name="beast/**/**" />
 			<!-- compile JUnit test classes -->
 			<include name="test/beast/**" />
