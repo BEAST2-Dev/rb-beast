@@ -4,7 +4,7 @@ import beast.core.Description;
 import beast.core.Input;
 import beast.core.Input.Validate;
 import beast.core.parameter.BooleanParameter;
-import beast.core.parameter.IntegerParameter;
+import beast.core.parameter.Parameter;
 import beast.core.parameter.RealParameter;
 import beast.evolution.operators.ScaleOperator;
 import beast.util.Randomizer;
@@ -12,9 +12,9 @@ import beast.util.Randomizer;
 
 @Description("Scale operator for the RB-Substitution model, which scales only those ratest that are in use")
 public class RBScaleOperator extends ScaleOperator {
-	public Input<IntegerParameter> countInput = new Input<IntegerParameter>("count","count parameter indicating the nr of rates to use", Validate.REQUIRED);
+	public Input<Parameter> countInput = new Input<Parameter>("count","count parameter indicating the nr of rates to use", Validate.REQUIRED);
 
-	IntegerParameter count;
+	Parameter count;
 	
 	@Override
 	public void initAndValidate() throws Exception {
@@ -40,7 +40,7 @@ public class RBScaleOperator extends ScaleOperator {
 
             assert param.getLower() != null  && param.getUpper() != null;
 
-            final int dim = count.getValue();//param.getDimension();
+            final int dim = (int) count.getArrayValue();//param.getDimension();
 
             if (bScaleAllIndependently) {
                 // update all dimensions independently.

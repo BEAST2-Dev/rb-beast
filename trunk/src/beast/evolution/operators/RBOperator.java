@@ -8,7 +8,7 @@ import beast.core.Description;
 import beast.core.Input;
 import beast.core.Operator;
 import beast.core.Input.Validate;
-import beast.core.parameter.IntegerParameter;
+import beast.core.parameter.Parameter;
 import beast.core.parameter.RealParameter;
 import beast.math.distributions.Exponential;
 import beast.math.distributions.ParametricDistribution;
@@ -20,10 +20,10 @@ import beast.util.Randomizer;
 @Description("Operator for RB-SubstitutionModel to jump between states in the hierarchy")
 public class RBOperator extends Operator {
 	public Input<RealParameter> rateInput = new Input<RealParameter>("rates","rate parameter containing rates for hierarchical subst model", Validate.REQUIRED);
-	public Input<IntegerParameter> countInput = new Input<IntegerParameter>("count","count parameter indicating the nr of rates to use", Validate.REQUIRED);
+	public Input<Parameter> countInput = new Input<Parameter>("count","count parameter indicating the nr of rates to use", Validate.REQUIRED);
 	
 	private RealParameter rates;
-	private IntegerParameter counts;
+	private Parameter counts;
 //	private Double scaleFactor;
 	//final static int [] countmap = {-1, -1, -1, 0, 2, 0}; 
 	//final static int [] countmap = {-1, 0, 1, 2, 3, 4}; 
@@ -46,7 +46,7 @@ public class RBOperator extends Operator {
 
 	@Override
 	public double proposal() {
-		int count = counts.getValue();
+		int count = (int) counts.getArrayValue();
 		double oldvalue = (countmap[count] >= 0 ? rates.getArrayValue(countmap[count]) : 1.0);
 		double scale = 1;// = (scaleFactor + (Randomizer.nextDouble() * ((1.0 / scaleFactor) - scaleFactor)));
 
