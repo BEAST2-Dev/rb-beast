@@ -71,14 +71,14 @@ name="alignment">
             <prior id="YuleBirthRatePrior.t:dna" name="distribution" x="@birthRate.t:dna">
                 <Uniform id="Uniform.0" name="distr" upper="Infinity"/>
             </prior>
-            <prior id="GammaShapePrior.s:dna" name="distribution" x="@gammaShape.s:dna">
+            <distribution id="GammaShapePrior.s:dna" spec="beast.math.distributions.RBPrior" x="@gammaShape.s:dna" count='@hasGammaRates.s:dna'>
                 <Exponential id="Exponential.0" name="distr">
                     <parameter id="RealParameter.02" lower="0.0" name="mean" upper="0.0">1.0</parameter>
                 </Exponential>
-            </prior>
-            <prior id="PropInvariantPrior.s:dna" name="distribution" x="@proportionInvariant.s:dna">
-                <Uniform id="Uniform.01" name="distr"/>
-            </prior>
+            </distribution>
+            <distribution id="PropInvariantPrior.s:dna" spec="beast.math.distributions.RBPrior" x="@proportionInvariant.s:dna" count='@hasInvariantSites.s:dna'>
+                <Gamma name="distr" alpha='0.2' beta='5.0'/>
+            </distribution>
         </distribution>
         <distribution id="likelihood" spec="util.CompoundDistribution">
             <distribution id="treeLikelihood.dna" spec="TreeLikelihood" data="@dna" tree="@Tree.t:dna">
@@ -125,7 +125,7 @@ name="alignment">
     <operator id="hasInvariantSitesFlipper.s:dna" spec="BitFlipOperator" parameter="@hasInvariantSites.s:dna" weight="0.1"/>
     
     
-    <logger id="tracelog" fileName="Primates.log" logEvery="1000" model="@posterior" sanitiseHeaders="true" sort="smart">
+    <logger id="tracelog" fileName="dna.log" logEvery="1000" model="@posterior" sanitiseHeaders="true" sort="smart">
         <log idref="posterior"/>
         <log idref="likelihood"/>
         <log idref="prior"/>
@@ -149,6 +149,9 @@ name="alignment">
         
         <log idref='hasGammaRates.s:dna'/>
         <log idref='hasInvariantSites.s:dna'/>
+        
+	<log idref="GammaShapePrior.s:dna"/>
+	<log idref="PropInvariantPrior.s:dna" />
     </logger>
 
     <logger id="screenlog" logEvery="1000">
@@ -158,7 +161,7 @@ name="alignment">
         <log idref="prior"/>
     </logger>
 
-    <logger id="treelog.t:dna" fileName="$(tree).trees" logEvery="1000" mode="tree">
+    <logger id="treelog.t:dna" fileName="dna.trees" logEvery="1000" mode="tree">
         <log id="TreeWithMetaDataLogger.t:dna" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@Tree.t:dna"/>
     </logger>
 
