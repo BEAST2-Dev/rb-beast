@@ -3,7 +3,6 @@ package beast.evolution.operators;
 
 import org.apache.commons.math.MathException;
 
-import beast.core.BEASTObject;
 import beast.core.Description;
 import beast.core.Input;
 import beast.core.Operator;
@@ -35,7 +34,7 @@ public class RBOperator extends Operator {
 	public void initAndValidate() throws Exception {
 		rates = rateInput.get();
 		distr = new Exponential();
-		for (BEASTObject plugin : rates.outputs) {
+		for (Object plugin : rates.getOutputs()) {
 			if (plugin instanceof RBPrior) {
 				RBPrior prior = (RBPrior) plugin;
 				distr = prior.distInput.get();
@@ -53,7 +52,7 @@ public class RBOperator extends Operator {
 		
 		if (Randomizer.nextBoolean()) {
 			// increase nr of rates
-			if (count == 5) {
+			if (count == rates.getDimension()	) {
 				// cannot increase any further
 				return Double.NEGATIVE_INFINITY;
 			}

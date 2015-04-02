@@ -9,16 +9,17 @@ import beast.core.Description;
 import beast.core.Input;
 import beast.core.Input.Validate;
 import beast.core.parameter.BooleanParameter;
+import beast.core.parameter.IntegerParameter;
 import beast.evolution.tree.Node;
 
 @Description("Site model that jumps between with and without gamma sites, as well as with and without invariant sites")
 public class BEASTModelTest extends SiteModel {
 
-	public Input<BooleanParameter> hasGammaRatesInput = new Input<BooleanParameter>("hasGammaRates", "flag indicating whether gamma rate heterogeneity should be used", Validate.REQUIRED);
-	public Input<BooleanParameter> hasInvariantSitesInput = new Input<BooleanParameter>("hasInvariantSites", "flag indicating whether invariant sites should be used", Validate.REQUIRED);
+	public Input<IntegerParameter> hasGammaRatesInput = new Input<IntegerParameter>("hasGammaRates", "flag indicating whether gamma rate heterogeneity should be used", Validate.REQUIRED);
+	public Input<IntegerParameter> hasInvariantSitesInput = new Input<IntegerParameter>("hasInvariantSites", "flag indicating whether invariant sites should be used", Validate.REQUIRED);
 
-	BooleanParameter hasInvariantSites;
-	BooleanParameter hasGammaRates;
+	IntegerParameter hasInvariantSites;
+	IntegerParameter hasGammaRates;
 	
 	@Override
 	public void initAndValidate() throws Exception {
@@ -52,7 +53,7 @@ public class BEASTModelTest extends SiteModel {
 		double propVariable = 1.0;
         int cat = 0;
 
-        if (/*invarParameter != null && */hasInvariantSites.getValue()) {
+        if (/*invarParameter != null && */hasInvariantSites.getValue() > 0) {
             if (hasPropInvariantCategory) {
                 categoryRates[0] = 0.0;
                 categoryProportions[0] = invarParameter.getValue();
@@ -68,7 +69,7 @@ public class BEASTModelTest extends SiteModel {
             }
         }
 
-        if (hasGammaRates.getValue()) {
+        if (hasGammaRates.getValue() > 0) {
 
             final double a = shapeParameter.getValue();
             double mean = 0.0;
@@ -144,7 +145,7 @@ public class BEASTModelTest extends SiteModel {
 	
 	@Override
     public double getProportionInvariant() {
-        if (hasInvariantSites.getValue()) {
+        if (hasInvariantSites.getValue() > 0) {
         	return invarParameter.getValue();
         } else {
         	return 0.0;

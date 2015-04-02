@@ -21,22 +21,25 @@
             <stateNode idref="rates"/>
         </state>
 
-    	<distribution spec='CompoundDistribution' id='prior'>
-            <distribution spec='beast.math.distributions.RBPrior' count='@count' x='@rates'>
 <!--
                 <distr spec="beast.math.distributions.OneOnX"/>
                 <distr spec="beast.math.distributions.Gamma" alpha='0.0625' beta='16.0'/>
                 <distr spec="beast.math.distributions.Gamma" alpha='1' beta='1.0'/>
                 <distr spec="beast.math.distributions.Gamma" alpha='0.2' beta='0.2'/>
--->
-                <distr spec="beast.math.distributions.Gamma" alpha='0.5' beta='2'/>
-            </distribution>
-
-<!--
 	        <distribution spec='beast.math.distributions.Prior' x='@count'>
 				<distr spec='beast.math.distributions.Exponential' mean='2'/>
 		    </distribution>
 -->
+    	<distribution spec='CompoundDistribution' id='prior'>
+<!--
+-->
+            <distribution spec='beast.math.distributions.RBPrior' count='@count' x='@rates'>
+				<distr spec='beast.math.distributions.Exponential' mean='1'/>
+<!--
+                <distr spec="beast.math.distributions.Uniform" lower='0.0' upper='1'/>
+-->
+            </distribution>
+
     	</distribution>
 
         <operator id='RBOperator' spec='RBOperator' weight="1" rates="@rates" count='@count'/>
@@ -45,7 +48,7 @@
 -->
 
 
-        <logger logEvery="1000" fileName="RB.$(seed).log" model='@prior'>
+        <logger logEvery="1000" fileName="RBprior.log" model='@prior'>
             <log idref="prior"/>
             <log idref='count'/>
             <log idref='rates'/>
