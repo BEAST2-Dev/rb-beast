@@ -21,6 +21,8 @@ import beast.core.Input.Validate;
 import beast.core.parameter.IntegerParameter;
 import beast.core.parameter.RealParameter;
 import beast.evolution.alignment.Alignment;
+import beast.evolution.alignment.Taxon;
+import beast.evolution.alignment.TaxonSet;
 import beast.evolution.sitemodel.SiteModel;
 import beast.util.Randomizer;
 
@@ -268,7 +270,17 @@ public class PartitionProvider extends CalculationNode implements StateNodeIniti
 			if (!plugins.contains(plugin2)) {
 				plugins.add(plugin2);
 				reinitialise(plugin2, plugins);
-				plugin2.initAndValidate();
+				// somehow, the process now produces a disconnected empty TaxonSet, which needs to be initialised
+				// TODO: find out how this TaxonSet came about.
+				if (plugin2 instanceof TaxonSet) {
+					TaxonSet taxa = (TaxonSet) plugin2;
+					if (taxa.alignmentInput.get() == null && taxa.taxonsetInput.get().size() == 0 && taxa.getOutputs().size()==0) {
+					} else {
+						plugin2.initAndValidate();
+					}
+				} else {
+					plugin2.initAndValidate();
+				}
 			}
 		}		
 	}
