@@ -20,6 +20,7 @@ import beast.core.StateNodeInitialiser;
 import beast.core.Input.Validate;
 import beast.core.parameter.IntegerParameter;
 import beast.core.parameter.RealParameter;
+import beast.core.util.CompoundDistribution;
 import beast.evolution.alignment.Alignment;
 import beast.evolution.alignment.Taxon;
 import beast.evolution.alignment.TaxonSet;
@@ -205,7 +206,7 @@ public class PartitionProvider extends CalculationNode implements StateNodeIniti
 	public void initStateNodes() throws Exception {
     	System.err.println(Randomizer.getSeed());
 		PartitionedTreeLikelihood likelihood = null;
-		for (BEASTObject plugin : outputs) {
+		for (BEASTInterface plugin : getOutputs()) {
 			if (plugin instanceof PartitionedTreeLikelihood) {
 				likelihood = (PartitionedTreeLikelihood) plugin;
 			}
@@ -278,6 +279,17 @@ public class PartitionProvider extends CalculationNode implements StateNodeIniti
 					} else {
 						plugin2.initAndValidate();
 					}
+				} else if (plugin2 instanceof MCMC) {
+					MCMC mcmc = (MCMC) plugin2;
+					if (mcmc.sampleFromPriorInput.get()) {
+						// likelihood was removed the first time around
+						// need to add it back into posterior
+						CompoundDistribution posterior = (CompoundDistribution) mcmc.posteriorInput.get();
+						CompoundDistribution likelihood = new CompoundDistribution();
+						likelihood.setID("likelihood");
+						posterior.pDistributions.get().add(likelihood);
+					}
+					plugin2.initAndValidate();
 				} else {
 					plugin2.initAndValidate();
 				}
