@@ -211,12 +211,13 @@
             <operator id='allTipDatesRandomWalker.t:$(n)' spec='TipDatesRandomWalker' windowSize="1" weight="0" tree="@Tree.t:$(n)"/>
 			<operator id='PartitionLengthsDeltaExchangeOperator.$(n)' spec='DeltaExchangeOperator' intparameter='@partitionLengths.$(n)' integer='true' delta='1' weight='10'/>
 
-            <operator id='treeScaler.t:$(n)' spec='ScaleOperator' scaleFactor="0.5" weight="1" tree="@Tree.t:$(n)"/>
-            <operator id='UniformOperator.t:$(n)' spec='Uniform' weight="10" tree="@Tree.t:$(n)"/>
-            <operator id='SubtreeSlide.t:$(n)' spec='SubtreeSlide' weight="5" gaussian="true" size="1.0" tree="@Tree.t:$(n)"/>
-            <operator id='narrow.t:$(n)' spec='Exchange' isNarrow='true' weight="1" tree="@Tree.t:$(n)"/>
-            <operator id='wide.t:$(n)' spec='Exchange' isNarrow='false' weight="1" tree="@Tree.t:$(n)"/>
-            <operator id='WilsonBalding.t:$(n)' spec='WilsonBalding' weight="1" tree="@Tree.t:$(n)"/>
+            <operator id='YuleModelTreeScaler.t:$(n)' spec='ScaleOperator' scaleFactor="0.5" weight="3" tree="@Tree.t:$(n)"/>
+            <operator id='YuleModelTreeRootScaler.t:$(n)' spec='ScaleOperator' scaleFactor="0.5" weight="3" tree="@Tree.t:$(n)" rootOnly='true'/>
+            <operator id='YuleModelUniformOperator.t:$(n)' spec='Uniform' weight="30" tree="@Tree.t:$(n)"/>
+            <operator id='YuleModelSubtreeSlide.t:$(n)' spec='SubtreeSlide' weight="15" gaussian="true" size="1.0" tree="@Tree.t:$(n)"/>
+            <operator id='YuleModelNarrow.t:$(n)' spec='Exchange' isNarrow='true' weight="15" tree="@Tree.t:$(n)"/>
+            <operator id='YuleModelWide.t:$(n)' spec='Exchange' isNarrow='false' weight="3" tree="@Tree.t:$(n)"/>
+            <operator id='YuleModelWilsonBalding.t:$(n)' spec='WilsonBalding' weight="3" tree="@Tree.t:$(n)"/>
 
 
             <prior id='YuleBirthRatePrior.t:$(n)' spec='Prior' x='@birthRate.t:$(n)'><distr spec="beast.math.distributions.Uniform" lower='0' /></prior>

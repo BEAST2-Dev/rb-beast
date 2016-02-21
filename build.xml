@@ -18,7 +18,7 @@
 	<property name="srcBeast2" location="${beast2path}/src" />
 	<property name="beast2classpath" location="${beast2path}/build" />
 	<property name="Add_on_dir" value="${release_dir}/add-on" />
-	<property name="version" value="1.2.4" />
+	<property name="version" value="1.2.5" />
 
     <import file="${beast2path}/build.xml" />
 
@@ -29,6 +29,7 @@
         <pathelement path="${buildRBS}"/>
 		<fileset dir="${libBeast2}" includes="junit-4.8.2.jar"/>
 		<fileset dir="${libBeast2}" includes="beagle.jar"/>
+                <fileset dir="${libBeast2}" includes="jam.jar"/>
         <pathelement path="${beast2classpath}"/>
 	</path>
 

@@ -238,8 +238,9 @@ public class PartitionProvider extends CalculationNode implements StateNodeIniti
 		tabuList.add(this);
 		for (int i = 1; i < numPartitions.get(); i++) {
 			BeautiDoc doc = new BeautiDoc();
-			PartitionContext context = new PartitionContext(sPartition+i);
-			BEASTInterface plugin = BeautiDoc.deepCopyPlugin(siteModel, this, mcmc, context, doc, tabuList);
+			PartitionContext oldContext = new PartitionContext(sPartition);
+			PartitionContext newContext = new PartitionContext(sPartition+i);
+			BEASTInterface plugin = BeautiDoc.deepCopyPlugin(siteModel, this, mcmc, oldContext, newContext, doc, tabuList);
 			m_pSiteModel.get().add((SiteModel.Base) plugin);
 		}
 		if (siteModel instanceof SiteModel) {
