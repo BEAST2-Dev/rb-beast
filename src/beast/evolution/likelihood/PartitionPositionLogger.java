@@ -23,7 +23,7 @@ public class PartitionPositionLogger extends BEASTObject implements Loggable {
     }
 
 	@Override
-	public void init(PrintStream out) throws Exception {
+	public void init(PrintStream out) {
 		for (int i = 0; i< partitionLengths.getDimension() - 1; i++) {
 			out.append(partitionLengths.getID() + ".pos." + (i+1) + "\t");
 		}
