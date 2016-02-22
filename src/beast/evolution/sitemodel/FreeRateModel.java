@@ -25,7 +25,7 @@ public class FreeRateModel extends SiteModel.Base {
     RealParameter invarParameter;
     
     @Override
-    public void initAndValidate() throws Exception {
+    public void initAndValidate() {
         muParameter = muParameterInput.get();
         if (muParameter == null) {
             muParameter = new RealParameter("1.0");
@@ -62,7 +62,7 @@ public class FreeRateModel extends SiteModel.Base {
 
 
         if (/*invarParameter != null && */(invarParameter.getValue() < 0 || invarParameter.getValue() > 1)) {
-            throw new Exception("proportion invariant should be between 0 and 1");
+            throw new IllegalArgumentException("proportion invariant should be between 0 and 1");
         }
         refresh();
 

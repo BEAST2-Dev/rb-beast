@@ -30,17 +30,17 @@ public class MixtureTreeLikelihood extends TreeLikelihood {
 	
 	
 	@Override
-	public void initAndValidate() throws Exception {
+	public void initAndValidate() {
         // sanity check: alignment should have same #taxa as tree
         if (dataInput.get().getNrTaxa() != treeInput.get().getLeafNodeCount()) {
-            throw new Exception("The number of nodes in the tree does not match the number of sequences");
+            throw new IllegalArgumentException("The number of nodes in the tree does not match the number of sequences");
         }
         // No Beagle instance was found, so we use the good old java likelihood core
         beagle = null;
 
         int nodeCount = treeInput.get().getNodeCount();
         if (!(siteModelInput.get() instanceof SiteModel.Base)) {
-        	throw new Exception ("siteModel input should be of type SiteModel.Base");
+        	throw new IllegalArgumentException ("siteModel input should be of type SiteModel.Base");
         }
         m_siteModel = (SiteModel.Base) siteModelInput.get();
         m_siteModel.setDataType(dataInput.get().getDataType());
@@ -92,7 +92,7 @@ public class MixtureTreeLikelihood extends TreeLikelihood {
 
     /* Assumes there IS a branch rate model as opposed to traverse() */
 	@Override
-    int traverse(final Node node) throws Exception {
+    int traverse(final Node node) {
 
         int update = (node.isDirty() | hasDirt);
 
@@ -139,7 +139,7 @@ public class MixtureTreeLikelihood extends TreeLikelihood {
                 if (siteModel.integrateAcrossCategories()) {
                 	mixtureLikelihoodCore.calculatePartials(childNum1, childNum2, iNode, classes);
                 } else {
-                    throw new Exception("Error TreeLikelihood 201: Site categories not supported");
+                    throw new IllegalArgumentException("Error TreeLikelihood 201: Site categories not supported");
                     //m_pLikelihoodCore->calculatePartials(childNum1, childNum2, nodeNum, siteCategories);
                 }
 

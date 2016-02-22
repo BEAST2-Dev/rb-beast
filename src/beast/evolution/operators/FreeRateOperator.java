@@ -17,7 +17,7 @@ public class FreeRateOperator extends Operator {
 	
 
 	@Override
-	public void initAndValidate() throws Exception {
+	public void initAndValidate() {
 	}
 
 	@Override

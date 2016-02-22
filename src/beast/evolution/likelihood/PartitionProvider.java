@@ -51,7 +51,7 @@ public class PartitionProvider extends CalculationNode implements StateNodeIniti
 	boolean needsInitilising = false;
     
     @Override
-    public void initAndValidate() throws Exception {    	
+    public void initAndValidate() {    	
     	if (numPartitions.get() > 0) {
     	    /** we have to wait to initialise till everything is parsed, 
     	     * so that the outputs of all plug-ins are properly set up */
@@ -203,7 +203,7 @@ public class PartitionProvider extends CalculationNode implements StateNodeIniti
      * The StateNodeInitialiser interface can be abused for this purpose
      */
 	@Override
-	public void initStateNodes() throws Exception {
+	public void initStateNodes() {
     	System.err.println(Randomizer.getSeed());
 		PartitionedTreeLikelihood likelihood = null;
 		for (BEASTInterface plugin : getOutputs()) {
@@ -212,7 +212,7 @@ public class PartitionProvider extends CalculationNode implements StateNodeIniti
 			}
 		}
 		if (likelihood == null) {
-			throw new Exception("PartitionProvider must have PartitionedTreeLikelihood as output");
+			throw new IllegalArgumentException("PartitionProvider must have PartitionedTreeLikelihood as output");
 		}
 		SiteModel.Base siteModel = (SiteModel.Base) likelihood.siteModelInput.get();
 		
@@ -255,7 +255,7 @@ public class PartitionProvider extends CalculationNode implements StateNodeIniti
 		initAndValidate();
 
 		Set<BEASTInterface> plugins = new HashSet<BEASTInterface>();
-		for (BEASTInterface plugin : mcmc.listActivePlugins()) {
+		for (BEASTInterface plugin : mcmc.listActiveBEASTObjects()) {
 			reinitialise(plugin, plugins);
 		}
 //		
@@ -267,8 +267,8 @@ public class PartitionProvider extends CalculationNode implements StateNodeIniti
 //		}
 	}
 
-	private void reinitialise(BEASTInterface plugin, Set<BEASTInterface> plugins) throws Exception {
-		for (BEASTInterface plugin2 : plugin.listActivePlugins()) {
+	private void reinitialise(BEASTInterface plugin, Set<BEASTInterface> plugins) {
+		for (BEASTInterface plugin2 : plugin.listActiveBEASTObjects()) {
 			if (!plugins.contains(plugin2)) {
 				plugins.add(plugin2);
 				reinitialise(plugin2, plugins);

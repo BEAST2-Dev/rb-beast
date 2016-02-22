@@ -10,10 +10,10 @@ import beast.core.Description;
 public class PartitionProviderByCodon extends PartitionProvider {
 
 	
-	public void initAndValidate() throws Exception {
+	public void initAndValidate() {
     	partitionLengths = partitionLengthsInput.get();
     	if (partitionLengths.getDimension() * 3 != m_pSiteModel.get().size()) {
-    		throw new Exception("nr of site models must be 3 times nr of partitions defined trough partitionLengths");
+    		throw new IllegalArgumentException("nr of site models must be 3 times nr of partitions defined trough partitionLengths");
     	}
     			
     	siteCount = alignment.get().getSiteCount();
@@ -34,7 +34,7 @@ public class PartitionProviderByCodon extends PartitionProvider {
     		sum += partitionLengths.getValue(i);
     	}
     	if (sum * 3 != siteCount + (siteCount % 3 == 0? 0 : 3-siteCount % 3)) {
-    		throw new Exception("nr of sites does not match partitions lengths (sum=" + sum + "*3 != siteCount=" + siteCount+")");
+    		throw new IllegalArgumentException("nr of sites does not match partitions lengths (sum=" + sum + "*3 != siteCount=" + siteCount+")");
     	}
     	
 //    	weights = new int[patternIndicators.length][patternCount];

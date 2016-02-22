@@ -20,7 +20,7 @@ public class MixtureSubstModel extends CalculationNode {
 	SubstitutionModel.Base substitutionModel;
 	
 	@Override
-	public void initAndValidate() throws Exception {
+	public void initAndValidate() {
 		weight = weightInput.get();
 		rate = rateInput.get();
 		substitutionModel = substModelInput.get();

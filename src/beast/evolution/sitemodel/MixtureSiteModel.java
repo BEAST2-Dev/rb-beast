@@ -25,7 +25,7 @@ public class MixtureSiteModel extends DefaultMixtureSiteModel {
 	boolean [] isDirtySiteModel;
 	
 	@Override
-	public void initAndValidate() throws Exception {
+	public void initAndValidate() {
 		components = componentInput.get();
 		weights = new double[components.size()];
 		updateWeights = true;

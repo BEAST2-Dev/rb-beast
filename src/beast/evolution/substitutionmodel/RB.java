@@ -1,6 +1,7 @@
 package beast.evolution.substitutionmodel;
 
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
 import beast.core.Citation;
@@ -25,21 +26,26 @@ public class RB extends GeneralSubstitutionModel {
 	IntegerParameter m_count;
 	
 	@Override
-	public void initAndValidate() throws Exception {
+	public void initAndValidate() {
 		m_count = m_countInput.get();
 		m_rate = ratesInput.get();
 		if (m_rate.getDimension() != 5) {
-			throw new Exception("rate input must have dimension 5");
+			throw new IllegalArgumentException("rate input must have dimension 5");
 		}
 		
     	frequencies = frequenciesInput.get();
         updateMatrix = true;
         nrOfStates = frequencies.getFreqs().length;
     	if (nrOfStates != 4) {
-    		throw new Exception("Frequencies has wrong size. Expected 4, but got " + nrOfStates);
+    		throw new IllegalArgumentException("Frequencies has wrong size. Expected 4, but got " + nrOfStates);
     	}
 
-        eigenSystem = createEigenSystem();
+        try {
+			eigenSystem = createEigenSystem();
+		} catch (SecurityException | ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException e) {
+			throw new IllegalArgumentException(e);
+		}
         rateMatrix = new double[nrOfStates][nrOfStates];
         relativeRates = new double[nrOfStates * (nrOfStates - 1)];
         storedRelativeRates = new double[nrOfStates * (nrOfStates - 1)];

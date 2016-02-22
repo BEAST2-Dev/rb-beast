@@ -18,7 +18,7 @@ public class PartitionPositionLogger extends BEASTObject implements Loggable {
     IntegerParameter partitionLengths;
     
     @Override
-    public void initAndValidate() throws Exception {
+    public void initAndValidate() {
     	partitionLengths = partitionLengthsInput.get();
     }
 

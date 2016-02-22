@@ -131,10 +131,10 @@ public class PartitionedTreeLikelihood extends TreeLikelihood {
     
     
     @Override
-    public void initAndValidate() throws Exception {
+    public void initAndValidate() {
         // sanity check: alignment should have same #taxa as tree
         if (dataInput.get().getNrTaxa() != treeInput.get().getLeafNodeCount()) {
-            throw new Exception("The number of nodes in the tree does not match the number of sequences");
+            throw new IllegalArgumentException("The number of nodes in the tree does not match the number of sequences");
         }
         m_beagle = null;
 //        m_beagle = new BeagleTreeLikelihood();
@@ -293,7 +293,7 @@ public class PartitionedTreeLikelihood extends TreeLikelihood {
     int X = 100;
 
     @Override
-    public double calculateLogP() throws Exception {
+    public double calculateLogP() {
         if (m_beagle != null) {
             logP = m_beagle.calculateLogP();
             return logP;
@@ -342,7 +342,7 @@ public class PartitionedTreeLikelihood extends TreeLikelihood {
         return logP;
     }
 
-    void calcLogP() throws Exception {
+    void calcLogP() {
         logP = 0.0;
         if (m_bAscertainedSitePatterns) {
         	for (int k = 0; k < partitionCount; k++) {
@@ -391,7 +391,7 @@ public class PartitionedTreeLikelihood extends TreeLikelihood {
     
 	CountDownLatch m_nCountDown;
 	
-	void threadedTraverse(Node root) throws Exception {
+	void threadedTraverse(Node root) {
 		try {
 			int nPatterns = m_fPatternLogLikelihoods.length;
 			if (partitionCount >= 1) {
@@ -407,7 +407,7 @@ public class PartitionedTreeLikelihood extends TreeLikelihood {
 		    		traverse(iThread, partitionProvider.getPatternIndicators(iThread), root);
 		    	}
 			}
-		} catch (RejectedExecutionException e) {
+		} catch (RejectedExecutionException | InterruptedException e) {
 			System.err.println("Reducing nr of threads to 1 because " + e.getMessage());
 			// refresh thread pool
 	    	for (int iThread = 0; iThread < partitionCount; iThread++) {
@@ -418,7 +418,7 @@ public class PartitionedTreeLikelihood extends TreeLikelihood {
     
     
     /* Assumes there IS a branch rate model as opposed to traverse() */
-    int traverse(int partition, List<Integer> patternIndicator, Node node) throws Exception {
+    int traverse(int partition, List<Integer> patternIndicator, Node node) {
 
         int update = (node.isDirty() | m_nHasDirt);
 
@@ -467,7 +467,7 @@ public class PartitionedTreeLikelihood extends TreeLikelihood {
                 if (m_siteModel[partition].integrateAcrossCategories()) {
                     m_likelihoodCore[partition].calculatePartials(childNum1, childNum2, iNode, patternIndicator);
                 } else {
-                    throw new Exception("Error TreeLikelihood 201: Site categories not supported");
+                    throw new IllegalArgumentException("Error TreeLikelihood 201: Site categories not supported");
                     //m_pLikelihoodCore->calculatePartials(childNum1, childNum2, nodeNum, siteCategories);
                 }
 

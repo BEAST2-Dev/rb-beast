@@ -31,7 +31,7 @@ public class RBOperator extends Operator {
 	ParametricDistribution distr;
 	
 	@Override
-	public void initAndValidate() throws Exception {
+	public void initAndValidate() {
 		rates = rateInput.get();
 		distr = new Exponential();
 		for (Object plugin : rates.getOutputs()) {
