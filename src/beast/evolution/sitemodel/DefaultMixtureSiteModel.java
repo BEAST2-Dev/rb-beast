@@ -1,5 +1,6 @@
 package beast.evolution.sitemodel;
 
+import beast.core.CalculationNode;
 import beast.core.Description;
 import beast.evolution.sitemodel.SiteModel;
 import beast.evolution.tree.Node;
@@ -18,7 +19,7 @@ public class DefaultMixtureSiteModel extends SiteModel {
 	
 	/** return whether the substitution model for category iClass is dirty **/ 
 	public boolean hasDirtySubstModel(int iClass) {
-		return substModelInput.get().isDirtyCalculation();
+		return ((CalculationNode) substModelInput.get()).isDirtyCalculation();
 	}
 
 //	/** return list of classes/categories that are dirty **/
