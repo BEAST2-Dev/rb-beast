@@ -30,7 +30,7 @@ public class PartitionPositionLogger extends BEASTObject implements Loggable {
 	}
 
 	@Override
-	public void log(int nSample, PrintStream out) {
+	public void log(long nSample, PrintStream out) {
 		int sum = 0;
 		for (int i = 0; i< partitionLengths.getDimension() - 1; i++) {
 			sum += partitionLengths.getValue(i);
