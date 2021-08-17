@@ -92,7 +92,7 @@ public class MixtureTreeLikelihood extends TreeLikelihood {
 
     /* Assumes there IS a branch rate model as opposed to traverse() */
 	@Override
-    int traverse(final Node node) {
+	protected int traverse(final Node node) {
 
         int update = (node.isDirty() | hasDirt);
 

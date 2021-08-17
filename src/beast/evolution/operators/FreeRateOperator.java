@@ -5,6 +5,7 @@ import beast.core.Input;
 import beast.core.Operator;
 import beast.core.Input.Validate;
 import beast.core.parameter.RealParameter;
+import beast.util.HeapSort;
 import beast.util.Randomizer;
 
 @Description("Generates proposals for free rate model")
@@ -22,13 +23,33 @@ public class FreeRateOperator extends Operator {
 
 	@Override
 	public double proposal() {
+		double HR = 0;
 		// enforce sum weight*rate = constant
 		if (Randomizer.nextBoolean()) {
 			// Weighted Delta Exchange on weights
-			return doNormalisedDeltaExchange(weightInput.get(), rateParameterInput.get());
+			HR = doNormalisedDeltaExchange(weightInput.get(), rateParameterInput.get());
 		} else {
 			// Weighted Delta Exchange on weights
-			return doDeltaExchange(rateParameterInput.get(), weightInput.get());
+			HR = doDeltaExchange(rateParameterInput.get(), weightInput.get());
+		}
+		// sort();
+		return HR;
+	}
+
+	
+	// sort rates and associated frequencies so rates are ordered from lowest to highest
+	private void sort() {
+		double [] rates = rateParameterInput.get().getDoubleValues();
+		int [] index = new int[rates.length];
+		for (int i = 0; i < index.length; i++) {
+			index[i] = i;
+		}
+		HeapSort.sort(rates, index);
+		double [] weights = weightInput.get().getDoubleValues();
+
+		for (int i = 0; i < index.length; i++) {
+			rateParameterInput.get().setValue(i, rates[index[i]]);
+			weightInput.get().setValue(i, weights[index[i]]);
 		}
 	}
 
