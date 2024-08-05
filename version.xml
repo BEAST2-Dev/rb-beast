@@ -18,6 +18,7 @@
         <provider classname="rbbeast.evolution.substitutionmodel.RB"/>
         <provider classname="rbbeast.evolution.substitutionmodel.VS"/>
         <provider classname="rbbeast.math.distributions.RBPrior"/>
+        <provider classname="rbbeast.evolution.util.FreeRateLogger"/>
     </service>
 
 
