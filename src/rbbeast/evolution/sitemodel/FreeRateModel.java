@@ -252,6 +252,7 @@ public class FreeRateModel extends SiteModel.Base {
         // do explicit check whether any of the non-substitution model parameters changed
         if (categoryCount > 1) {
             if (rateParameter != null && rateParameter.somethingIsDirty() ||
+            		weightParameter.somethingIsDirty() ||
                     muParameter.somethingIsDirty() ||
                     invarParameter.somethingIsDirty()) {
                 ratesKnown = false;

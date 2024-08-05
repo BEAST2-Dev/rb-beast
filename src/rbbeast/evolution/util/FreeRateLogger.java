@@ -50,8 +50,12 @@ public class FreeRateLogger extends BEASTObject implements Loggable {
 			index[i]= i;
 		}
 		HeapSort.sort(r, index);
+		double sum = 0;
+		for (double d : r) {
+			sum += d;
+		}
 		for (int i = 0; i < n ; i++) {
-			out.print(rates.getArrayValue(index[i]) + "\t");
+			out.print(rates.getArrayValue(index[i])/sum + "\t");
 		}
 		for (int i = 0; i < n ; i++) {
 			out.print(weights.getArrayValue(index[i]) + "\t");

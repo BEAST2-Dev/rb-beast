@@ -8,17 +8,23 @@
         <provider classname="rbbeast.evolution.likelihood.PartitionPositionLogger"/>
         <provider classname="rbbeast.evolution.likelihood.PartitionProvider"/>
         <provider classname="rbbeast.evolution.likelihood.PartitionProviderByCodon"/>
+
         <provider classname="rbbeast.evolution.operators.FreeRateOperator"/>
         <provider classname="rbbeast.evolution.operators.RBOperator"/>
         <provider classname="rbbeast.evolution.operators.RBScaleOperator"/>
+
         <provider classname="rbbeast.evolution.sitemodel.DefaultMixtureSiteModel"/>
         <provider classname="rbbeast.evolution.sitemodel.FreeRateModel"/>
         <provider classname="rbbeast.evolution.sitemodel.MixtureSiteModel"/>
         <provider classname="rbbeast.evolution.sitemodel.MixtureSubstModel"/>
+
         <provider classname="rbbeast.evolution.substitutionmodel.RB"/>
         <provider classname="rbbeast.evolution.substitutionmodel.VS"/>
-        <provider classname="rbbeast.math.distributions.RBPrior"/>
+
         <provider classname="rbbeast.evolution.util.FreeRateLogger"/>
+
+        <provider classname="rbbeast.math.distributions.RBPrior"/>
+        <provider classname="rbbeast.math.distributions.FreeRatePrior"/>
     </service>
 
 
