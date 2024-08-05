@@ -1,12 +1,12 @@
 package beast.evolution.sitemodel;
 
-import beast.core.CalculationNode;
-import beast.core.Description;
-import beast.core.Input;
-import beast.core.Input.Validate;
-import beast.core.parameter.RealParameter;
-import beast.evolution.substitutionmodel.SubstitutionModel;
-import beast.evolution.substitutionmodel.SubstitutionModel.Base;
+import beast.base.inference.CalculationNode;
+import beast.base.core.Description;
+import beast.base.core.Input;
+import beast.base.core.Input.Validate;
+import beast.base.inference.parameter.RealParameter;
+import beast.base.evolution.substitutionmodel.SubstitutionModel;
+import beast.base.evolution.substitutionmodel.SubstitutionModel.Base;
 
 @Description("One component of a Mixture Site Model")
 public class MixtureSubstModel extends CalculationNode {

@@ -1,11 +1,12 @@
 package test.beast.evolution.substitutionmodel;
 
-import beast.core.Description;
-import beast.core.parameter.IntegerParameter;
-import beast.core.parameter.RealParameter;
-import beast.evolution.substitutionmodel.Frequencies;
+import beast.base.core.Description;
+import beast.base.inference.parameter.IntegerParameter;
+import beast.base.inference.parameter.RealParameter;
+import beast.base.evolution.substitutionmodel.Frequencies;
 import beast.evolution.substitutionmodel.RB;
 import test.beast.evolution.substmodel.HKYTest;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Description("Test HKY matrix exponentiation")
 public class RBHKYTest extends HKYTest {

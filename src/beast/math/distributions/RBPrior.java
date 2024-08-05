@@ -1,12 +1,12 @@
 package beast.math.distributions;
 
 
-import beast.core.Description;
-import beast.core.Function;
-import beast.core.Input;
-import beast.core.Input.Validate;
-import beast.core.parameter.Parameter;
-import beast.math.distributions.Prior;
+import beast.base.core.Description;
+import beast.base.core.Function;
+import beast.base.core.Input;
+import beast.base.core.Input.Validate;
+import beast.base.inference.parameter.Parameter;
+import beast.base.inference.distribution.Prior;
 
 @Description("Prior for Reversible-jump Based (RB) substitution model, applies prior only to the rates that are in use")
 public class RBPrior extends Prior {

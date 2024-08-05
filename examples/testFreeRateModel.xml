@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><beast namespace="beast.core:beast.evolution.alignment:beast.evolution.tree.coalescent:beast.core.util:beast.evolution.nuc:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.likelihood" version="2.0">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><beast namespace="beast.pkgmgmt:beast.base.core:beast.base.inference:beast.base.evolution.alignment:beast.base.evolution.tree.coalescent:beast.pkgmgmt:beast.base.core:beast.base.inference.util:beast.evolution.nuc:beast.base.evolution.operator:beast.base.inference.operator:beast.base.evolution.sitemodel:beast.base.evolution.substitutionmodel:beast.base.evolution.likelihood" version="2.0">
 
 
     <data dataType="nucleotide" id="alignment" name="alignment" strip="false">
@@ -14,27 +14,27 @@
     
 
 
-    <distribution id="posterior" spec="util.CompoundDistribution" useThreads="false">
+    <distribution id="posterior" spec="beast.base.inference.CompoundDistribution" useThreads="false">
 
-       <distribution id="prior" spec="util.CompoundDistribution" useThreads="false">
-            <distribution birthDiffRate="@birthRate.alignment" conditionalOnRoot="false" id="YuleModel.alignment" spec="beast.evolution.speciation.YuleModel" tree="@Tree.alignment"/>
-            <distribution id="YuleBirthRatePrior.alignment" spec="beast.math.distributions.Prior" x="@birthRate.alignment">
-                <distr id="Uniform.0" lower="0.0" offset="0.0" spec="beast.math.distributions.Uniform" upper="1.0"/>
+       <distribution id="prior" spec="beast.base.inference.CompoundDistribution" useThreads="false">
+            <distribution birthDiffRate="@birthRate.alignment" conditionalOnRoot="false" id="YuleModel.alignment" spec="beast.base.evolution.speciation.YuleModel" tree="@Tree.alignment"/>
+            <distribution id="YuleBirthRatePrior.alignment" spec="beast.base.inference.distribution.Prior" x="@birthRate.alignment">
+                <distr id="Uniform.0" lower="0.0" offset="0.0" spec="beast.base.inference.distribution.Uniform" upper="1.0"/>
             </distribution>
             <distribution count="@RBScount.alignment" id="RBSprior.alignment" spec="beast.math.distributions.RBPrior" x="@RBSrates.alignment">
-                <distr spec="beast.math.distributions.Gamma" alpha='0.2' beta='5.0'/>
+                <distr spec="beast.base.inference.distribution.Gamma" alpha='0.2' beta='5.0'/>
             </distribution>
         </distribution>
-        <distribution id="likelihood" spec="util.CompoundDistribution" useThreads="false">
+        <distribution id="likelihood" spec="beast.base.inference.CompoundDistribution" useThreads="false">
             <distribution data="@alignment" id="treeLikelihood.alignment" spec="TreeLikelihood" tree="@Tree.alignment" useAmbiguities="false">
                 <!-- site model for FreeRateModel -->
                 <siteModel id="SiteModel.alignment" spec="FreeRateModel" rates='@FreeRateRates' weights='@FreeRateWeights'
                 	mutationRate="1.0" proportionInvariant="0.0">
-                    <substModel count="@RBScount.alignment" eigenSystem="beast.evolution.substitutionmodel.DefaultEigenSystem" id="RBS.alignment" rates="@RBSrates.alignment" spec="RB">
+                    <substModel count="@RBScount.alignment" eigenSystem="beast.base.evolution.substitutionmodel.DefaultEigenSystem" id="RBS.alignment" rates="@RBSrates.alignment" spec="RB">
                         <frequencies data="@alignment" estimate="true" id="freqs.alignment" spec="Frequencies"/>
                     </substModel>
                 </siteModel>
-                <branchRateModel id="StrictClock.alignment" spec="beast.evolution.branchratemodel.StrictClockModel">
+                <branchRateModel id="StrictClock.alignment" spec="beast.base.evolution.branchratemodel.StrictClockModel">
                     <parameter dimension="1" estimate="false" id="clockRate.alignment" minordimension="1" name="clock.rate" value="1.0"/>
                 </branchRateModel>
             </distribution>
@@ -89,7 +89,7 @@
         <distribution idref="likelihood" name="log"/>
         <distribution idref="prior" name="log"/>
         <distribution idref="treeLikelihood.alignment" name="log"/>
-        <log id="TreeHeight.alignment" spec="beast.evolution.tree.TreeHeightLogger" tree="@Tree.alignment"/>
+        <log id="TreeHeight.alignment" spec="beast.base.evolution.tree.TreeHeightLogger" tree="@Tree.alignment"/>
         <distribution idref="YuleModel.alignment" name="log"/>
         <log idref="RBScount.alignment"/>
         <parameter idref="RBSrates.alignment" name="log"/>
@@ -111,7 +111,7 @@
         <tree idref="Tree.alignment" name="log"/>
     </logger>
 
-    <tree estimate="false" id="RandomTree.alignment" initial="@Tree.alignment" name="init" spec="beast.evolution.tree.RandomTree" taxa="@alignment">
+    <tree estimate="false" id="RandomTree.alignment" initial="@Tree.alignment" name="init" spec="beast.base.evolution.tree.coalescent.RandomTree" taxa="@alignment">
         <populationModel id="ConstantPopulation0.alignment" spec="ConstantPopulation">
             <parameter dimension="1" estimate="true" id="randomPopSize.alignment" minordimension="1" name="popSize" value="1"/>
         </populationModel>

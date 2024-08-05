@@ -1,5 +1,5 @@
 <beast version='2.0'
-       namespace='beast.evolution.alignment:beast.core:beast.evolution.tree.coalescent:beast.core.util:beast.evolution.nuc:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.likelihood'>
+       namespace='beast.base.evolution.alignment:beast.pkgmgmt:beast.base.core:beast.base.inference:beast.base.evolution.tree.coalescent:beast.pkgmgmt:beast.base.core:beast.base.inference.util:beast.evolution.nuc:beast.base.evolution.operator:beast.base.inference.operator:beast.base.evolution.sitemodel:beast.base.evolution.substitutionmodel:beast.base.evolution.likelihood'>
 
 
     <!-- The sequence alignment                                                  -->
@@ -31,7 +31,7 @@
 
     <input spec='PartitionedTreeLikelihood' id="treeLikelihood" tree='@tree' data='@alignment'>
 		<partitionProvider spec='beast.evolution.likelihood.PartitionProvider' alignment="@alignment">
-			<partitionLengths spec='beast.core.parameter.IntegerParameter' value='500 268'/>
+			<partitionLengths spec='beast.base.inference.parameter.IntegerParameter' value='500 268'/>
 		    <siteModel spec='SiteModel' id="siteModel" gammaCategoryCount='1'>
 <!--
 	<parameter name='shape' id='shape' value='0.5'/>
@@ -52,10 +52,10 @@
 
     <tree id='tree'/>
 
-    <tree spec='beast.util.ClusterTree' id='upgmatree' clusterType='upgma' initial='@tree'>
+    <tree spec='beast.base.evolution.tree.ClusterTree' id='upgmatree' clusterType='upgma' initial='@tree'>
         <taxa idref='alignment'/>
     </tree>
-    <tree spec='beast.evolution.tree.RandomTree' id='coalescentSimulator' initial='@tree' taxa='@alignment'>
+    <tree spec='beast.base.evolution.tree.coalescent.RandomTree' id='coalescentSimulator' initial='@tree' taxa='@alignment'>
         <populationModel spec='ConstantPopulation'>
 		<popSize spec='parameter.RealParameter' value='1'/>
 	</populationModel>
@@ -75,8 +75,8 @@
 	<init idref='coalescentSimulator'/>
 	<distribution spec='CompoundDistribution' id='posterior'>
 <!--
-		<distribution spec='beast.math.distributions.Prior' x='@hky.kappa'>
-			<distribution spec='beast.math.distributions.OneOnX'/>
+		<distribution spec='beast.base.inference.distribution.Prior' x='@hky.kappa'>
+			<distribution spec='beast.base.inference.distribution.OneOnX'/>
 		</distribution>
 -->
         	<distribution id='likelihood' idref="treeLikelihood"/>
@@ -105,7 +105,7 @@
 	        <model idref='likelihood'/>
             <log idref="likelihood"/>
             <log idref='hky.kappa'/>
-            <log spec='beast.evolution.tree.TreeHeightLogger' tree='@tree'/>
+            <log spec='beast.base.evolution.tree.TreeHeightLogger' tree='@tree'/>
         </logger>
         <logger logEvery="10000" fileName="test.$(seed).trees">
             <log idref="tree"/>

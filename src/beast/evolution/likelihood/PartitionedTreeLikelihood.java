@@ -34,21 +34,22 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.RejectedExecutionException;
 
-import beast.app.BeastMCMC;
-import beast.core.Description;
-import beast.core.Input;
-import beast.core.Input.Validate;
-import beast.evolution.alignment.Alignment;
-import beast.evolution.alignment.AscertainedAlignment;
-import beast.evolution.branchratemodel.BranchRateModel;
-import beast.evolution.branchratemodel.StrictClockModel;
-import beast.evolution.likelihood.BeagleTreeLikelihood;
-import beast.evolution.likelihood.TreeLikelihood;
-import beast.evolution.sitemodel.SiteModel;
-import beast.evolution.substitutionmodel.SubstitutionModel;
-import beast.evolution.tree.Node;
-import beast.evolution.tree.Tree;
-import beast.evolution.tree.TreeInterface;
+import beastfx.app.beast.BeastMCMC;
+import beast.base.core.Description;
+import beast.base.core.Input;
+import beast.base.core.Input.Validate;
+import beast.base.core.ProgramStatus;
+import beast.base.evolution.alignment.Alignment;
+import beast.base.evolution.alignment.AscertainedAlignment;
+import beast.base.evolution.branchratemodel.BranchRateModel;
+import beast.base.evolution.branchratemodel.StrictClockModel;
+import beast.base.evolution.likelihood.BeagleTreeLikelihood;
+import beast.base.evolution.likelihood.TreeLikelihood;
+import beast.base.evolution.sitemodel.SiteModel;
+import beast.base.evolution.substitutionmodel.SubstitutionModel;
+import beast.base.evolution.tree.Node;
+import beast.base.evolution.tree.Tree;
+import beast.base.evolution.tree.TreeInterface;
 
 
 
@@ -342,7 +343,7 @@ public class PartitionedTreeLikelihood extends TreeLikelihood {
         return logP;
     }
 
-    void calcLogP() {
+    protected void calcLogP() {
         logP = 0.0;
         if (m_bAscertainedSitePatterns) {
         	for (int k = 0; k < partitionCount; k++) {
@@ -399,7 +400,7 @@ public class PartitionedTreeLikelihood extends TreeLikelihood {
 				// kick off the threads
 		    	for (int partition = 0; partition < partitionCount; partition++) {
 		    		CoreRunnable coreRunnable = new CoreRunnable(partition, root, partitionProvider.getPatternIndicators(partition));
-		    		BeastMCMC.g_exec.execute(coreRunnable);
+		    		ProgramStatus.g_exec.execute(coreRunnable);
 		    	}
 				m_nCountDown.await();
 			} else {

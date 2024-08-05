@@ -1,13 +1,13 @@
 package beast.evolution.operators;
 
-import beast.core.Description;
-import beast.core.Input;
-import beast.core.Input.Validate;
-import beast.core.parameter.BooleanParameter;
-import beast.core.parameter.Parameter;
-import beast.core.parameter.RealParameter;
-import beast.evolution.operators.ScaleOperator;
-import beast.util.Randomizer;
+import beast.base.core.Description;
+import beast.base.core.Input;
+import beast.base.core.Input.Validate;
+import beast.base.inference.parameter.BooleanParameter;
+import beast.base.inference.parameter.Parameter;
+import beast.base.inference.parameter.RealParameter;
+import beast.base.evolution.operator.ScaleOperator;
+import beast.base.util.Randomizer;
 
 
 @Description("Scale operator for the RB-Substitution model, which scales only those ratest that are in use")
@@ -36,7 +36,7 @@ public class RBScaleOperator extends ScaleOperator {
             final int nDegreesOfFreedom = degreesOfFreedomInput.get();
             final boolean bScaleAllIndependently = scaleAllIndependentlyInput.get();
 
-            final RealParameter param = parameterInput.get(this);
+            final RealParameter param = parameterInput.get();
 
             assert param.getLower() != null  && param.getUpper() != null;
 

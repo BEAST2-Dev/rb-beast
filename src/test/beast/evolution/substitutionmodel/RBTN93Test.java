@@ -1,8 +1,8 @@
 package test.beast.evolution.substitutionmodel;
 
-import beast.core.parameter.IntegerParameter;
-import beast.core.parameter.RealParameter;
-import beast.evolution.substitutionmodel.Frequencies;
+import beast.base.inference.parameter.IntegerParameter;
+import beast.base.inference.parameter.RealParameter;
+import beast.base.evolution.substitutionmodel.Frequencies;
 import beast.evolution.substitutionmodel.RB;
 import junit.framework.TestCase;
 

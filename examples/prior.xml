@@ -1,5 +1,5 @@
 <beast version='2.0'
-       namespace=' beast.math.distributions:beast.core.parameter:beast.evolution.alignment:beast.core:beast.evolution.tree.coalescent:beast.core.util:beast.evolution.nuc:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.likelihood'>
+       namespace=' beast.base.inference.distribution:beast.pkgmgmt:beast.base.core:beast.base.inference.parameter:beast.base.evolution.alignment:beast.pkgmgmt:beast.base.core:beast.base.inference:beast.base.evolution.tree.coalescent:beast.pkgmgmt:beast.base.core:beast.base.inference.util:beast.evolution.nuc:beast.base.evolution.operator:beast.base.inference.operator:beast.base.evolution.sitemodel:beast.base.evolution.substitutionmodel:beast.base.evolution.likelihood'>
 
 
 
@@ -22,21 +22,21 @@
         </state>
 
 <!--
-                <distr spec="beast.math.distributions.OneOnX"/>
-                <distr spec="beast.math.distributions.Gamma" alpha='0.0625' beta='16.0'/>
-                <distr spec="beast.math.distributions.Gamma" alpha='1' beta='1.0'/>
-                <distr spec="beast.math.distributions.Gamma" alpha='0.2' beta='0.2'/>
-	        <distribution spec='beast.math.distributions.Prior' x='@count'>
-				<distr spec='beast.math.distributions.Exponential' mean='2'/>
+                <distr spec="beast.base.inference.distribution.OneOnX"/>
+                <distr spec="beast.base.inference.distribution.Gamma" alpha='0.0625' beta='16.0'/>
+                <distr spec="beast.base.inference.distribution.Gamma" alpha='1' beta='1.0'/>
+                <distr spec="beast.base.inference.distribution.Gamma" alpha='0.2' beta='0.2'/>
+	        <distribution spec='beast.base.inference.distribution.Prior' x='@count'>
+				<distr spec='beast.base.inference.distribution.Exponential' mean='2'/>
 		    </distribution>
 -->
     	<distribution spec='CompoundDistribution' id='prior'>
 <!--
 -->
             <distribution spec='beast.math.distributions.RBPrior' count='@count' x='@rates'>
-				<distr spec='beast.math.distributions.Exponential' mean='1'/>
+				<distr spec='beast.base.inference.distribution.Exponential' mean='1'/>
 <!--
-                <distr spec="beast.math.distributions.Uniform" lower='0.0' upper='1'/>
+                <distr spec="beast.base.inference.distribution.Uniform" lower='0.0' upper='1'/>
 -->
             </distribution>
 

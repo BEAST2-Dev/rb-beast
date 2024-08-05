@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><beast namespace="beast.core:beast.evolution.alignment:beast.evolution.tree.coalescent:beast.core.util:beast.evolution.nuc:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.likelihood" version="2.0">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><beast namespace="beast.pkgmgmt:beast.base.core:beast.base.inference:beast.base.evolution.alignment:beast.base.evolution.tree.coalescent:beast.pkgmgmt:beast.base.core:beast.base.inference.util:beast.evolution.nuc:beast.base.evolution.operator:beast.base.inference.operator:beast.base.evolution.sitemodel:beast.base.evolution.substitutionmodel:beast.base.evolution.likelihood" version="2.0">
 
 
     <data dataType="nucleotide" id="HIV" name="alignment" strip="false">
@@ -51,46 +51,46 @@
                     </data>
 
 
-    <data data="@HIV" dataType="nucleotide" filter="1::3" id="HIV.1" name="taxa" spec="beast.evolution.alignment.FilteredAlignment"/>
-    <data data="@HIV" dataType="nucleotide" filter="2::3" id="HIV.2" name="taxa" spec="beast.evolution.alignment.FilteredAlignment"/>
-    <data data="@HIV" dataType="nucleotide" filter="3::3" id="HIV.3" name="taxa" spec="beast.evolution.alignment.FilteredAlignment"/>
+    <data data="@HIV" dataType="nucleotide" filter="1::3" id="HIV.1" name="taxa" spec="beast.base.evolution.alignment.FilteredAlignment"/>
+    <data data="@HIV" dataType="nucleotide" filter="2::3" id="HIV.2" name="taxa" spec="beast.base.evolution.alignment.FilteredAlignment"/>
+    <data data="@HIV" dataType="nucleotide" filter="3::3" id="HIV.3" name="taxa" spec="beast.base.evolution.alignment.FilteredAlignment"/>
 
-    <distribution id="posterior" spec="util.CompoundDistribution" useThreads="false">
-        <distribution id="prior" spec="util.CompoundDistribution" useThreads="false">
+    <distribution id="posterior" spec="beast.base.inference.CompoundDistribution" useThreads="false">
+        <distribution id="prior" spec="beast.base.inference.CompoundDistribution" useThreads="false">
             <distribution id="CoalescentExponential.HIV" spec="Coalescent">
                 <populationModel growthRate="@growthRate.HIV" id="ExponentialGrowth.HIV" popSize="@ePopSize.HIV" spec="ExponentialGrowth"/>
-                <treeIntervals id="TreeIntervals.HIV" spec="TreeIntervals" tree="@Tree.HIV"/>
+                <treeIntervals id="TreeIntervals.HIV" spec="beast.base.evolution.tree.TreeIntervals" tree="@Tree.HIV"/>
             </distribution>
 			<plate range='1,2,3' var='n'>
 			    <distribution count="@RBScount.HIV.$(n)" id="RBSprior.HIV.$(n)" spec="beast.math.distributions.RBPrior" x="@RBSrates.HIV.$(n)">
-			        <distr spec="beast.math.distributions.Gamma" alpha='0.2' beta='5.0'/>
+			        <distr spec="beast.base.inference.distribution.Gamma" alpha='0.2' beta='5.0'/>
 			    </distribution>
 		    </plate>
-            <distribution id="ClockPrior.HIV" spec="beast.math.distributions.Prior" x="@clockRate.HIV">
-                <distr id="OneOnX.01" offset="0.0" spec="beast.math.distributions.OneOnX"/>
+            <distribution id="ClockPrior.HIV" spec="beast.base.inference.distribution.Prior" x="@clockRate.HIV">
+                <distr id="OneOnX.01" offset="0.0" spec="beast.base.inference.distribution.OneOnX"/>
             </distribution>
-            <distribution id="ePopSizePrior.HIV" spec="beast.math.distributions.Prior" x="@ePopSize.HIV">
-                <distr id="OneOnX.02" offset="0.0" spec="beast.math.distributions.OneOnX"/>
+            <distribution id="ePopSizePrior.HIV" spec="beast.base.inference.distribution.Prior" x="@ePopSize.HIV">
+                <distr id="OneOnX.02" offset="0.0" spec="beast.base.inference.distribution.OneOnX"/>
             </distribution>
-            <distribution id="GrowthRatePrior.HIV" spec="beast.math.distributions.Prior" x="@growthRate.HIV">
-                <distr id="LaplaceDistribution.0" offset="0.0" spec="beast.math.distributions.LaplaceDistribution">
+            <distribution id="GrowthRatePrior.HIV" spec="beast.base.inference.distribution.Prior" x="@growthRate.HIV">
+                <distr id="LaplaceDistribution.0" offset="0.0" spec="beast.base.inference.distribution.LaplaceDistribution">
                     <parameter dimension="1" estimate="true" id="RealParameter.0" lower="0.0" minordimension="1" name="mu" upper="0.0" value="0.001"/>
                     <parameter dimension="1" estimate="true" id="RealParameter.01" lower="0.0" minordimension="1" name="scale" upper="0.0" value="30.701135"/>
                 </distr>
             </distribution>
         </distribution>
-        <distribution id="likelihood" spec="util.CompoundDistribution" useThreads="false">
+        <distribution id="likelihood" spec="beast.base.inference.CompoundDistribution" useThreads="false">
 	      <plate range='1,2,3' var='n'>
             <distribution data="@HIV.$(n)" id="treeLikelihood.HIV.$(n)" spec="TreeLikelihood" tree="@Tree.HIV" useAmbiguities="false">
                 <siteModel gammaCategoryCount="0" id="SiteModel.HIV.$(n)" spec="SiteModel">
                     <parameter dimension="1" estimate="false" id="mutationRate.HIV.$(n)" minordimension="1" name="mutationRate" value="1.0"/>
                     <parameter dimension="1" estimate="false" id="gammaShape.HIV.$(n)" minordimension="1" name="shape" value="1.0"/>
                     <parameter dimension="1" estimate="false" id="proportionInvariant.HIV.$(n)" minordimension="1" name="proportionInvariant" value="0.0"/>
-                    <substModel count="@RBScount.HIV.$(n)" eigenSystem="beast.evolution.substitutionmodel.DefaultEigenSystem" id="RBS.HIV.$(n)" rates="@RBSrates.HIV.$(n)" spec="RB">
+                    <substModel count="@RBScount.HIV.$(n)" eigenSystem="beast.base.evolution.substitutionmodel.DefaultEigenSystem" id="RBS.HIV.$(n)" rates="@RBSrates.HIV.$(n)" spec="RB">
                         <frequencies data="@HIV" estimate="true" id="freqs.HIV.$(n)" spec="Frequencies"/>
                     </substModel>
                 </siteModel>
-                <branchRateModel clock.rate="@clockRate.HIV" id="StrictClock.HIV.$(n)" spec="beast.evolution.branchratemodel.StrictClockModel"/>
+                <branchRateModel clock.rate="@clockRate.HIV" id="StrictClock.HIV.$(n)" spec="beast.base.evolution.branchratemodel.StrictClockModel"/>
             </distribution>
 		  </plate>
         </distribution>
@@ -100,7 +100,7 @@
 <run chainLength="10000000" id="mcmc" preBurnin="0" sampleFromPrior="false" spec="MCMC" storeEvery="-1">
     <state id="state" storeEvery="1000">
         <tree estimate="true" id="Tree.HIV" name="stateNode">
-            <trait spec="beast.evolution.tree.TraitSet" traitname="date" units="year" value="193Has94=94.0,276Has94=94.0,341Has94=94.0,655Has94=94.0,CMA009s96=96.0,ABT2156s95=95.0,ANT70s87=87.0,CA9s93=93.0,CMA010s98=98.0,CMA100s98=98.0,CMA102s96=96.0,CMA103s98=98.0,CMA104s98=98.0,CMA105s98=98.0,CMA108s99=99.0,CMA119s99=99.0,CMA120s99=99.0,CMA121s99=99.0,CMA122s99=99.0,CMA123s98=98.0,CMA124s98=98.0,CMA141s98=98.0,CMA197s98=98.0,CMA212s98=98.0,CMA304s99=99.0,CMA307s98=98.0,CMA323s98=98.0,CMA376s98=98.0,CMA407s98=98.0,CMA447s97=97.0,CMA453s98=98.0,CMA497s97=97.0,CMA637s96=96.0,CMEB005s96=96.0,CMU2901s98=98.0,CMU4122s99=99.0,CMU4673s99=99.0,CMU4970s98=98.0,CMU5337s98=98.0,MP1299s99=99.0,MP1300s99=99.0,MVP5180s91=91.0,US08692s97=97.0,USTWLAs99=99.0,VAUs92=92.0,VI686s92=92.0">
+            <trait spec="beast.base.evolution.tree.TraitSet" traitname="date" units="year" value="193Has94=94.0,276Has94=94.0,341Has94=94.0,655Has94=94.0,CMA009s96=96.0,ABT2156s95=95.0,ANT70s87=87.0,CA9s93=93.0,CMA010s98=98.0,CMA100s98=98.0,CMA102s96=96.0,CMA103s98=98.0,CMA104s98=98.0,CMA105s98=98.0,CMA108s99=99.0,CMA119s99=99.0,CMA120s99=99.0,CMA121s99=99.0,CMA122s99=99.0,CMA123s98=98.0,CMA124s98=98.0,CMA141s98=98.0,CMA197s98=98.0,CMA212s98=98.0,CMA304s99=99.0,CMA307s98=98.0,CMA323s98=98.0,CMA376s98=98.0,CMA407s98=98.0,CMA447s97=97.0,CMA453s98=98.0,CMA497s97=97.0,CMA637s96=96.0,CMEB005s96=96.0,CMU2901s98=98.0,CMU4122s99=99.0,CMU4673s99=99.0,CMU4970s98=98.0,CMU5337s98=98.0,MP1299s99=99.0,MP1300s99=99.0,MVP5180s91=91.0,US08692s97=97.0,USTWLAs99=99.0,VAUs92=92.0,VI686s92=92.0">
                 <taxa id="TaxonSet.HIV" spec="TaxonSet">
                     <data idref="HIV" name="alignment"/>
                 </taxa>
@@ -148,7 +148,7 @@
         <distribution idref="posterior" name="log"/>
         <distribution idref="likelihood" name="log"/>
         <distribution idref="prior" name="log"/>
-        <log id="TreeHeight.HIV" spec="beast.evolution.tree.TreeHeightLogger" tree="@Tree.HIV"/>
+        <log id="TreeHeight.HIV" spec="beast.base.evolution.tree.TreeHeightLogger" tree="@Tree.HIV"/>
 		<plate range='1,2,3' var='n'>
 	        <distribution idref="treeLikelihood.HIV.$(n)" name="log"/>
 		    <log idref="RBScount.HIV.$(n)"/>
@@ -171,7 +171,7 @@
         <tree idref="Tree.HIV" name="log"/>
     </logger>
 
-    <tree estimate="false" id="RandomTree.HIV" initial="@Tree.HIV" name="init" spec="beast.evolution.tree.RandomTree" taxa="@HIV">
+    <tree estimate="false" id="RandomTree.HIV" initial="@Tree.HIV" name="init" spec="beast.base.evolution.tree.coalescent.RandomTree" taxa="@HIV">
         <populationModel id="ConstantPopulation0.HIV" spec="ConstantPopulation">
             <parameter dimension="1" estimate="true" id="randomPopSize.HIV" minordimension="1" name="popSize" value="1"/>
         </populationModel>

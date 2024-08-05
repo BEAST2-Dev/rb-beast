@@ -3,16 +3,16 @@ package beast.evolution.operators;
 
 import org.apache.commons.math.MathException;
 
-import beast.core.Description;
-import beast.core.Input;
-import beast.core.Operator;
-import beast.core.Input.Validate;
-import beast.core.parameter.Parameter;
-import beast.core.parameter.RealParameter;
-import beast.math.distributions.Exponential;
-import beast.math.distributions.ParametricDistribution;
+import beast.base.core.Description;
+import beast.base.core.Input;
+import beast.base.inference.Operator;
+import beast.base.core.Input.Validate;
+import beast.base.inference.parameter.Parameter;
+import beast.base.inference.parameter.RealParameter;
+import beast.base.inference.distribution.Exponential;
+import beast.base.inference.distribution.ParametricDistribution;
 import beast.math.distributions.RBPrior;
-import beast.util.Randomizer;
+import beast.base.util.Randomizer;
 
 
 

@@ -3,7 +3,7 @@ package beast.evolution.likelihood;
 import java.util.Arrays;
 import java.util.List;
 
-import beast.evolution.likelihood.BeerLikelihoodCore;
+import beast.base.evolution.likelihood.BeerLikelihoodCore;
 
 
 public class MixtureBeerLikelihoodCore extends BeerLikelihoodCore implements MixtureLikelihoodCore {

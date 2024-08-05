@@ -3,14 +3,15 @@ package beast.evolution.substitutionmodel;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
-import beast.core.Citation;
-import beast.core.Description;
-import beast.core.Function;
-import beast.core.Input;
-import beast.core.Input.Validate;
-import beast.core.parameter.IntegerParameter;
-import beast.evolution.datatype.DataType;
-import beast.evolution.datatype.Nucleotide;
+import beast.base.core.Citation;
+import beast.base.core.Description;
+import beast.base.core.Function;
+import beast.base.core.Input;
+import beast.base.core.Input.Validate;
+import beast.base.inference.parameter.IntegerParameter;
+import beast.base.evolution.datatype.DataType;
+import beast.base.evolution.datatype.Nucleotide;
+import beast.base.evolution.substitutionmodel.GeneralSubstitutionModel;
 
 @Description("Substitution model for nucleotides that changes where the count input " +
 		"determines the number of parameters used in a hierarchy of models")
@@ -48,7 +49,7 @@ public class VS extends GeneralSubstitutionModel {
 	}
 
 	@Override
-    protected void setupRelativeRates() {
+    public void setupRelativeRates() {
 		switch (count.getValue()) {
 		case 0: // JC96
 			Arrays.fill(relativeRates, 1.0);

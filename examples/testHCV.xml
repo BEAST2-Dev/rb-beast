@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><beast namespace="beast.core:beast.evolution.alignment:beast.evolution.tree.coalescent:beast.core.util:beast.evolution.nuc:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.likelihood" version="2.0">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><beast namespace="beast.pkgmgmt:beast.base.core:beast.base.inference:beast.base.evolution.alignment:beast.base.evolution.tree.coalescent:beast.pkgmgmt:beast.base.core:beast.base.inference.util:beast.evolution.nuc:beast.base.evolution.operator:beast.base.inference.operator:beast.base.evolution.sitemodel:beast.base.evolution.substitutionmodel:beast.base.evolution.likelihood" version="2.0">
 
 
     <data dataType="nucleotide" id="HCV" name="alignment" strip="false">
@@ -49,30 +49,30 @@
                     </data>
 
 
-    <distribution id="posterior" spec="util.CompoundDistribution" useThreads="false">
-        <distribution id="prior" spec="util.CompoundDistribution" useThreads="false">
+    <distribution id="posterior" spec="beast.base.inference.CompoundDistribution" useThreads="false">
+        <distribution id="prior" spec="beast.base.inference.CompoundDistribution" useThreads="false">
             <distribution groupSizes="@bGroupSizes.HCV" id="BayesianSkyline.HCV" popSizes="@bPopSizes.HCV" spec="BayesianSkyline">
-                <treeIntervals id="BSPTreeIntervals.HCV" spec="TreeIntervals" tree="@Tree.HCV"/>
+                <treeIntervals id="BSPTreeIntervals.HCV" spec="beast.base.evolution.tree.TreeIntervals" tree="@Tree.HCV"/>
             </distribution>
             <distribution count="@RBScount.HCV" id="RBSprior.HCV" spec="beast.math.distributions.RBPrior" x="@RBSrates.HCV">
-                <distr spec="beast.math.distributions.Gamma" alpha='0.2' beta='5.0'/>
+                <distr spec="beast.base.inference.distribution.Gamma" alpha='0.2' beta='5.0'/>
             </distribution>
-            <distribution id="ClockPrior.HCV" spec="beast.math.distributions.Prior" x="@clockRate.HCV">
-                <distr id="OneOnX.01" offset="0.0" spec="beast.math.distributions.OneOnX"/>
+            <distribution id="ClockPrior.HCV" spec="beast.base.inference.distribution.Prior" x="@clockRate.HCV">
+                <distr id="OneOnX.01" offset="0.0" spec="beast.base.inference.distribution.OneOnX"/>
             </distribution>
-            <distribution id="MarkovChainedPopSizes.HCV" jeffreys="true" parameter="@bPopSizes.HCV" reverse="false" shape="1.0" spec="beast.math.distributions.MarkovChainDistribution" uselog="false"/>
+            <distribution id="MarkovChainedPopSizes.HCV" jeffreys="true" parameter="@bPopSizes.HCV" reverse="false" shape="1.0" spec="beast.base.inference.distribution.MarkovChainDistribution" uselog="false"/>
         </distribution>
-        <distribution id="likelihood" spec="util.CompoundDistribution" useThreads="false">
+        <distribution id="likelihood" spec="beast.base.inference.CompoundDistribution" useThreads="false">
             <distribution data="@HCV" id="treeLikelihood.HCV" spec="TreeLikelihood" tree="@Tree.HCV" useAmbiguities="false">
                 <siteModel gammaCategoryCount="0" id="SiteModel.HCV" spec="SiteModel">
                     <parameter dimension="1" estimate="false" id="mutationRate.HCV" minordimension="1" name="mutationRate" value="1.0"/>
                     <parameter dimension="1" estimate="false" id="gammaShape.HCV" minordimension="1" name="shape" value="1.0"/>
                     <parameter dimension="1" estimate="false" id="proportionInvariant.HCV" minordimension="1" name="proportionInvariant" value="0.0"/>
-                    <substModel count="@RBScount.HCV" eigenSystem="beast.evolution.substitutionmodel.DefaultEigenSystem" id="RBS.HCV" rates="@RBSrates.HCV" spec="RB">
+                    <substModel count="@RBScount.HCV" eigenSystem="beast.base.evolution.substitutionmodel.DefaultEigenSystem" id="RBS.HCV" rates="@RBSrates.HCV" spec="RB">
                         <frequencies data="@HCV" estimate="true" id="freqs.HCV" spec="Frequencies"/>
                     </substModel>
                 </siteModel>
-                <branchRateModel clock.rate="@clockRate.HCV" id="StrictClock.HCV" spec="beast.evolution.branchratemodel.StrictClockModel"/>
+                <branchRateModel clock.rate="@clockRate.HCV" id="StrictClock.HCV" spec="beast.base.evolution.branchratemodel.StrictClockModel"/>
             </distribution>
         </distribution>
     </distribution>
@@ -82,7 +82,7 @@
 <run chainLength="10000000" id="mcmc" preBurnin="0" sampleFromPrior="false" spec="MCMC" storeEvery="-1">
     <state id="state" storeEvery="1000">
         <tree estimate="true" id="Tree.HCV" name="stateNode">
-            <trait spec="beast.evolution.tree.TraitSet" traitname="date" units="year" value="95_US.AB079092.1a=1995.0,
+            <trait spec="beast.base.evolution.tree.TraitSet" traitname="date" units="year" value="95_US.AB079092.1a=1995.0,
 89.38_US.AF118615.1a=1989.38,
 92.83_GB.AY958045.1a=1992.83,
 02_US.AY956466.1a=2002.0,
@@ -172,7 +172,7 @@
         <distribution idref="likelihood" name="log"/>
         <distribution idref="prior" name="log"/>
         <distribution idref="treeLikelihood.HCV" name="log"/>
-        <log id="TreeHeight.HCV" spec="beast.evolution.tree.TreeHeightLogger" tree="@Tree.HCV"/>
+        <log id="TreeHeight.HCV" spec="beast.base.evolution.tree.TreeHeightLogger" tree="@Tree.HCV"/>
         <log idref="RBScount.HCV"/>
         <parameter idref="RBSrates.HCV" name="log"/>
         <parameter idref="clockRate.HCV" name="log"/>
@@ -192,7 +192,7 @@
         <tree idref="Tree.HCV" name="log"/>
     </logger>
 
-    <tree estimate="false" id="RandomTree.HCV" initial="@Tree.HCV" name="init" spec="beast.evolution.tree.RandomTree" taxa="@HCV">
+    <tree estimate="false" id="RandomTree.HCV" initial="@Tree.HCV" name="init" spec="beast.base.evolution.tree.coalescent.RandomTree" taxa="@HCV">
         <populationModel id="ConstantPopulation0.HCV" spec="ConstantPopulation">
             <parameter dimension="1" estimate="true" id="randomPopSize.HCV" minordimension="1" name="popSize" value="1"/>
         </populationModel>
@@ -206,30 +206,30 @@
 
 <!-- DO NOT EDIT the following machine generated text, they are used in Beauti 
 
-<input id='LaplaceDistribution.0' spec='beast.math.distributions.LaplaceDistribution' offset='0.0'>
+<input id='LaplaceDistribution.0' spec='beast.base.inference.distribution.LaplaceDistribution' offset='0.0'>
     <parameter id='RealParameter.0' name='mu' lower='0.0' upper='0.0' value='0.001' dimension='1' minordimension='1' estimate='true'/>
 
     <parameter id='RealParameter.01' name='scale' lower='0.0' upper='0.0' value='30.701135' dimension='1' minordimension='1' estimate='true'/>
 
 </input>
 
-<operator id='mutationRateScaler.HCV' spec='beast.evolution.operators.ScaleOperator' parameter='@mutationRate.HCV' scaleFactor='0.5' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='1.0'/>
+<operator id='mutationRateScaler.HCV' spec='beast.base.evolution.operator.ScaleOperator' parameter='@mutationRate.HCV' scaleFactor='0.5' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='1.0'/>
 
-<operator id='updownBD.HCV' spec='beast.evolution.operators.UpDownOperator' scaleFactor='0.75' optimise='true' weight='10.0'/>
+<operator id='updownBD.HCV' spec='beast.base.inference.operator.UpDownOperator' scaleFactor='0.75' optimise='true' weight='10.0'/>
 
-<input id='ConstantPopulation.HCV' spec='beast.evolution.tree.coalescent.ConstantPopulation'>
+<input id='ConstantPopulation.HCV' spec='beast.base.evolution.tree.coalescent.ConstantPopulation'>
     <parameter id='popSize.HCV' name='popSize' value='0.3' dimension='1' minordimension='1' estimate='true'/>
 
 </input>
 
-<input id='TreeIntervals.HCV' spec='beast.evolution.tree.coalescent.TreeIntervals' tree='@Tree.HCV'/>
+<input id='TreeIntervals.HCV' spec='beast.base.evolution.tree.TreeIntervals' tree='@Tree.HCV'/>
 
-<distribution id='PopSizePrior.HCV' spec='beast.math.distributions.Prior' x='@popSize.HCV'>
-    <input id='OneOnX.02' spec='beast.math.distributions.OneOnX' name='distr' offset='0.0'/>
+<distribution id='PopSizePrior.HCV' spec='beast.base.inference.distribution.Prior' x='@popSize.HCV'>
+    <input id='OneOnX.02' spec='beast.base.inference.distribution.OneOnX' name='distr' offset='0.0'/>
 
 </distribution>
 
-<input id='R_0.HCV' spec='beast.math.statistic.RPNcalculator' expression='birthRate.HCV deathRate.HCV samplingRate.HCV + /'>
+<input id='R_0.HCV' spec='beast.base.inference.util.RPNcalculator' expression='birthRate.HCV deathRate.HCV samplingRate.HCV + /'>
     <parameter id='birthRate.HCV' value='1.0' dimension='1' minordimension='1' estimate='true'/>
 
     <parameter id='deathRate.HCV' lower='0.0' upper='Infinity' value='0.02' dimension='1' minordimension='1' estimate='true'/>
@@ -238,95 +238,95 @@
 
 </input>
 
-<distribution id='CoalescentExponential.HCV' spec='beast.evolution.tree.coalescent.Coalescent' treeIntervals='@TreeIntervals.HCV'>
-    <input id='ExponentialGrowth.HCV' spec='beast.evolution.tree.coalescent.ExponentialGrowth' name='populationModel'>
+<distribution id='CoalescentExponential.HCV' spec='beast.base.evolution.tree.coalescent.Coalescent' treeIntervals='@TreeIntervals.HCV'>
+    <input id='ExponentialGrowth.HCV' spec='beast.base.evolution.tree.coalescent.ExponentialGrowth' name='populationModel'>
         <parameter id='ePopSize.HCV' name='popSize' value='0.3' dimension='1' minordimension='1' estimate='true'/>
         <parameter id='growthRate.HCV' name='growthRate' value='3e-4' dimension='1' minordimension='1' estimate='true'/>
     </input>
 
 </distribution>
 
-<distribution id='YuleBirthRatePrior.HCV' spec='beast.math.distributions.Prior' x='@birthRate.HCV'>
-    <input id='Uniform.0' spec='beast.math.distributions.Uniform' name='distr' lower='0.0' upper='1.0' offset='0.0'/>
+<distribution id='YuleBirthRatePrior.HCV' spec='beast.base.inference.distribution.Prior' x='@birthRate.HCV'>
+    <input id='Uniform.0' spec='beast.base.inference.distribution.Uniform' name='distr' lower='0.0' upper='1.0' offset='0.0'/>
 
 </distribution>
 
-<operator id='samplingOperator.HCV' spec='beast.evolution.operators.ScaleOperator' parameter='@samplingRate.HCV' scaleFactor='0.75' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='3.0'/>
+<operator id='samplingOperator.HCV' spec='beast.base.evolution.operator.ScaleOperator' parameter='@samplingRate.HCV' scaleFactor='0.75' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='3.0'/>
 
-<operator id='proportionInvariantScaler.HCV' spec='beast.evolution.operators.ScaleOperator' parameter='@proportionInvariant.HCV' scaleFactor='0.5' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='1.0'/>
+<operator id='proportionInvariantScaler.HCV' spec='beast.base.evolution.operator.ScaleOperator' parameter='@proportionInvariant.HCV' scaleFactor='0.5' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='1.0'/>
 
-<distribution id='GrowthRatePrior.HCV' spec='beast.math.distributions.Prior' x='@growthRate.HCV' distr='@LaplaceDistribution.0'/>
+<distribution id='GrowthRatePrior.HCV' spec='beast.base.inference.distribution.Prior' x='@growthRate.HCV' distr='@LaplaceDistribution.0'/>
 
-<distribution id='samplingPrior.HCV' spec='beast.math.distributions.Prior' x='@samplingRate.HCV'>
-    <input id='Gamma.0' spec='beast.math.distributions.Gamma' name='distr' offset='0.0'>
+<distribution id='samplingPrior.HCV' spec='beast.base.inference.distribution.Prior' x='@samplingRate.HCV'>
+    <input id='Gamma.0' spec='beast.base.inference.distribution.Gamma' name='distr' offset='0.0'>
         <parameter id='RealParameter.02' name='alpha' lower='0.0' upper='0.0' value='8' dimension='1' minordimension='1' estimate='true'/>
         <parameter id='RealParameter.03' name='beta' lower='0.0' upper='0.0' value='2.' dimension='1' minordimension='1' estimate='true'/>
     </input>
 
 </distribution>
 
-<operator id='ePopSizeScaler.HCV' spec='beast.evolution.operators.ScaleOperator' parameter='@ePopSize.HCV' scaleFactor='0.75' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='3.0'/>
+<operator id='ePopSizeScaler.HCV' spec='beast.base.evolution.operator.ScaleOperator' parameter='@ePopSize.HCV' scaleFactor='0.75' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='3.0'/>
 
-<distribution id='deathPrior.HCV' spec='beast.math.distributions.Prior' x='@deathRate.HCV'>
-    <input id='Gamma.01' spec='beast.math.distributions.Gamma' name='distr' offset='0.0'>
+<distribution id='deathPrior.HCV' spec='beast.base.inference.distribution.Prior' x='@deathRate.HCV'>
+    <input id='Gamma.01' spec='beast.base.inference.distribution.Gamma' name='distr' offset='0.0'>
         <parameter id='RealParameter.04' name='alpha' lower='0.0' upper='0.0' value='12' dimension='1' minordimension='1' estimate='true'/>
         <parameter id='RealParameter.05' name='beta' lower='0.0' upper='0.0' value='2.' dimension='1' minordimension='1' estimate='true'/>
     </input>
 
 </distribution>
 
-<operator id='GrowthRateRandomWalk.HCV' spec='beast.evolution.operators.RealRandomWalkOperator' windowSize='1.0' parameter='@growthRate.HCV' useGaussian='false' weight='3.0'/>
+<operator id='GrowthRateRandomWalk.HCV' spec='beast.base.inference.operator.RealRandomWalkOperator' windowSize='1.0' parameter='@growthRate.HCV' useGaussian='false' weight='3.0'/>
 
-<input id='intervalNumber.HCV' spec='beast.core.parameter.IntegerParameter' value='3' dimension='1' minordimension='1' estimate='false'/>
+<input id='intervalNumber.HCV' spec='beast.base.inference.parameter.IntegerParameter' value='3' dimension='1' minordimension='1' estimate='false'/>
 
-<distribution id='birthPrior.HCV' spec='beast.math.distributions.Prior' x='@birthRate.HCV'>
-    <input id='Gamma.02' spec='beast.math.distributions.Gamma' name='distr' offset='0.0'>
+<distribution id='birthPrior.HCV' spec='beast.base.inference.distribution.Prior' x='@birthRate.HCV'>
+    <input id='Gamma.02' spec='beast.base.inference.distribution.Gamma' name='distr' offset='0.0'>
         <parameter id='RealParameter.06' name='alpha' lower='0.0' upper='0.0' value='20' dimension='1' minordimension='1' estimate='true'/>
         <parameter id='RealParameter.07' name='beta' lower='0.0' upper='0.0' value='2.' dimension='1' minordimension='1' estimate='true'/>
     </input>
 
 </distribution>
 
-<operator id='intervalTimesOperator.HCV' spec='beast.evolution.operators.ScaleOperator' scaleFactor='0.75' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='1.0'>
+<operator id='intervalTimesOperator.HCV' spec='beast.base.evolution.operator.ScaleOperator' scaleFactor='0.75' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='1.0'>
     <parameter id='intervalTimes.HCV' value='0. 0.002 0.01' dimension='3' minordimension='1' estimate='true'/>
 
 </operator>
 
-<input id='psi/(psi+death).HCV' spec='beast.math.statistic.RPNcalculator' expression='samplingRate.HCV deathRate.HCV samplingRate.HCV + /'>
+<input id='psi/(psi+death).HCV' spec='beast.base.inference.util.RPNcalculator' expression='samplingRate.HCV deathRate.HCV samplingRate.HCV + /'>
     <parameter idref='deathRate.HCV'/>
 
     <parameter idref='samplingRate.HCV'/>
 
 </input>
 
-<operator id='PopSizeScaler.HCV' spec='beast.evolution.operators.ScaleOperator' parameter='@popSize.HCV' scaleFactor='0.75' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='3.0'/>
+<operator id='PopSizeScaler.HCV' spec='beast.base.evolution.operator.ScaleOperator' parameter='@popSize.HCV' scaleFactor='0.75' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='3.0'/>
 
-<distribution id='BirthDeathSky.HCV' spec='beast.evolution.speciation.BirthDeathSkylineModel' intervalTimes='@intervalTimes.HCV' intervalNumber='@intervalNumber.HCV' birthRate='@birthRate.HCV' deathRate='@deathRate.HCV' samplingRate='@samplingRate.HCV' forceRateChange='true' tree='@Tree.HCV'>
+<distribution id='BirthDeathSky.HCV' spec='bdsky.evolution.speciation.BirthDeathSkylineModel' intervalTimes='@intervalTimes.HCV' intervalNumber='@intervalNumber.HCV' birthRate='@birthRate.HCV' deathRate='@deathRate.HCV' samplingRate='@samplingRate.HCV' forceRateChange='true' tree='@Tree.HCV'>
     <parameter id='orig_root.HCV' name='orig_root' lower='0.0' upper='Infinity' value='1.' dimension='1' minordimension='1' estimate='true'/>
 
 </distribution>
 
-<distribution id='CoalescentConstant.HCV' spec='beast.evolution.tree.coalescent.Coalescent' populationModel='@ConstantPopulation.HCV' treeIntervals='@TreeIntervals.HCV'/>
+<distribution id='CoalescentConstant.HCV' spec='beast.base.evolution.tree.coalescent.Coalescent' populationModel='@ConstantPopulation.HCV' treeIntervals='@TreeIntervals.HCV'/>
 
-<operator id='YuleBirthRateScaler.HCV' spec='beast.evolution.operators.ScaleOperator' parameter='@birthRate.HCV' scaleFactor='0.75' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='3.0'/>
+<operator id='YuleBirthRateScaler.HCV' spec='beast.base.evolution.operator.ScaleOperator' parameter='@birthRate.HCV' scaleFactor='0.75' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='3.0'/>
 
-<operator id='birthOperator.HCV' spec='beast.evolution.operators.ScaleOperator' parameter='@birthRate.HCV' scaleFactor='0.75' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='3.0'/>
+<operator id='birthOperator.HCV' spec='beast.base.evolution.operator.ScaleOperator' parameter='@birthRate.HCV' scaleFactor='0.75' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='3.0'/>
 
-<distribution id='ePopSizePrior.HCV' spec='beast.math.distributions.Prior' x='@ePopSize.HCV'>
-    <input id='OneOnX.03' spec='beast.math.distributions.OneOnX' name='distr' offset='0.0'/>
+<distribution id='ePopSizePrior.HCV' spec='beast.base.inference.distribution.Prior' x='@ePopSize.HCV'>
+    <input id='OneOnX.03' spec='beast.base.inference.distribution.OneOnX' name='distr' offset='0.0'/>
 
 </distribution>
 
-<operator id='gammaShapeScaler.HCV' spec='beast.evolution.operators.ScaleOperator' parameter='@gammaShape.HCV' scaleFactor='0.5' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='1.0'/>
+<operator id='gammaShapeScaler.HCV' spec='beast.base.evolution.operator.ScaleOperator' parameter='@gammaShape.HCV' scaleFactor='0.5' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='1.0'/>
 
-<distribution id='YuleModel.HCV' spec='beast.evolution.speciation.YuleModel' birthDiffRate='@birthRate.HCV' conditionalOnRoot='false' tree='@Tree.HCV'/>
+<distribution id='YuleModel.HCV' spec='beast.base.evolution.speciation.YuleModel' birthDiffRate='@birthRate.HCV' conditionalOnRoot='false' tree='@Tree.HCV'/>
 
-<operator id='deathOperator.HCV' spec='beast.evolution.operators.ScaleOperator' parameter='@deathRate.HCV' scaleFactor='0.75' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='3.0'/>
+<operator id='deathOperator.HCV' spec='beast.base.evolution.operator.ScaleOperator' parameter='@deathRate.HCV' scaleFactor='0.75' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='3.0'/>
 
-<operator id='origOperator.HCV' spec='beast.evolution.operators.ScaleOperator' parameter='@orig_root.HCV' scaleFactor='0.75' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='3.0'/>
+<operator id='origOperator.HCV' spec='beast.base.evolution.operator.ScaleOperator' parameter='@orig_root.HCV' scaleFactor='0.75' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='3.0'/>
 
-<distribution id='GammaShapePrior.HCV' spec='beast.math.distributions.Prior' x='@gammaShape.HCV'>
-    <input id='Uniform.01' spec='beast.math.distributions.Uniform' name='distr' lower='0.0' upper='1000.0' offset='0.0'/>
+<distribution id='GammaShapePrior.HCV' spec='beast.base.inference.distribution.Prior' x='@gammaShape.HCV'>
+    <input id='Uniform.01' spec='beast.base.inference.distribution.Uniform' name='distr' lower='0.0' upper='1000.0' offset='0.0'/>
 
 </distribution>
 

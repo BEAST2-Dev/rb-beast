@@ -4,17 +4,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import beast.core.Description;
-import beast.evolution.alignment.AscertainedAlignment;
-import beast.evolution.branchratemodel.StrictClockModel;
-import beast.evolution.likelihood.TreeLikelihood;
+import beast.base.core.Description;
+import beast.base.evolution.alignment.AscertainedAlignment;
+import beast.base.evolution.branchratemodel.StrictClockModel;
+import beast.base.evolution.likelihood.TreeLikelihood;
 import beast.evolution.sitemodel.DefaultMixtureSiteModel;
 import beast.evolution.sitemodel.MixtureSiteModel;
 import beast.evolution.sitemodel.MixtureSubstModel;
-import beast.evolution.sitemodel.SiteModel;
-import beast.evolution.substitutionmodel.SubstitutionModel;
-import beast.evolution.tree.Node;
-import beast.evolution.tree.Tree;
+import beast.base.evolution.sitemodel.SiteModel;
+import beast.base.evolution.substitutionmodel.SubstitutionModel;
+import beast.base.evolution.tree.Node;
+import beast.base.evolution.tree.Tree;
 
 
 

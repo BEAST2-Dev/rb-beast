@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><beast beautitemplate='GeneralMixtureModel' beautistatus='' namespace="beast.core:beast.evolution.alignment:beast.evolution.tree.coalescent:beast.core.util:beast.evolution.nuc:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.likelihood" version="2.0">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><beast beautitemplate='GeneralMixtureModel' beautistatus='' namespace="beast.pkgmgmt:beast.base.core:beast.base.inference:beast.base.evolution.alignment:beast.base.evolution.tree.coalescent:beast.pkgmgmt:beast.base.core:beast.base.inference.util:beast.evolution.nuc:beast.base.evolution.operator:beast.base.inference.operator:beast.base.evolution.sitemodel:beast.base.evolution.substitutionmodel:beast.base.evolution.likelihood" version="2.0">
 
 
     <data id="Primates" name="alignment">
@@ -24,16 +24,16 @@
 
 
     
-<map name="Beta">beast.math.distributions.Beta</map>
-<map name="Exponential">beast.math.distributions.Exponential</map>
-<map name="InverseGamma">beast.math.distributions.InverseGamma</map>
-<map name="LogNormal">beast.math.distributions.LogNormalDistributionModel</map>
-<map name="Gamma">beast.math.distributions.Gamma</map>
-<map name="Uniform">beast.math.distributions.Uniform</map>
-<map name="prior">beast.math.distributions.Prior</map>
-<map name="LaplaceDistribution">beast.math.distributions.LaplaceDistribution</map>
-<map name="OneOnX">beast.math.distributions.OneOnX</map>
-<map name="Normal">beast.math.distributions.Normal</map>
+<map name="Beta">beast.base.inference.distribution.Beta</map>
+<map name="Exponential">beast.base.inference.distribution.Exponential</map>
+<map name="InverseGamma">beast.base.inference.distribution.InverseGamma</map>
+<map name="LogNormal">beast.base.inference.distribution.LogNormalDistributionModel</map>
+<map name="Gamma">beast.base.inference.distribution.Gamma</map>
+<map name="Uniform">beast.base.inference.distribution.Uniform</map>
+<map name="prior">beast.base.inference.distribution.Prior</map>
+<map name="LaplaceDistribution">beast.base.inference.distribution.LaplaceDistribution</map>
+<map name="OneOnX">beast.base.inference.distribution.OneOnX</map>
+<map name="Normal">beast.base.inference.distribution.Normal</map>
 
 
 <run chainLength="10000000" id="mcmc" spec="MCMC">
@@ -48,9 +48,9 @@
         <parameter dimension="5" id="RBrates.s:Primates" lower="0.01" name="stateNode" upper="100.0" value="1"/>
     </state>
 
-    <distribution id="posterior" spec="util.CompoundDistribution">
-        <distribution id="prior" spec="util.CompoundDistribution">
-            <distribution birthDiffRate="@birthRate.t:Primates" id="YuleModel.t:Primates" spec="beast.evolution.speciation.YuleModel" tree="@Tree.t:Primates"/>
+    <distribution id="posterior" spec="beast.base.inference.CompoundDistribution">
+        <distribution id="prior" spec="beast.base.inference.CompoundDistribution">
+            <distribution birthDiffRate="@birthRate.t:Primates" id="YuleModel.t:Primates" spec="beast.base.evolution.speciation.YuleModel" tree="@Tree.t:Primates"/>
             <prior id="YuleBirthRatePrior.t:Primates" name="distribution" x="@birthRate.t:Primates">
                 <Uniform id="Uniform.0" name="distr" upper="Infinity"/>
             </prior>
@@ -61,7 +61,7 @@
                 </Gamma>
             </distribution>
         </distribution>
-        <distribution id="likelihood" spec="util.CompoundDistribution">
+        <distribution id="likelihood" spec="beast.base.inference.CompoundDistribution">
             <distribution data="@Primates" id="treeLikelihood.Primates" spec="MixtureTreeLikelihood" tree="@Tree.t:Primates">
                 <siteModel id="SiteModel.s:Primates" spec="MixtureSiteModel">
                     <component id="component1.s:Primates" spec="MixtureSubstModel">
@@ -81,7 +81,7 @@
                     <parameter estimate="false" id="proportionInvariant.s:Primates" lower="0.0" name="proportionInvariant" upper="1.0" value="0.0"/>
                     <substModel idref="RB.s:Primates"/>
                 </siteModel>
-                <branchRateModel id="StrictClock.c:Primates" spec="beast.evolution.branchratemodel.StrictClockModel">
+                <branchRateModel id="StrictClock.c:Primates" spec="beast.base.evolution.branchratemodel.StrictClockModel">
                     <parameter estimate="false" id="clockRate.c:Primates" name="clock.rate" value="1.0"/>
                 </branchRateModel>
             </distribution>
@@ -113,7 +113,7 @@
         <log idref="likelihood"/>
         <log idref="prior"/>
         <log idref="treeLikelihood.Primates"/>
-        <log id="TreeHeight.t:Primates" spec="beast.evolution.tree.TreeHeightLogger" tree="@Tree.t:Primates"/>
+        <log id="TreeHeight.t:Primates" spec="beast.base.evolution.tree.TreeHeightLogger" tree="@Tree.t:Primates"/>
         <log idref="YuleModel.t:Primates"/>
         <parameter idref="birthRate.t:Primates" name="log"/>
         <log idref="RBcount.s:Primates"/>
@@ -128,10 +128,10 @@
     </logger>
 
     <logger fileName="PrimatesMixture.trees" id="treelog.t:Primates" logEvery="1000" mode="tree">
-        <log id="TreeWithMetaDataLogger.t:Primates" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@Tree.t:Primates"/>
+        <log id="TreeWithMetaDataLogger.t:Primates" spec="beast.base.evolution.TreeWithMetaDataLogger" tree="@Tree.t:Primates"/>
     </logger>
 
-    <init estimate="false" id="RandomTree.t:Primates" initial="@Tree.t:Primates" spec="beast.evolution.tree.RandomTree" taxa="@Primates">
+    <init estimate="false" id="RandomTree.t:Primates" initial="@Tree.t:Primates" spec="beast.base.evolution.tree.coalescent.RandomTree" taxa="@Primates">
         <populationModel id="ConstantPopulation0.t:Primates" spec="ConstantPopulation">
             <parameter id="randomPopSize.t:Primates" name="popSize" value="1"/>
         </populationModel>

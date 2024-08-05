@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><beast namespace="beast.core:beast.evolution.alignment:beast.evolution.tree.coalescent:beast.core.util:beast.evolution.nuc:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.likelihood" version="2.0">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><beast namespace="beast.pkgmgmt:beast.base.core:beast.base.inference:beast.base.evolution.alignment:beast.base.evolution.tree.coalescent:beast.pkgmgmt:beast.base.core:beast.base.inference.util:beast.evolution.nuc:beast.base.evolution.operator:beast.base.inference.operator:beast.base.evolution.sitemodel:beast.base.evolution.substitutionmodel:beast.base.evolution.likelihood" version="2.0">
 
 
     <data dataType="nucleotide" id="HIV" name="alignment" strip="false">
@@ -54,39 +54,39 @@
     
 
 
-    <distribution id="posterior" spec="util.CompoundDistribution" useThreads="false">
-        <distribution id="prior" spec="util.CompoundDistribution" useThreads="false">
+    <distribution id="posterior" spec="beast.base.inference.CompoundDistribution" useThreads="false">
+        <distribution id="prior" spec="beast.base.inference.CompoundDistribution" useThreads="false">
             <distribution id="CoalescentExponential.HIV" spec="Coalescent">
                 <populationModel growthRate="@growthRate.HIV" id="ExponentialGrowth.HIV" popSize="@ePopSize.HIV" spec="ExponentialGrowth"/>
-                <treeIntervals id="TreeIntervals.HIV" spec="TreeIntervals" tree="@Tree.HIV"/>
+                <treeIntervals id="TreeIntervals.HIV" spec="beast.base.evolution.tree.TreeIntervals" tree="@Tree.HIV"/>
             </distribution>
             <distribution count="@RBScount.HIV" id="RBSprior.HIV" spec="beast.math.distributions.RBPrior" x="@RBSrates.HIV">
-                <distr spec="beast.math.distributions.Gamma" alpha='0.2' beta='5.0'/>
+                <distr spec="beast.base.inference.distribution.Gamma" alpha='0.2' beta='5.0'/>
             </distribution>
-            <distribution id="ClockPrior.HIV" spec="beast.math.distributions.Prior" x="@clockRate.HIV">
-                <distr id="OneOnX.01" offset="0.0" spec="beast.math.distributions.OneOnX"/>
+            <distribution id="ClockPrior.HIV" spec="beast.base.inference.distribution.Prior" x="@clockRate.HIV">
+                <distr id="OneOnX.01" offset="0.0" spec="beast.base.inference.distribution.OneOnX"/>
             </distribution>
-            <distribution id="ePopSizePrior.HIV" spec="beast.math.distributions.Prior" x="@ePopSize.HIV">
-                <distr id="OneOnX.02" offset="0.0" spec="beast.math.distributions.OneOnX"/>
+            <distribution id="ePopSizePrior.HIV" spec="beast.base.inference.distribution.Prior" x="@ePopSize.HIV">
+                <distr id="OneOnX.02" offset="0.0" spec="beast.base.inference.distribution.OneOnX"/>
             </distribution>
-            <distribution id="GrowthRatePrior.HIV" spec="beast.math.distributions.Prior" x="@growthRate.HIV">
-                <distr id="LaplaceDistribution.0" offset="0.0" spec="beast.math.distributions.LaplaceDistribution">
+            <distribution id="GrowthRatePrior.HIV" spec="beast.base.inference.distribution.Prior" x="@growthRate.HIV">
+                <distr id="LaplaceDistribution.0" offset="0.0" spec="beast.base.inference.distribution.LaplaceDistribution">
                     <parameter dimension="1" estimate="true" id="RealParameter.0" lower="0.0" minordimension="1" name="mu" upper="0.0" value="0.001"/>
                     <parameter dimension="1" estimate="true" id="RealParameter.01" lower="0.0" minordimension="1" name="scale" upper="0.0" value="30.701135"/>
                 </distr>
             </distribution>
         </distribution>
-        <distribution id="likelihood" spec="util.CompoundDistribution" useThreads="false">
+        <distribution id="likelihood" spec="beast.base.inference.CompoundDistribution" useThreads="false">
             <distribution data="@HIV" id="treeLikelihood.HIV" spec="TreeLikelihood" tree="@Tree.HIV" useAmbiguities="false">
                 <siteModel gammaCategoryCount="0" id="SiteModel.HIV" spec="SiteModel">
                     <parameter dimension="1" estimate="false" id="mutationRate.HIV" minordimension="1" name="mutationRate" value="1.0"/>
                     <parameter dimension="1" estimate="false" id="gammaShape.HIV" minordimension="1" name="shape" value="1.0"/>
                     <parameter dimension="1" estimate="false" id="proportionInvariant.HIV" minordimension="1" name="proportionInvariant" value="0.0"/>
-                    <substModel count="@RBScount.HIV" eigenSystem="beast.evolution.substitutionmodel.DefaultEigenSystem" id="RBS.HIV" rates="@RBSrates.HIV" spec="RB">
+                    <substModel count="@RBScount.HIV" eigenSystem="beast.base.evolution.substitutionmodel.DefaultEigenSystem" id="RBS.HIV" rates="@RBSrates.HIV" spec="RB">
                         <frequencies data="@HIV" estimate="true" id="freqs.HIV" spec="Frequencies"/>
                     </substModel>
                 </siteModel>
-                <branchRateModel clock.rate="@clockRate.HIV" id="StrictClock.HIV" spec="beast.evolution.branchratemodel.StrictClockModel"/>
+                <branchRateModel clock.rate="@clockRate.HIV" id="StrictClock.HIV" spec="beast.base.evolution.branchratemodel.StrictClockModel"/>
             </distribution>
         </distribution>
     </distribution>
@@ -96,7 +96,7 @@
 <run chainLength="10000000" id="mcmc" preBurnin="0" sampleFromPrior="false" spec="MCMC" storeEvery="-1">
     <state id="state" storeEvery="1000">
         <tree estimate="true" id="Tree.HIV" name="stateNode">
-            <trait spec="beast.evolution.tree.TraitSet" traitname="date" units="year" value="193Has94=94.0,276Has94=94.0,341Has94=94.0,655Has94=94.0,CMA009s96=96.0,ABT2156s95=95.0,ANT70s87=87.0,CA9s93=93.0,CMA010s98=98.0,CMA100s98=98.0,CMA102s96=96.0,CMA103s98=98.0,CMA104s98=98.0,CMA105s98=98.0,CMA108s99=99.0,CMA119s99=99.0,CMA120s99=99.0,CMA121s99=99.0,CMA122s99=99.0,CMA123s98=98.0,CMA124s98=98.0,CMA141s98=98.0,CMA197s98=98.0,CMA212s98=98.0,CMA304s99=99.0,CMA307s98=98.0,CMA323s98=98.0,CMA376s98=98.0,CMA407s98=98.0,CMA447s97=97.0,CMA453s98=98.0,CMA497s97=97.0,CMA637s96=96.0,CMEB005s96=96.0,CMU2901s98=98.0,CMU4122s99=99.0,CMU4673s99=99.0,CMU4970s98=98.0,CMU5337s98=98.0,MP1299s99=99.0,MP1300s99=99.0,MVP5180s91=91.0,US08692s97=97.0,USTWLAs99=99.0,VAUs92=92.0,VI686s92=92.0">
+            <trait spec="beast.base.evolution.tree.TraitSet" traitname="date" units="year" value="193Has94=94.0,276Has94=94.0,341Has94=94.0,655Has94=94.0,CMA009s96=96.0,ABT2156s95=95.0,ANT70s87=87.0,CA9s93=93.0,CMA010s98=98.0,CMA100s98=98.0,CMA102s96=96.0,CMA103s98=98.0,CMA104s98=98.0,CMA105s98=98.0,CMA108s99=99.0,CMA119s99=99.0,CMA120s99=99.0,CMA121s99=99.0,CMA122s99=99.0,CMA123s98=98.0,CMA124s98=98.0,CMA141s98=98.0,CMA197s98=98.0,CMA212s98=98.0,CMA304s99=99.0,CMA307s98=98.0,CMA323s98=98.0,CMA376s98=98.0,CMA407s98=98.0,CMA447s97=97.0,CMA453s98=98.0,CMA497s97=97.0,CMA637s96=96.0,CMEB005s96=96.0,CMU2901s98=98.0,CMU4122s99=99.0,CMU4673s99=99.0,CMU4970s98=98.0,CMU5337s98=98.0,MP1299s99=99.0,MP1300s99=99.0,MVP5180s91=91.0,US08692s97=97.0,USTWLAs99=99.0,VAUs92=92.0,VI686s92=92.0">
                 <taxa id="TaxonSet.HIV" spec="TaxonSet">
                     <data idref="HIV" name="alignment"/>
                 </taxa>
@@ -141,7 +141,7 @@
         <distribution idref="likelihood" name="log"/>
         <distribution idref="prior" name="log"/>
         <distribution idref="treeLikelihood.HIV" name="log"/>
-        <log id="TreeHeight.HIV" spec="beast.evolution.tree.TreeHeightLogger" tree="@Tree.HIV"/>
+        <log id="TreeHeight.HIV" spec="beast.base.evolution.tree.TreeHeightLogger" tree="@Tree.HIV"/>
         <log idref="RBScount.HIV"/>
         <parameter idref="RBSrates.HIV" name="log"/>
         <parameter idref="clockRate.HIV" name="log"/>
@@ -161,7 +161,7 @@
         <tree idref="Tree.HIV" name="log"/>
     </logger>
 
-    <tree estimate="false" id="RandomTree.HIV" initial="@Tree.HIV" name="init" spec="beast.evolution.tree.RandomTree" taxa="@HIV">
+    <tree estimate="false" id="RandomTree.HIV" initial="@Tree.HIV" name="init" spec="beast.base.evolution.tree.coalescent.RandomTree" taxa="@HIV">
         <populationModel id="ConstantPopulation0.HIV" spec="ConstantPopulation">
             <parameter dimension="1" estimate="true" id="randomPopSize.HIV" minordimension="1" name="popSize" value="1"/>
         </populationModel>
@@ -175,50 +175,50 @@
 
 <!-- DO NOT EDIT the following machine generated text, they are used in Beauti 
 
-<operator id='origOperator.HIV' spec='beast.evolution.operators.ScaleOperator' scaleFactor='0.75' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='3.0'>
+<operator id='origOperator.HIV' spec='beast.base.evolution.operator.ScaleOperator' scaleFactor='0.75' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='3.0'>
     <parameter id='orig_root.HIV' lower='0.0' upper='Infinity' value='1.' dimension='1' minordimension='1' estimate='true'/>
 
 </operator>
 
-<distribution id='samplingPrior.HIV' spec='beast.math.distributions.Prior'>
+<distribution id='samplingPrior.HIV' spec='beast.base.inference.distribution.Prior'>
     <parameter id='samplingRate.HIV' name='x' lower='0.0' upper='Infinity' value='.007' dimension='1' minordimension='1' estimate='true'/>
 
-    <input id='Gamma.0' spec='beast.math.distributions.Gamma' name='distr' offset='0.0'>
+    <input id='Gamma.0' spec='beast.base.inference.distribution.Gamma' name='distr' offset='0.0'>
         <parameter id='RealParameter.02' name='alpha' lower='0.0' upper='0.0' value='8' dimension='1' minordimension='1' estimate='true'/>
         <parameter id='RealParameter.03' name='beta' lower='0.0' upper='0.0' value='2.' dimension='1' minordimension='1' estimate='true'/>
     </input>
 
 </distribution>
 
-<distribution id='GammaShapePrior.HIV' spec='beast.math.distributions.Prior' x='@gammaShape.HIV'>
-    <input id='Uniform.0' spec='beast.math.distributions.Uniform' name='distr' lower='0.0' upper='1000.0' offset='0.0'/>
+<distribution id='GammaShapePrior.HIV' spec='beast.base.inference.distribution.Prior' x='@gammaShape.HIV'>
+    <input id='Uniform.0' spec='beast.base.inference.distribution.Uniform' name='distr' lower='0.0' upper='1000.0' offset='0.0'/>
 
 </distribution>
 
-<operator id='updownBD.HIV' spec='beast.evolution.operators.UpDownOperator' scaleFactor='0.75' optimise='true' weight='10.0'/>
+<operator id='updownBD.HIV' spec='beast.base.inference.operator.UpDownOperator' scaleFactor='0.75' optimise='true' weight='10.0'/>
 
-<operator id='gammaShapeScaler.HIV' spec='beast.evolution.operators.ScaleOperator' parameter='@gammaShape.HIV' scaleFactor='0.5' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='1.0'/>
+<operator id='gammaShapeScaler.HIV' spec='beast.base.evolution.operator.ScaleOperator' parameter='@gammaShape.HIV' scaleFactor='0.5' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='1.0'/>
 
-<operator id='deathOperator.HIV' spec='beast.evolution.operators.ScaleOperator' scaleFactor='0.75' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='3.0'>
+<operator id='deathOperator.HIV' spec='beast.base.evolution.operator.ScaleOperator' scaleFactor='0.75' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='3.0'>
     <parameter id='deathRate.HIV' lower='0.0' upper='Infinity' value='0.02' dimension='1' minordimension='1' estimate='true'/>
 
 </operator>
 
 <parameter id='intervalTimes.HIV' value='0. 0.002 0.01' dimension='3' minordimension='1' estimate='true'/>
 
-<operator id='proportionInvariantScaler.HIV' spec='beast.evolution.operators.ScaleOperator' parameter='@proportionInvariant.HIV' scaleFactor='0.5' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='1.0'/>
+<operator id='proportionInvariantScaler.HIV' spec='beast.base.evolution.operator.ScaleOperator' parameter='@proportionInvariant.HIV' scaleFactor='0.5' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='1.0'/>
 
-<distribution id='birthPrior.HIV' spec='beast.math.distributions.Prior'>
+<distribution id='birthPrior.HIV' spec='beast.base.inference.distribution.Prior'>
     <parameter id='birthRate.HIV' name='x' value='1.0' dimension='1' minordimension='1' estimate='true'/>
 
-    <input id='Gamma.01' spec='beast.math.distributions.Gamma' name='distr' offset='0.0'>
+    <input id='Gamma.01' spec='beast.base.inference.distribution.Gamma' name='distr' offset='0.0'>
         <parameter id='RealParameter.04' name='alpha' lower='0.0' upper='0.0' value='20' dimension='1' minordimension='1' estimate='true'/>
         <parameter id='RealParameter.05' name='beta' lower='0.0' upper='0.0' value='2.' dimension='1' minordimension='1' estimate='true'/>
     </input>
 
 </distribution>
 
-<input id='R_0.HIV' spec='beast.math.statistic.RPNcalculator' expression='birthRate.HIV deathRate.HIV samplingRate.HIV + /'>
+<input id='R_0.HIV' spec='beast.base.inference.util.RPNcalculator' expression='birthRate.HIV deathRate.HIV samplingRate.HIV + /'>
     <parameter idref='birthRate.HIV'/>
 
     <parameter idref='deathRate.HIV'/>
@@ -227,41 +227,41 @@
 
 </input>
 
-<distribution id='YuleBirthRatePrior.HIV' spec='beast.math.distributions.Prior' x='@birthRate.HIV'>
-    <input id='Uniform.01' spec='beast.math.distributions.Uniform' name='distr' lower='0.0' upper='1.0' offset='0.0'/>
+<distribution id='YuleBirthRatePrior.HIV' spec='beast.base.inference.distribution.Prior' x='@birthRate.HIV'>
+    <input id='Uniform.01' spec='beast.base.inference.distribution.Uniform' name='distr' lower='0.0' upper='1.0' offset='0.0'/>
 
 </distribution>
 
-<operator id='birthOperator.HIV' spec='beast.evolution.operators.ScaleOperator' parameter='@birthRate.HIV' scaleFactor='0.75' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='3.0'/>
+<operator id='birthOperator.HIV' spec='beast.base.evolution.operator.ScaleOperator' parameter='@birthRate.HIV' scaleFactor='0.75' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='3.0'/>
 
-<operator id='mutationRateScaler.HIV' spec='beast.evolution.operators.ScaleOperator' parameter='@mutationRate.HIV' scaleFactor='0.5' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='1.0'/>
+<operator id='mutationRateScaler.HIV' spec='beast.base.evolution.operator.ScaleOperator' parameter='@mutationRate.HIV' scaleFactor='0.5' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='1.0'/>
 
-<distribution id='YuleModel.HIV' spec='beast.evolution.speciation.YuleModel' birthDiffRate='@birthRate.HIV' conditionalOnRoot='false' tree='@Tree.HIV'/>
+<distribution id='YuleModel.HIV' spec='beast.base.evolution.speciation.YuleModel' birthDiffRate='@birthRate.HIV' conditionalOnRoot='false' tree='@Tree.HIV'/>
 
-<operator id='intervalTimesOperator.HIV' spec='beast.evolution.operators.ScaleOperator' parameter='@intervalTimes.HIV' scaleFactor='0.75' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='1.0'/>
+<operator id='intervalTimesOperator.HIV' spec='beast.base.evolution.operator.ScaleOperator' parameter='@intervalTimes.HIV' scaleFactor='0.75' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='1.0'/>
 
-<operator id='samplingOperator.HIV' spec='beast.evolution.operators.ScaleOperator' parameter='@samplingRate.HIV' scaleFactor='0.75' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='3.0'/>
+<operator id='samplingOperator.HIV' spec='beast.base.evolution.operator.ScaleOperator' parameter='@samplingRate.HIV' scaleFactor='0.75' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='3.0'/>
 
-<operator id='YuleBirthRateScaler.HIV' spec='beast.evolution.operators.ScaleOperator' parameter='@birthRate.HIV' scaleFactor='0.75' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='3.0'/>
+<operator id='YuleBirthRateScaler.HIV' spec='beast.base.evolution.operator.ScaleOperator' parameter='@birthRate.HIV' scaleFactor='0.75' scaleAll='false' scaleAllIndependently='false' degreesOfFreedom='1' rootOnly='false' optimise='true' weight='3.0'/>
 
-<input id='intervalNumber.HIV' spec='beast.core.parameter.IntegerParameter' value='3' dimension='1' minordimension='1' estimate='false'/>
+<input id='intervalNumber.HIV' spec='beast.base.inference.parameter.IntegerParameter' value='3' dimension='1' minordimension='1' estimate='false'/>
 
-<input id='psi/(psi+death).HIV' spec='beast.math.statistic.RPNcalculator' expression='samplingRate.HIV deathRate.HIV samplingRate.HIV + /'>
+<input id='psi/(psi+death).HIV' spec='beast.base.inference.util.RPNcalculator' expression='samplingRate.HIV deathRate.HIV samplingRate.HIV + /'>
     <parameter idref='deathRate.HIV'/>
 
     <parameter idref='samplingRate.HIV'/>
 
 </input>
 
-<distribution id='deathPrior.HIV' spec='beast.math.distributions.Prior' x='@deathRate.HIV'>
-    <input id='Gamma.02' spec='beast.math.distributions.Gamma' name='distr' offset='0.0'>
+<distribution id='deathPrior.HIV' spec='beast.base.inference.distribution.Prior' x='@deathRate.HIV'>
+    <input id='Gamma.02' spec='beast.base.inference.distribution.Gamma' name='distr' offset='0.0'>
         <parameter id='RealParameter.06' name='alpha' lower='0.0' upper='0.0' value='12' dimension='1' minordimension='1' estimate='true'/>
         <parameter id='RealParameter.07' name='beta' lower='0.0' upper='0.0' value='2.' dimension='1' minordimension='1' estimate='true'/>
     </input>
 
 </distribution>
 
-<distribution id='BirthDeathSky.HIV' spec='beast.evolution.speciation.BirthDeathSkylineModel' intervalTimes='@intervalTimes.HIV' orig_root='@orig_root.HIV' intervalNumber='@intervalNumber.HIV' birthRate='@birthRate.HIV' deathRate='@deathRate.HIV' samplingRate='@samplingRate.HIV' forceRateChange='true' tree='@Tree.HIV'/>
+<distribution id='BirthDeathSky.HIV' spec='bdsky.evolution.speciation.BirthDeathSkylineModel' intervalTimes='@intervalTimes.HIV' orig_root='@orig_root.HIV' intervalNumber='@intervalNumber.HIV' birthRate='@birthRate.HIV' deathRate='@deathRate.HIV' samplingRate='@samplingRate.HIV' forceRateChange='true' tree='@Tree.HIV'/>
 
 
 

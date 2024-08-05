@@ -1,9 +1,9 @@
 package beast.evolution.sitemodel;
 
-import beast.core.CalculationNode;
-import beast.core.Description;
-import beast.evolution.sitemodel.SiteModel;
-import beast.evolution.tree.Node;
+import beast.base.inference.CalculationNode;
+import beast.base.core.Description;
+import beast.base.evolution.sitemodel.SiteModel;
+import beast.base.evolution.tree.Node;
 
 @Description("Gamma site model -- for testing Mixture treelikelihood")
 public class DefaultMixtureSiteModel extends SiteModel {

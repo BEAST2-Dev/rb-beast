@@ -1,4 +1,4 @@
-<beast version='2.0'      namespace='beast.app.beauti:beast.core:beast.evolution.branchratemodel:beast.evolution.speciation:beast.evolution.tree.coalescent:beast.core.util:beast.evolution.nuc:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.likelihood:beast.evolution:beast.math.distributions'>
+<beast version='2.0'      namespace='beast.app.beauti:beast.pkgmgmt:beast.base.core:beast.base.inference:beast.base.evolution.branchratemodel:beast.base.evolution.speciation:beast.base.evolution.tree.coalescent:beast.base.util:beast.base.math:beast.evolution.nuc:beast.base.evolution.operator:beast.base.inference.operator:beast.base.evolution.sitemodel:beast.base.evolution.substitutionmodel:beast.base.evolution.likelihood:beast.evolution:beast.base.math.distributions'>
 
 <mergewith point='substModelTemplates'>
 
@@ -17,8 +17,8 @@
         </frequencies>
     </substModel>
 
-    <distribution id='VSprior.s:$(n)' spec='beast.math.distributions.Prior' x='@VSrates.s:$(n)'>
-        <distr spec="beast.math.distributions.Gamma" alpha='0.2' beta='5.0'/>
+    <distribution id='VSprior.s:$(n)' spec='beast.base.inference.distribution.Prior' x='@VSrates.s:$(n)'>
+        <distr spec="beast.base.inference.distribution.Gamma" alpha='0.2' beta='5.0'/>
     </distribution>
 
     <operator id='VSOperator.s:$(n)' spec='IntRandomWalkOperator' weight="9" windowSize='1' parameter='@VScount.s:$(n)'/>

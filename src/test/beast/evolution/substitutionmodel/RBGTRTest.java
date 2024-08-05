@@ -3,13 +3,14 @@ package test.beast.evolution.substitutionmodel;
 
 import org.junit.Test;
 
-import beast.core.Description;
-import beast.core.parameter.IntegerParameter;
-import beast.core.parameter.RealParameter;
-import beast.evolution.substitutionmodel.Frequencies;
+import beast.base.core.Description;
+import beast.base.inference.parameter.IntegerParameter;
+import beast.base.inference.parameter.RealParameter;
+import beast.base.evolution.substitutionmodel.Frequencies;
 import beast.evolution.substitutionmodel.RB;
 
 import test.beast.evolution.substmodel.GTRTest;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Description("Test GTR matrix exponentiation")
 public class RBGTRTest extends GTRTest {

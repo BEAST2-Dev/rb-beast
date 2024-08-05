@@ -6,26 +6,26 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import beast.app.beauti.BeautiDoc;
-import beast.app.beauti.PartitionContext;
-import beast.core.BEASTInterface;
-import beast.core.BEASTObject;
-import beast.core.CalculationNode;
-import beast.core.Description;
-import beast.core.Input;
-import beast.core.MCMC;
-import beast.core.State;
-import beast.core.StateNode;
-import beast.core.StateNodeInitialiser;
-import beast.core.Input.Validate;
-import beast.core.parameter.IntegerParameter;
-import beast.core.parameter.RealParameter;
-import beast.core.util.CompoundDistribution;
-import beast.evolution.alignment.Alignment;
-import beast.evolution.alignment.Taxon;
-import beast.evolution.alignment.TaxonSet;
-import beast.evolution.sitemodel.SiteModel;
-import beast.util.Randomizer;
+import beastfx.app.inputeditor.BeautiDoc;
+import beast.base.parser.PartitionContext;
+import beast.base.core.BEASTInterface;
+import beast.base.core.BEASTObject;
+import beast.base.inference.CalculationNode;
+import beast.base.core.Description;
+import beast.base.core.Input;
+import beast.base.inference.MCMC;
+import beast.base.inference.State;
+import beast.base.inference.StateNode;
+import beast.base.inference.StateNodeInitialiser;
+import beast.base.core.Input.Validate;
+import beast.base.inference.parameter.IntegerParameter;
+import beast.base.inference.parameter.RealParameter;
+import beast.base.inference.CompoundDistribution;
+import beast.base.evolution.alignment.Alignment;
+import beast.base.evolution.alignment.Taxon;
+import beast.base.evolution.alignment.TaxonSet;
+import beast.base.evolution.sitemodel.SiteModel;
+import beast.base.util.Randomizer;
 
 
 
@@ -188,7 +188,7 @@ public class PartitionProvider extends CalculationNode implements StateNodeIniti
 	
 	@Override
 	protected boolean requiresRecalculation() {
-		if (partitionLengthsInput.isDirty()) {
+		if (partitionLengthsInput.get().somethingIsDirty()) {  
 			needsUpdate = true;
 		}
 		return true;

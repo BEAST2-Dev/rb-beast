@@ -4,9 +4,9 @@ import java.io.File;
 
 import org.junit.Test;
 
-import beast.core.MCMC;
-import beast.util.Randomizer;
-import beast.util.XMLParser;
+import beast.base.inference.MCMC;
+import beast.base.util.Randomizer;
+import beast.base.parser.XMLParser;
 
 
 

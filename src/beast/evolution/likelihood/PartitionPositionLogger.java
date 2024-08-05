@@ -2,12 +2,12 @@ package beast.evolution.likelihood;
 
 import java.io.PrintStream;
 
-import beast.core.BEASTObject;
-import beast.core.Description;
-import beast.core.Input;
-import beast.core.Loggable;
-import beast.core.Input.Validate;
-import beast.core.parameter.IntegerParameter;
+import beast.base.core.BEASTObject;
+import beast.base.core.Description;
+import beast.base.core.Input;
+import beast.base.core.Loggable;
+import beast.base.core.Input.Validate;
+import beast.base.inference.parameter.IntegerParameter;
 
 
 

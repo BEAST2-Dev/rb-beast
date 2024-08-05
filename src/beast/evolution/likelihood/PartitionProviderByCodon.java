@@ -2,7 +2,7 @@ package beast.evolution.likelihood;
 
 import java.util.ArrayList;
 
-import beast.core.Description;
+import beast.base.core.Description;
 
 
 
