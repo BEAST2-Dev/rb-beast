@@ -24,7 +24,7 @@
 */
 
 
-package beast.evolution.likelihood;
+package rbbeast.evolution.likelihood;
 
 
 
@@ -497,7 +497,8 @@ public class PartitionedTreeLikelihood extends TreeLikelihood {
     @Override
     protected boolean requiresRecalculation() {
         if (m_beagle != null) {
-            return m_beagle.requiresRecalculation();
+        	throw new RuntimeException("Not implemented yet");
+            // return m_beagle.requiresRecalculation();
         }
         m_nHasDirt = Tree.IS_CLEAN;
 

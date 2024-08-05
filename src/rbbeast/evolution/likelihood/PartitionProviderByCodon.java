@@ -1,4 +1,4 @@
-package beast.evolution.likelihood;
+package rbbeast.evolution.likelihood;
 
 import java.util.ArrayList;
 

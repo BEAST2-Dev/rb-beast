@@ -26,7 +26,7 @@
         </sequence>
     </data>
 
-    <substModel spec='RB' id='RB'> <!-- eigenSystem="beast.evolution.substitutionmodel.RobustEigenSystem"-->
+    <substModel spec='rbbeast.evolution.substitutionmodel.RB' id='RB'> <!-- eigenSystem="beast.evolution.substitutionmodel.RobustEigenSystem"-->
         <count spec='IntegerParameter' id='count' value='1' lower='0' upper='5'/>
         <rates spec='RealParameter' id='rates' value='0.030259933' dimension='5' lower='0.01' upper='100.0'/>
         <frequencies id='freqs' spec='Frequencies'>
@@ -41,7 +41,7 @@
     </substModel>
 
 
-    <distribution id='RBprior' spec='beast.math.distributions.RBPrior' count='@count' x='@rates'>
+    <distribution id='RBprior' spec='rbbeast.math.distributions.RBPrior' count='@count' x='@rates'>
                 <distr spec="beast.base.inference.distribution.Gamma" alpha='0.2' beta='5.0'/>
 <!--
         <distr spec="beast.base.inference.distribution.Gamma" alpha='0.05' beta='20.0'/>
@@ -92,8 +92,8 @@
         <operator id='invarScaler' spec='ScaleOperator' scaleFactor="0.5" weight="1" parameter="@propInvar"/>
 -->
 
-        <operator id='RBOperator' spec='RBOperator' weight="1" rates="@rates" count='@count'/>
-        <operator id='rateScaler' spec='RBScaleOperator' scaleFactor="0.5" weight="1" parameter="@rates" count='@count'/>
+        <operator id='RBOperator' spec='rbbeast.evolution.operators.RBOperator' weight="1" rates="@rates" count='@count'/>
+        <operator id='rateScaler' spec='rbbeast.evolution.operators.RBScaleOperator' scaleFactor="0.5" weight="1" parameter="@rates" count='@count'/>
 
         <operator id="PopSizeScaler" parameter="@popSize" scaleFactor="0.75" spec="ScaleOperator" weight="3.0"/>
 

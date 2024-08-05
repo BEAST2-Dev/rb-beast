@@ -1,4 +1,4 @@
-package beast.evolution.sitemodel;
+package rbbeast.evolution.sitemodel;
 
 import beast.base.inference.CalculationNode;
 import beast.base.core.Description;

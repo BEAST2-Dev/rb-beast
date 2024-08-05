@@ -54,7 +54,7 @@
             <prior id="YuleBirthRatePrior.t:Primates" name="distribution" x="@birthRate.t:Primates">
                 <Uniform id="Uniform.0" name="distr" upper="Infinity"/>
             </prior>
-            <distribution count="@RBcount.s:Primates" id="RBprior.s:Primates" spec="beast.math.distributions.RBPrior" x="@RBrates.s:Primates">
+            <distribution count="@RBcount.s:Primates" id="RBprior.s:Primates" spec="rbbeast.math.distributions.RBPrior" x="@RBrates.s:Primates">
                 <Gamma id="Gamma.0" name="distr">
                     <parameter id="RealParameter.0" lower="0.0" name="alpha" upper="0.0" value="0.2"/>
                     <parameter id="RealParameter.01" lower="0.0" name="beta" upper="0.0" value="5.0"/>
@@ -62,17 +62,17 @@
             </distribution>
         </distribution>
         <distribution id="likelihood" spec="beast.base.inference.CompoundDistribution">
-            <distribution data="@Primates" id="treeLikelihood.Primates" spec="MixtureTreeLikelihood" tree="@Tree.t:Primates">
-                <siteModel id="SiteModel.s:Primates" spec="MixtureSiteModel">
-                    <component id="component1.s:Primates" spec="MixtureSubstModel">
+            <distribution data="@Primates" id="treeLikelihood.Primates" spec="rbbeast.evolution.likelihood.MixtureTreeLikelihood" tree="@Tree.t:Primates">
+                <siteModel id="SiteModel.s:Primates" spec="rbbeast.evolution.sitemodel.MixtureSiteModel">
+                    <component id="component1.s:Primates" spec="rbbeast.evolution.sitemodel.MixtureSubstModel">
                         <weight id="RealParameter.02" spec='parameter.RealParameter'>1.0</weight>
                         <rate id="RealParameter.03" spec='parameter.RealParameter'>1.0</rate>
                         <substModel id="JC69.s:Primates" spec="JukesCantor"/>
                     </component>
-                    <component id="component2.s:Primates" spec="MixtureSubstModel">
+                    <component id="component2.s:Primates" spec="rbbeast.evolution.sitemodel.MixtureSubstModel">
                         <weight id="RealParameter.04" spec='parameter.RealParameter'>1.0</weight>
                         <rate id="RealParameter.05" spec='parameter.RealParameter'>1.0</rate>
-		                <substModel count="@RBcount.s:Primates" id="RB.s:Primates" rates="@RBrates.s:Primates" spec="RB">
+		                <substModel count="@RBcount.s:Primates" id="RB.s:Primates" rates="@RBrates.s:Primates" spec="rbbeast.evolution.substitutionmodel.RB">
 		                    <frequencies data="@Primates" id="freqs.s:Primates" spec="Frequencies"/>
 		                </substModel>
                     </component>
@@ -104,9 +104,9 @@
 
     <operator id="WilsonBalding.t:Primates" spec="WilsonBalding" tree="@Tree.t:Primates" weight="3.0"/>
 
-    <operator count="@RBcount.s:Primates" id="RBOperator.s:Primates" rates="@RBrates.s:Primates" spec="RBOperator" weight="1.0"/>
+    <operator count="@RBcount.s:Primates" id="RBOperator.s:Primates" rates="@RBrates.s:Primates" spec='rbbeast.evolution.operators.RBOperator' weight="1.0"/>
 
-    <operator count="@RBcount.s:Primates" id="RBratescaler.s:Primates" parameter="@RBrates.s:Primates" scaleFactor="0.5" spec="RBScaleOperator" weight="1.0"/>
+    <operator count="@RBcount.s:Primates" id="RBratescaler.s:Primates" parameter="@RBrates.s:Primates" scaleFactor="0.5" spec='rbbeast.evolution.operators.RBScaleOperator' weight="1.0"/>
 
     <logger fileName="PrimatesMixture.log" id="tracelog" logEvery="1000" model="@posterior" sanitiseHeaders="true" sort="smart">
         <log idref="posterior"/>

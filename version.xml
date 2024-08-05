@@ -1,7 +1,24 @@
 <package name='RBS' version='1.5.0'>
-	<depends on='beast2' atleast='2.7.7'/>
-	<depends on='BeastFX' atleast='2.7.7'/>
+         <depends on='BEAST.base' atleast='2.7.0'/>
+         <depends on='BEAST.app' atleast='2.7.0'/>
 
+    <service type="beast.base.core.BEASTInterface">
+        <provider classname="rbbeast.evolution.likelihood.MixtureTreeLikelihood"/>
+        <provider classname="rbbeast.evolution.likelihood.PartitionedTreeLikelihood"/>
+        <provider classname="rbbeast.evolution.likelihood.PartitionPositionLogger"/>
+        <provider classname="rbbeast.evolution.likelihood.PartitionProvider"/>
+        <provider classname="rbbeast.evolution.likelihood.PartitionProviderByCodon"/>
+        <provider classname="rbbeast.evolution.operators.FreeRateOperator"/>
+        <provider classname="rbbeast.evolution.operators.RBOperator"/>
+        <provider classname="rbbeast.evolution.operators.RBScaleOperator"/>
+        <provider classname="rbbeast.evolution.sitemodel.DefaultMixtureSiteModel"/>
+        <provider classname="rbbeast.evolution.sitemodel.FreeRateModel"/>
+        <provider classname="rbbeast.evolution.sitemodel.MixtureSiteModel"/>
+        <provider classname="rbbeast.evolution.sitemodel.MixtureSubstModel"/>
+        <provider classname="rbbeast.evolution.substitutionmodel.RB"/>
+        <provider classname="rbbeast.evolution.substitutionmodel.VS"/>
+        <provider classname="rbbeast.math.distributions.RBPrior"/>
+    </service>
 
 
 </package>

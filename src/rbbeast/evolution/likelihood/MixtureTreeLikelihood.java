@@ -1,4 +1,4 @@
-package beast.evolution.likelihood;
+package rbbeast.evolution.likelihood;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,9 +8,7 @@ import beast.base.core.Description;
 import beast.base.evolution.alignment.AscertainedAlignment;
 import beast.base.evolution.branchratemodel.StrictClockModel;
 import beast.base.evolution.likelihood.TreeLikelihood;
-import beast.evolution.sitemodel.DefaultMixtureSiteModel;
-import beast.evolution.sitemodel.MixtureSiteModel;
-import beast.evolution.sitemodel.MixtureSubstModel;
+import rbbeast.evolution.sitemodel.DefaultMixtureSiteModel;
 import beast.base.evolution.sitemodel.SiteModel;
 import beast.base.evolution.substitutionmodel.SubstitutionModel;
 import beast.base.evolution.tree.Node;

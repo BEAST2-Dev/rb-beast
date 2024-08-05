@@ -20,7 +20,7 @@
             <distribution id="YuleBirthRatePrior.alignment" spec="beast.base.inference.distribution.Prior" x="@birthRate.alignment">
                 <distr id="Uniform.0" lower="0.0" offset="0.0" spec="beast.base.inference.distribution.Uniform" upper="1.0"/>
             </distribution>
-            <distribution count="@RBScount.alignment" id="RBSprior.alignment" spec="beast.math.distributions.RBPrior" x="@RBSrates.alignment">
+            <distribution count="@RBScount.alignment" id="RBSprior.alignment" spec="rbbeast.math.distributions.RBPrior" x="@RBSrates.alignment">
                 <distr spec="beast.base.inference.distribution.Gamma" alpha='0.2' beta='5.0'/>
             </distribution>
         </distribution>
@@ -30,7 +30,7 @@
                     <parameter dimension="1" estimate="false" id="mutationRate.alignment" minordimension="1" name="mutationRate" value="1.0"/>
                     <parameter dimension="1" estimate="false" id="gammaShape.alignment" minordimension="1" name="shape" value="1.0"/>
                     <parameter dimension="1" estimate="false" id="proportionInvariant.alignment" minordimension="1" name="proportionInvariant" value="0.0"/>
-                    <substModel count="@RBScount.alignment" eigenSystem="beast.base.evolution.substitutionmodel.DefaultEigenSystem" id="RBS.alignment" rates="@RBSrates.alignment" spec="RB">
+                    <substModel count="@RBScount.alignment" eigenSystem="beast.base.evolution.substitutionmodel.DefaultEigenSystem" id="RBS.alignment" rates="@RBSrates.alignment" spec="rbbeast.evolution.substitutionmodel.RB">
                         <frequencies data="@alignment" estimate="true" id="freqs.alignment" spec="Frequencies"/>
                     </substModel>
                 </siteModel>
@@ -73,9 +73,9 @@
 
     <operator id="WilsonBalding.alignment" spec="WilsonBalding" tree="@Tree.alignment" weight="1.0"/>
 
-    <operator count="@RBScount.alignment" id="RBSOperator.alignment" rates="@RBSrates.alignment" spec="RBOperator" weight="1.0"/>
+    <operator count="@RBScount.alignment" id="RBSOperator.alignment" rates="@RBSrates.alignment" spec='rbbeast.evolution.operators.RBOperator' weight="1.0"/>
 
-    <operator count="@RBScount.alignment" degreesOfFreedom="1" id="RBSrateScaler.alignment" optimise="true" parameter="@RBSrates.alignment" rootOnly="false" scaleAll="false" scaleAllIndependently="false" scaleFactor="0.5" spec="RBScaleOperator" weight="1.0"/>
+    <operator count="@RBScount.alignment" degreesOfFreedom="1" id="RBSrateScaler.alignment" optimise="true" parameter="@RBSrates.alignment" rootOnly="false" scaleAll="false" scaleAllIndependently="false" scaleFactor="0.5" spec='rbbeast.evolution.operators.RBScaleOperator' weight="1.0"/>
 
     <logger fileName="ape.$(seed).log" id="tracelog" logEvery="1000" mode="autodetect" model="@posterior">
         <distribution idref="posterior" name="log"/>

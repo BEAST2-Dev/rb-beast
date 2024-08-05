@@ -2,13 +2,13 @@
 
 <mergewith point='substModelTemplates'>
 <!-- Reversible-jump Based substitution model -->
-        <subtemplate id='RB' class='beast.evolution.substitutionmodel.RB' mainid='RB.s:$(n)'
-		suppressInputs='beast.evolution.substitutionmodel.RB.eigenSystem,
-						beast.evolution.substitutionmodel.RB.count,
-						beast.evolution.substitutionmodel.RB.rates,
-						beast.evolution.substitutionmodel.RB.frequencies'>
+        <subtemplate id='RB' class='rbbeast.evolution.substitutionmodel.RB' mainid='RB.s:$(n)'
+		suppressInputs='rbbeast.evolution.substitutionmodel.RB.eigenSystem,
+						rbbeast.evolution.substitutionmodel.RB.count,
+						rbbeast.evolution.substitutionmodel.RB.rates,
+						rbbeast.evolution.substitutionmodel.RB.frequencies'>
 <![CDATA[
-    <substModel spec='RB' id='RB.s:$(n)'> 
+    <substModel spec='rbbeast.evolution.substitutionmodel.RB' id='RB.s:$(n)'> 
         <count spec='parameter.IntegerParameter' id='RBcount.s:$(n)' value='5' lower='0' upper='5'/>
         <rates spec='parameter.RealParameter' id='RBrates.s:$(n)' value='1' dimension='5' lower='0.01' upper='100.0'/>
         <frequencies id='freqs.s:$(n)' spec='Frequencies'>
@@ -16,12 +16,12 @@
         </frequencies>
     </substModel>
 
-    <distribution id='RBprior.s:$(n)' spec='beast.math.distributions.RBPrior' count='@RBcount.s:$(n)' x='@RBrates.s:$(n)'>
+    <distribution id='RBprior.s:$(n)' spec='rbbeast.math.distributions.RBPrior' count='@RBcount.s:$(n)' x='@RBrates.s:$(n)'>
         <distr spec="beast.base.inference.distribution.Gamma" alpha='0.2' beta='5.0'/>
     </distribution>
 
-    <operator id='RBOperator.s:$(n)' spec='RBOperator' weight="1" rates="@RBrates.s:$(n)" count='@RBcount.s:$(n)'/>
-    <operator id='RBratescaler.s:$(n)' spec='RBScaleOperator' scaleFactor="0.5" weight="1" parameter="@RBrates.s:$(n)" count='@RBcount.s:$(n)'/>
+    <operator id='RBOperator.s:$(n)' spec='rbbeast.evolution.operators.RBOperator' weight="1" rates="@RBrates.s:$(n)" count='@RBcount.s:$(n)'/>
+    <operator id='RBratescaler.s:$(n)' spec='rbbeast.evolution.operators.RBScaleOperator' scaleFactor="0.5" weight="1" parameter="@RBrates.s:$(n)" count='@RBcount.s:$(n)'/>
 
 ]]>
 
@@ -40,13 +40,13 @@
 
 <!-- Variable Selection substitution model -->
 <!--
-        <subtemplate id='VS' class='beast.evolution.substitutionmodel.RB' mainid='VS.s:$(n)'
-		suppressInputs='beast.evolution.substitutionmodel.RB.eigenSystem,
-						beast.evolution.substitutionmodel.RB.count,
-						beast.evolution.substitutionmodel.RB.rates,
-						beast.evolution.substitutionmodel.VS.frequencies'>
+        <subtemplate id='VS' class='rbbeast.evolution.substitutionmodel.RB' mainid='VS.s:$(n)'
+		suppressInputs='rbbeast.evolution.substitutionmodel.RB.eigenSystem,
+						rbbeast.evolution.substitutionmodel.RB.count,
+						rbbeast.evolution.substitutionmodel.RB.rates,
+						rbbeast.evolution.substitutionmodel.VS.frequencies'>
 <![CDATA[
-    <substModel spec='RB' id='VS.s:$(n)'> 
+    <substModel spec='rbbeast.evolution.substitutionmodel.RB' id='VS.s:$(n)'> 
         <count spec='parameter.IntegerParameter' id='VScount.s:$(n)' value='5' lower='0' upper='5'/>
         <rates spec='parameter.RealParameter' id='VSrates.s:$(n)' value='1' dimension='5' lower='0.01' upper='100.0'/>
         <frequencies id='freqs.s:$(n)' spec='Frequencies'>

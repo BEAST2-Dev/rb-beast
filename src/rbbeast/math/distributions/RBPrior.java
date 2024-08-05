@@ -1,4 +1,4 @@
-package beast.math.distributions;
+package rbbeast.math.distributions;
 
 
 import beast.base.core.Description;

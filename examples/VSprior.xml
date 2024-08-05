@@ -61,7 +61,7 @@
                     <parameter estimate="false" id="mutationRate.s:alignment" name="mutationRate" value="1.0"/>
                     <parameter estimate="false" id="gammaShape.s:alignment" name="shape" value="1.0"/>
                     <parameter estimate="false" id="proportionInvariant.s:alignment" lower="0.0" name="proportionInvariant" upper="1.0" value="0.0"/>
-                    <substModel count="@VScount.s:alignment" id="VS.s:alignment" rates="@VSrates.s:alignment" spec="RB">
+                    <substModel count="@VScount.s:alignment" id="VS.s:alignment" rates="@VSrates.s:alignment" spec="rbbeast.evolution.substitutionmodel.RB">
                         <frequencies data="@alignment" id="freqs.s:alignment" spec="Frequencies"/>
                     </substModel>
                 </siteModel>

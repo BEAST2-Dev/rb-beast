@@ -1,4 +1,4 @@
-package beast.evolution.operators;
+package rbbeast.evolution.operators;
 
 
 import org.apache.commons.math.MathException;
@@ -11,7 +11,7 @@ import beast.base.inference.parameter.Parameter;
 import beast.base.inference.parameter.RealParameter;
 import beast.base.inference.distribution.Exponential;
 import beast.base.inference.distribution.ParametricDistribution;
-import beast.math.distributions.RBPrior;
+import rbbeast.math.distributions.RBPrior;
 import beast.base.util.Randomizer;
 
 

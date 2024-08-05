@@ -29,8 +29,8 @@
     <!-- The HKY substitution model (Hasegawa, Kishino & Yano, 1985)             -->
 
 
-    <input spec='PartitionedTreeLikelihood' id="treeLikelihood" tree='@tree' data='@alignment'>
-		<partitionProvider spec='beast.evolution.likelihood.PartitionProvider' alignment="@alignment">
+    <input spec='rbbeast.evolution.likelihood.PartitionedTreeLikelihood' id="treeLikelihood" tree='@tree' data='@alignment'>
+		<partitionProvider spec='rbbeast.evolution.likelihood.PartitionProvider' alignment="@alignment">
 			<partitionLengths spec='beast.base.inference.parameter.IntegerParameter' value='500 268'/>
 		    <siteModel spec='SiteModel' id="siteModel" gammaCategoryCount='1'>
 <!--

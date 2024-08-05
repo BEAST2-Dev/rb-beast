@@ -54,7 +54,7 @@
             <distribution groupSizes="@bGroupSizes.HCV" id="BayesianSkyline.HCV" popSizes="@bPopSizes.HCV" spec="BayesianSkyline">
                 <treeIntervals id="BSPTreeIntervals.HCV" spec="beast.base.evolution.tree.TreeIntervals" tree="@Tree.HCV"/>
             </distribution>
-            <distribution count="@RBScount.HCV" id="RBSprior.HCV" spec="beast.math.distributions.RBPrior" x="@RBSrates.HCV">
+            <distribution count="@RBScount.HCV" id="RBSprior.HCV" spec="rbbeast.math.distributions.RBPrior" x="@RBSrates.HCV">
                 <distr spec="beast.base.inference.distribution.Gamma" alpha='0.2' beta='5.0'/>
             </distribution>
             <distribution id="ClockPrior.HCV" spec="beast.base.inference.distribution.Prior" x="@clockRate.HCV">
@@ -68,7 +68,7 @@
                     <parameter dimension="1" estimate="false" id="mutationRate.HCV" minordimension="1" name="mutationRate" value="1.0"/>
                     <parameter dimension="1" estimate="false" id="gammaShape.HCV" minordimension="1" name="shape" value="1.0"/>
                     <parameter dimension="1" estimate="false" id="proportionInvariant.HCV" minordimension="1" name="proportionInvariant" value="0.0"/>
-                    <substModel count="@RBScount.HCV" eigenSystem="beast.base.evolution.substitutionmodel.DefaultEigenSystem" id="RBS.HCV" rates="@RBSrates.HCV" spec="RB">
+                    <substModel count="@RBScount.HCV" eigenSystem="beast.base.evolution.substitutionmodel.DefaultEigenSystem" id="RBS.HCV" rates="@RBSrates.HCV" spec="rbbeast.evolution.substitutionmodel.RB">
                         <frequencies data="@HCV" estimate="true" id="freqs.HCV" spec="Frequencies"/>
                     </substModel>
                 </siteModel>
@@ -155,9 +155,9 @@
 
     <operator id="WilsonBalding.HCV" spec="WilsonBalding" tree="@Tree.HCV" weight="1.0"/>
 
-    <operator count="@RBScount.HCV" id="RBSOperator.HCV" rates="@RBSrates.HCV" spec="RBOperator" weight="1.0"/>
+    <operator count="@RBScount.HCV" id="RBSOperator.HCV" rates="@RBSrates.HCV" spec='rbbeast.evolution.operators.RBOperator' weight="1.0"/>
 
-    <operator count="@RBScount.HCV" degreesOfFreedom="1" id="RBSrateScaler.HCV" optimise="true" parameter="@RBSrates.HCV" rootOnly="false" scaleAll="false" scaleAllIndependently="false" scaleFactor="0.5" spec="RBScaleOperator" weight="1.0"/>
+    <operator count="@RBScount.HCV" degreesOfFreedom="1" id="RBSrateScaler.HCV" optimise="true" parameter="@RBSrates.HCV" rootOnly="false" scaleAll="false" scaleAllIndependently="false" scaleFactor="0.5" spec='rbbeast.evolution.operators.RBScaleOperator' weight="1.0"/>
 
     <operator degreesOfFreedom="1" id="StrictClockRateScaler.HCV" optimise="true" parameter="@clockRate.HCV" rootOnly="false" scaleAll="false" scaleAllIndependently="false" scaleFactor="0.75" spec="ScaleOperator" weight="3.0"/>
 

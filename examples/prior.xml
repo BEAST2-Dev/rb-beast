@@ -33,7 +33,7 @@
     	<distribution spec='CompoundDistribution' id='prior'>
 <!--
 -->
-            <distribution spec='beast.math.distributions.RBPrior' count='@count' x='@rates'>
+            <distribution spec='rbbeast.math.distributions.RBPrior' count='@count' x='@rates'>
 				<distr spec='beast.base.inference.distribution.Exponential' mean='1'/>
 <!--
                 <distr spec="beast.base.inference.distribution.Uniform" lower='0.0' upper='1'/>
@@ -42,9 +42,9 @@
 
     	</distribution>
 
-        <operator id='RBOperator' spec='RBOperator' weight="1" rates="@rates" count='@count'/>
+        <operator id='RBOperator' spec='rbbeast.evolution.operators.RBOperator' weight="1" rates="@rates" count='@count'/>
 <!--
-        <operator id='rateScaler' spec='RBScaleOperator' scaleFactor="0.5" weight="1" parameter="@rates" count='@count'/>
+        <operator id='rateScaler' spec='rbbeast.evolution.operators.RBScaleOperator' scaleFactor="0.5" weight="1" parameter="@rates" count='@count'/>
 -->
 
 

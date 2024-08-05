@@ -60,7 +60,7 @@
                 <populationModel growthRate="@growthRate.HIV" id="ExponentialGrowth.HIV" popSize="@ePopSize.HIV" spec="ExponentialGrowth"/>
                 <treeIntervals id="TreeIntervals.HIV" spec="beast.base.evolution.tree.TreeIntervals" tree="@Tree.HIV"/>
             </distribution>
-            <distribution count="@RBScount.HIV" id="RBSprior.HIV" spec="beast.math.distributions.RBPrior" x="@RBSrates.HIV">
+            <distribution count="@RBScount.HIV" id="RBSprior.HIV" spec="rbbeast.math.distributions.RBPrior" x="@RBSrates.HIV">
                 <distr spec="beast.base.inference.distribution.Gamma" alpha='0.2' beta='5.0'/>
             </distribution>
             <distribution id="ClockPrior.HIV" spec="beast.base.inference.distribution.Prior" x="@clockRate.HIV">
@@ -82,7 +82,7 @@
                     <parameter dimension="1" estimate="false" id="mutationRate.HIV" minordimension="1" name="mutationRate" value="1.0"/>
                     <parameter dimension="1" estimate="false" id="gammaShape.HIV" minordimension="1" name="shape" value="1.0"/>
                     <parameter dimension="1" estimate="false" id="proportionInvariant.HIV" minordimension="1" name="proportionInvariant" value="0.0"/>
-                    <substModel count="@RBScount.HIV" eigenSystem="beast.base.evolution.substitutionmodel.DefaultEigenSystem" id="RBS.HIV" rates="@RBSrates.HIV" spec="RB">
+                    <substModel count="@RBScount.HIV" eigenSystem="beast.base.evolution.substitutionmodel.DefaultEigenSystem" id="RBS.HIV" rates="@RBSrates.HIV" spec="rbbeast.evolution.substitutionmodel.RB">
                         <frequencies data="@HIV" estimate="true" id="freqs.HIV" spec="Frequencies"/>
                     </substModel>
                 </siteModel>
@@ -126,9 +126,9 @@
 
     <operator id="WilsonBalding.HIV" spec="WilsonBalding" tree="@Tree.HIV" weight="1.0"/>
 
-    <operator count="@RBScount.HIV" id="RBSOperator.HIV" rates="@RBSrates.HIV" spec="RBOperator" weight="1.0"/>
+    <operator count="@RBScount.HIV" id="RBSOperator.HIV" rates="@RBSrates.HIV" spec='rbbeast.evolution.operators.RBOperator' weight="1.0"/>
 
-    <operator count="@RBScount.HIV" degreesOfFreedom="1" id="RBSrateScaler.HIV" optimise="true" parameter="@RBSrates.HIV" rootOnly="false" scaleAll="false" scaleAllIndependently="false" scaleFactor="0.5" spec="RBScaleOperator" weight="1.0"/>
+    <operator count="@RBScount.HIV" degreesOfFreedom="1" id="RBSrateScaler.HIV" optimise="true" parameter="@RBSrates.HIV" rootOnly="false" scaleAll="false" scaleAllIndependently="false" scaleFactor="0.5" spec='rbbeast.evolution.operators.RBScaleOperator' weight="1.0"/>
 
     <operator degreesOfFreedom="1" id="StrictClockRateScaler.HIV" optimise="true" parameter="@clockRate.HIV" rootOnly="false" scaleAll="false" scaleAllIndependently="false" scaleFactor="0.75" spec="ScaleOperator" weight="3.0"/>
 

@@ -18,6 +18,7 @@
 	<property name="libBeast2" location="${beast2path}/lib" />
 	<property name="srcBeast2" location="${beast2path}/src" />
 	<property name="beast2classpath" location="${beast2path}/build" />
+	<property name="beastfxclasspath" location="../BeastFX/build" />
 	<property name="package_dir" value="${release_dir}/add-on" />
 
     <import file="${beast2path}/build.xml" />
@@ -31,6 +32,7 @@
 		<fileset dir="${libBeast2}" includes="beagle.jar"/>
                 <fileset dir="${libBeast2}" includes="jam.jar"/>
         <pathelement path="${beast2classpath}"/>
+        <pathelement path="${beastfxclasspath}"/>
 	</path>
 
 	<!-- start -->
@@ -84,9 +86,9 @@
 		       memorymaximumsize="256m">
 			   <!--source="1.6"
 		       target="1.6"-->
-			<include name="beast/**/**" />
+			<include name="rbbeast/**/**" />
 			<!-- compile JUnit test classes -->
-			<include name="test/beast/**" />
+			<exclude name="test/beast/**" />
 		</javac>
 		<echo message="Successfully compiled." />
 	</target>
@@ -103,7 +105,7 @@
 				<attribute name="Main-Class" value="${main_class_BEAST}" />
 			</manifest>
 			<fileset dir="${buildRBS}">
-				<include name="beast/**/*.class" />
+				<include name="rbbeast/**/*.class" />
 			</fileset>
 			<fileset dir="${beast2classpath}">
 				<include name="beast/**/*.class" />
@@ -115,18 +117,17 @@
 		</jar>
 		<jar jarfile="${distRBS}/RBS.src.jar">
 			<fileset dir="${srcRBS}">
-				<include name="beast/**/*.java" />
-				<include name="beast/**/*.png" />
-				<include name="beast/**/*.xsl" />
+				<include name="rbbeast/**/*.java" />
+				<include name="rbbeast/**/*.png" />
+				<include name="rbbeast/**/*.xsl" />
 			</fileset>
         </jar>
-		<jar jarfile="${distRBS}/RBS.addon.jar">
+		<jar jarfile="${distRBS}/RBS.package.jar">
 			<manifest>
 				<attribute name="Built-By" value="${user.name}" />
 			</manifest>
 			<fileset dir="${buildRBS}">
-				<include name="beast/**/*.class" />
-				<include name="util/**/*.class" />
+				<include name="rbbeast/**/*.class" />
 				<include name="**/*.properties" />
 			</fileset>
 		</jar>
@@ -195,8 +196,8 @@
 			<fileset dir="${distRBS}" includes="RBS.src.jar" />
 		</copy>
 		<copy todir="${package_dir}/fxtemplates">
-			<fileset file="templates/RBS.xml" />
-			<fileset file="templates/AutoPartition.xml" />
+			<fileset file="fxtemplates/RBS.xml" />
+			<fileset file="fxtemplates/AutoPartition.xml" />
 		</copy>
 
 		<jar jarfile="${distRBS}/RBS.package.v${RBSversion}.zip">

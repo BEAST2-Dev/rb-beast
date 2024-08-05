@@ -35,7 +35,7 @@
                 <populationModel growthRate="@growthRate.Flu" id="ExponentialGrowth.Flu" popSize="@ePopSize.Flu" spec="ExponentialGrowth"/>
                 <treeIntervals id="TreeIntervals.Flu" spec="beast.base.evolution.tree.TreeIntervals" tree="@Tree.Flu"/>
             </distribution>
-            <distribution count="@RBScount.Flu" id="RBSprior.Flu" spec="beast.math.distributions.RBPrior" x="@RBSrates.Flu">
+            <distribution count="@RBScount.Flu" id="RBSprior.Flu" spec="rbbeast.math.distributions.RBPrior" x="@RBSrates.Flu">
                 <distr spec="beast.base.inference.distribution.Gamma" alpha='0.2' beta='5.0'/>
             </distribution>
             <distribution id="ClockPrior.Flu" spec="beast.base.inference.distribution.Prior" x="@clockRate.Flu">
@@ -57,7 +57,7 @@
                     <parameter dimension="1" estimate="false" id="mutationRate.Flu" minordimension="1" name="mutationRate" value="1.0"/>
                     <parameter dimension="1" estimate="false" id="gammaShape.Flu" minordimension="1" name="shape" value="1.0"/>
                     <parameter dimension="1" estimate="false" id="proportionInvariant.Flu" minordimension="1" name="proportionInvariant" value="0.0"/>
-                    <substModel count="@RBScount.Flu" eigenSystem="beast.base.evolution.substitutionmodel.DefaultEigenSystem" id="RBS.Flu" rates="@RBSrates.Flu" spec="RB">
+                    <substModel count="@RBScount.Flu" eigenSystem="beast.base.evolution.substitutionmodel.DefaultEigenSystem" id="RBS.Flu" rates="@RBSrates.Flu" spec="rbbeast.evolution.substitutionmodel.RB">
                         <frequencies data="@Flu" estimate="true" id="freqs.Flu" spec="Frequencies"/>
                     </substModel>
                 </siteModel>
@@ -101,9 +101,9 @@
 
     <operator id="WilsonBalding.Flu" spec="WilsonBalding" tree="@Tree.Flu" weight="1.0"/>
 
-    <operator count="@RBScount.Flu" id="RBSOperator.Flu" rates="@RBSrates.Flu" spec="RBOperator" weight="1.0"/>
+    <operator count="@RBScount.Flu" id="RBSOperator.Flu" rates="@RBSrates.Flu" spec='rbbeast.evolution.operators.RBOperator' weight="1.0"/>
 
-    <operator count="@RBScount.Flu" degreesOfFreedom="1" id="RBSrateScaler.Flu" optimise="true" parameter="@RBSrates.Flu" rootOnly="false" scaleAll="false" scaleAllIndependently="false" scaleFactor="0.5" spec="RBScaleOperator" weight="1.0"/>
+    <operator count="@RBScount.Flu" degreesOfFreedom="1" id="RBSrateScaler.Flu" optimise="true" parameter="@RBSrates.Flu" rootOnly="false" scaleAll="false" scaleAllIndependently="false" scaleFactor="0.5" spec='rbbeast.evolution.operators.RBScaleOperator' weight="1.0"/>
 
     <operator degreesOfFreedom="1" id="StrictClockRateScaler.Flu" optimise="true" parameter="@clockRate.Flu" rootOnly="false" scaleAll="false" scaleAllIndependently="false" scaleFactor="0.75" spec="ScaleOperator" weight="3.0"/>
 

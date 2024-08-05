@@ -7,7 +7,7 @@ import beast.base.core.Description;
 import beast.base.inference.parameter.IntegerParameter;
 import beast.base.inference.parameter.RealParameter;
 import beast.base.evolution.substitutionmodel.Frequencies;
-import beast.evolution.substitutionmodel.RB;
+import rbbeast.evolution.substitutionmodel.RB;
 
 import test.beast.evolution.substmodel.GTRTest;
 import static org.junit.jupiter.api.Assertions.assertEquals;

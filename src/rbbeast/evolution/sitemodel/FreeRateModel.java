@@ -1,4 +1,4 @@
-package beast.evolution.sitemodel;
+package rbbeast.evolution.sitemodel;
 
 import beast.base.core.Description;
 import beast.base.core.Input;

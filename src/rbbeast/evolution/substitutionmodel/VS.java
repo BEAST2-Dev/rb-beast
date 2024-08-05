@@ -1,4 +1,4 @@
-package beast.evolution.substitutionmodel;
+package rbbeast.evolution.substitutionmodel;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;

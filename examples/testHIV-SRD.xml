@@ -62,7 +62,7 @@
                 <treeIntervals id="TreeIntervals.HIV" spec="beast.base.evolution.tree.TreeIntervals" tree="@Tree.HIV"/>
             </distribution>
 			<plate range='1,2,3' var='n'>
-			    <distribution count="@RBScount.HIV.$(n)" id="RBSprior.HIV.$(n)" spec="beast.math.distributions.RBPrior" x="@RBSrates.HIV.$(n)">
+			    <distribution count="@RBScount.HIV.$(n)" id="RBSprior.HIV.$(n)" spec="rbbeast.math.distributions.RBPrior" x="@RBSrates.HIV.$(n)">
 			        <distr spec="beast.base.inference.distribution.Gamma" alpha='0.2' beta='5.0'/>
 			    </distribution>
 		    </plate>
@@ -86,7 +86,7 @@
                     <parameter dimension="1" estimate="false" id="mutationRate.HIV.$(n)" minordimension="1" name="mutationRate" value="1.0"/>
                     <parameter dimension="1" estimate="false" id="gammaShape.HIV.$(n)" minordimension="1" name="shape" value="1.0"/>
                     <parameter dimension="1" estimate="false" id="proportionInvariant.HIV.$(n)" minordimension="1" name="proportionInvariant" value="0.0"/>
-                    <substModel count="@RBScount.HIV.$(n)" eigenSystem="beast.base.evolution.substitutionmodel.DefaultEigenSystem" id="RBS.HIV.$(n)" rates="@RBSrates.HIV.$(n)" spec="RB">
+                    <substModel count="@RBScount.HIV.$(n)" eigenSystem="beast.base.evolution.substitutionmodel.DefaultEigenSystem" id="RBS.HIV.$(n)" rates="@RBSrates.HIV.$(n)" spec="rbbeast.evolution.substitutionmodel.RB">
                         <frequencies data="@HIV" estimate="true" id="freqs.HIV.$(n)" spec="Frequencies"/>
                     </substModel>
                 </siteModel>
@@ -133,9 +133,9 @@
     <operator id="WilsonBalding.HIV" spec="WilsonBalding" tree="@Tree.HIV" weight="1.0"/>
 
 	<plate range='1,2,3' var='n'>
-		<operator count="@RBScount.HIV.$(n)" id="RBSOperator.HIV.$(n)" rates="@RBSrates.HIV.$(n)" spec="RBOperator" weight="1.0"/>
+		<operator count="@RBScount.HIV.$(n)" id="RBSOperator.HIV.$(n)" rates="@RBSrates.HIV.$(n)" spec='rbbeast.evolution.operators.RBOperator' weight="1.0"/>
 
-		<operator count="@RBScount.HIV.$(n)" degreesOfFreedom="1" id="RBSrateScaler.HIV.$(n)" optimise="true" parameter="@RBSrates.HIV.$(n)" rootOnly="false" scaleAll="false" scaleAllIndependently="false" scaleFactor="0.5" spec="RBScaleOperator" weight="1.0"/>
+		<operator count="@RBScount.HIV.$(n)" degreesOfFreedom="1" id="RBSrateScaler.HIV.$(n)" optimise="true" parameter="@RBSrates.HIV.$(n)" rootOnly="false" scaleAll="false" scaleAllIndependently="false" scaleFactor="0.5" spec='rbbeast.evolution.operators.RBScaleOperator' weight="1.0"/>
 	</plate>
 
     <operator degreesOfFreedom="1" id="StrictClockRateScaler.HIV" optimise="true" parameter="@clockRate.HIV" rootOnly="false" scaleAll="false" scaleAllIndependently="false" scaleFactor="0.75" spec="ScaleOperator" weight="3.0"/>
