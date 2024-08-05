@@ -22,6 +22,8 @@
         <provider classname="rbbeast.evolution.substitutionmodel.VS"/>
 
         <provider classname="rbbeast.evolution.util.FreeRateLogger"/>
+        <provider classname="rbbeast.evolution.util.ContinuousGammaSimulatedAlignment"/>
+        
 
         <provider classname="rbbeast.math.distributions.RBPrior"/>
         <provider classname="rbbeast.math.distributions.FreeRatePrior"/>
