@@ -197,7 +197,7 @@
 		</copy>
 		<copy todir="${package_dir}/fxtemplates">
 			<fileset file="fxtemplates/RBS.xml" />
-			<fileset file="fxtemplates/AutoPartition.xml" />
+			<fileset file="fxtemplates/FreeRateModel.xml" />
 		</copy>
 
 		<jar jarfile="${distRBS}/RBS.package.v${RBSversion}.zip">

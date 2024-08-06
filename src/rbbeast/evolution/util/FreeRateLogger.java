@@ -9,21 +9,22 @@ import beast.base.core.Loggable;
 import beast.base.core.Input.Validate;
 import beast.base.inference.parameter.RealParameter;
 import beast.base.util.HeapSort;
+import rbbeast.evolution.sitemodel.FreeRateModel;
 
 @Description("logger that logs rates in increasing order + logs associated weights")
 public class FreeRateLogger extends BEASTObject implements Loggable {
-    public Input<RealParameter> weightInput =
-            new Input<RealParameter>("weights", "weights of the various categories, should sum to 1", Validate.REQUIRED);
-    public Input<RealParameter> rateParameterInput =
-            new Input<RealParameter>("rates", "rates for each of the categories, will be weighted and normalised to 1", Validate.REQUIRED);
-
+    public Input<FreeRateModel> modelInput =
+            new Input<>("model", "free rate model so parameters can be accessed", Validate.REQUIRED);
+	
     private RealParameter rates;
     private RealParameter weights;
+    private boolean incremental;
     
 	@Override
 	public void initAndValidate() {
-		weights = weightInput.get();
-    	rates = rateParameterInput.get();
+		weights = modelInput.get().weightInput.get();
+    	rates = modelInput.get().rateParameterInput.get();
+    	incremental = modelInput.get().incrementalInput.get();
 	}
 
 	@Override
@@ -45,6 +46,11 @@ public class FreeRateLogger extends BEASTObject implements Loggable {
 	public void log(long sample, PrintStream out) {
 		int n = rates.getDimension();
 		double [] r = rates.getDoubleValues();
+		if (incremental) {
+			for (int i = 1; i < r.length; i++) {
+				r[i] += r[i-1];
+			}
+		}
 		int [] index = new int[n];
 		for (int i = 0; i < n; i++) {
 			index[i]= i;
@@ -55,7 +61,7 @@ public class FreeRateLogger extends BEASTObject implements Loggable {
 			sum += d;
 		}
 		for (int i = 0; i < n ; i++) {
-			out.print(rates.getArrayValue(index[i])/sum + "\t");
+			out.print(r[index[i]]/sum + "\t");
 		}
 		for (int i = 0; i < n ; i++) {
 			out.print(weights.getArrayValue(index[i]) + "\t");

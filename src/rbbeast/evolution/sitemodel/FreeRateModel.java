@@ -19,21 +19,29 @@ public class FreeRateModel extends SiteModel.Base {
             new Input<RealParameter>("rates", "rates for each of the categories, will be weighted and normalised to 1", Validate.REQUIRED);
     public Input<RealParameter> invarParameterInput =
             new Input<RealParameter>("proportionInvariant", "proportion of sites that is invariant: should be between 0 (default) and 1");
-
+    public Input<Boolean> incrementalInput = new Input<>("incremental", "whether to add rates incermentally so the rate categories remain in order", false);
+    public Input<Integer> categoryCountInput =
+            new Input<>("categoryCount", "number of categories used. If set, dimension of weight and rate parameters will be updated and values of rates and weights set to 1/count, "
+            		+ "otherwise the parameter dimensions are used as category count and values are left unchanged", -1);
+    
     RealParameter muParameter;
     RealParameter rateParameter;
     RealParameter weightParameter;
     RealParameter invarParameter;
+    boolean incremental;
     
     @Override
     public void initAndValidate() {
+    	incremental = incrementalInput.get();
         muParameter = muParameterInput.get();
         if (muParameter == null) {
             muParameter = new RealParameter("1.0");
         }
         rateParameter = rateParameterInput.get();
         weightParameter = weightInput.get();
-    	int dim = Math.max(rateParameter.getDimension(), weightParameter.getDimension());
+
+    	int dim = categoryCountInput.get() > 0 ? categoryCountInput.get() : 
+    			Math.max(rateParameter.getDimension(), weightParameter.getDimension());
         if (rateParameter.getDimension() != dim) {
         	Log.warning.println("Warning: setting dimesnio of " + rateParameter.getID() + " to " + dim);
         	rateParameter.setDimension(dim);
@@ -42,7 +50,14 @@ public class FreeRateModel extends SiteModel.Base {
         	Log.warning.println("Warning: setting dimesnio of " + weightParameter.getID() + " to " + dim);
         	weightParameter.setDimension(dim);
         }
-        
+
+        if (categoryCountInput.get() > 0) {
+	    	for (int i = 0; i < dim; i++) {
+	    		rateParameter.setValue(i, 1.0/dim);
+	    		weightParameter.setValue(i, 1.0/dim);
+	    	}
+        }
+ 
         invarParameter = invarParameterInput.get();
         if (invarParameter == null) {
             invarParameter = new RealParameter("0.0");
@@ -217,6 +232,9 @@ public class FreeRateModel extends SiteModel.Base {
         double sumWeight = 0;
 	    for (int i = 0; i < rateParameter.getDimension(); i++) {
 	        categoryRates[i + cat] = rateParameter.getValue(i);
+	        if (incremental && i > 0) {
+	        	categoryRates[i + cat] += categoryRates[i + cat - 1];
+	        }
 	        categoryProportions[i + cat] = weightParameter.getValue(i);
 	        sumWeight += categoryProportions[i + cat];
 	        meanRate += categoryRates[i + cat] * categoryProportions[i + cat];

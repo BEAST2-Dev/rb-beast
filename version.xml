@@ -30,4 +30,9 @@
     </service>
 
 
+	<service type="beastfx.app.inputeditor.InputEditor">
+		<provider classname="rbbeast.beauti.FreeRateModelInputEditor"/>
+    </service>
+
+
 </package>
