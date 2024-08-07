@@ -37,8 +37,10 @@ public class FreeRateLogger extends BEASTObject implements Loggable {
 		for (int i = 0; i < n ; i++) {
 			out.print("sortedRates" + partition + (i+1) + "\t");
 		}
-		for (int i = 0; i < n ; i++) {
-			out.print("sortedWeight" + partition + (i+1) + "\t");
+		if (weights.isEstimated()) {
+			for (int i = 0; i < n ; i++) {
+				out.print("sortedWeight" + partition + (i+1) + "\t");
+			}
 		}
 	}
 
@@ -63,10 +65,11 @@ public class FreeRateLogger extends BEASTObject implements Loggable {
 		for (int i = 0; i < n ; i++) {
 			out.print(r[index[i]]/sum + "\t");
 		}
-		for (int i = 0; i < n ; i++) {
-			out.print(weights.getArrayValue(index[i]) + "\t");
-		}
-		
+		if (weights.isEstimated()) {
+			for (int i = 0; i < n ; i++) {
+				out.print(weights.getArrayValue(index[i]) + "\t");
+			}
+		}		
 	}
 
 	@Override
