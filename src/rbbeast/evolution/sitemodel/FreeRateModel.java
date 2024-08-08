@@ -247,6 +247,11 @@ public class FreeRateModel extends VariableCategorySiteModel {
                 cat = 1;
             }
         }
+        
+        if (rateParameter.getDimension() != weightParameter.getDimension()) {
+        	int h  =3;
+        	h++;
+        }
 
         double meanRate = 0;
         double sumWeight = 0;

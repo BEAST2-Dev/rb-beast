@@ -1,6 +1,8 @@
 package rbbeast.evolution.sitemodel;
 
 import beast.base.core.Description;
+import beast.base.core.Input;
+import beast.base.core.Input.Validate;
 import beast.base.evolution.datatype.DataType;
 import beast.base.evolution.sitemodel.SiteModel;
 import beast.base.evolution.sitemodel.SiteModelInterface;
@@ -9,18 +11,17 @@ import beast.base.evolution.tree.Node;
 
 @Description("Site model representing a single category of a multi-catogry site model -- useful for VariableCategoryTreeLikelihood")
 public class SingleCategorySiteModel extends SiteModelInterface.Base {
+	public Input<SiteModelInterface> variableCategorySiteModelInput = new Input<>("variableCategorySiteModel", "the sitemodel that this model represents a single site for", Validate.REQUIRED);
+	public Input<Integer> catecoryInput = new Input<>("category" , "category in the variableCategorySiteModel", 0);
 
 	private SiteModel.Base siteModel;
 	private int category;
 	
-	public SingleCategorySiteModel(int category, SiteModelInterface siteModelInterface) {
-		this.category = category;
-		this.siteModel = (SiteModel.Base) siteModelInterface;
-		substModelInput.setValue(siteModel.substModelInput.get(), this);
-	}
-
 	@Override
 	public void initAndValidate() {
+		this.category = catecoryInput.get();
+		this.siteModel = (SiteModel.Base) variableCategorySiteModelInput.get();
+		substModelInput.setValue(siteModel.substModelInput.get(), this);
 	}
 
 	@Override
@@ -30,7 +31,7 @@ public class SingleCategorySiteModel extends SiteModelInterface.Base {
 
 	@Override
 	public boolean integrateAcrossCategories() {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -45,7 +46,11 @@ public class SingleCategorySiteModel extends SiteModelInterface.Base {
 
 	@Override
 	public double getRateForCategory(int category, Node node) {
-		return siteModel.getRateForCategory(this.category, node);
+		if (siteModel.getCategoryCount() > this.category) {
+			return siteModel.getRateForCategory(this.category, node);
+		} else {
+			return 1.0;
+		}
 	}
 
 	@Override
@@ -53,7 +58,7 @@ public class SingleCategorySiteModel extends SiteModelInterface.Base {
 		if (siteModel.getCategoryCount() > this.category) {
 			return new double[] {siteModel.getRateForCategory(this.category, node)};
 		} else {
-			return new double[] {0.0};
+			return new double[] {1.0};
 		}
 	}
 

@@ -62,7 +62,7 @@ public class FreeRateDimensionMover extends Operator {
 			sum += weights.getValue(i);
 		}
 		for (int i = 0; i < dim; i++) {
-			weights.setValue(weights.getValue(i)/sum);
+			weights.setValue(i, weights.getValue(i)/sum);
 		}
 	}
 
@@ -74,9 +74,9 @@ public class FreeRateDimensionMover extends Operator {
 		rates.setDimension(dim + 1);
 		weights.setDimension(dim + 1);
 
-		weights.setValue(dim, 1.0/(dim+1));
+		weights.setValue(dim, 1.0/(dim));
 		normalise(weights);
-		rates.setValue(dim, 1.0/(dim+1));
+		rates.setValue(dim, 1.0/(dim));
 		normalise(rates);
 		return 0;
 	}

@@ -57,7 +57,8 @@ public class VariableCategoryTreeLikelihood extends TreeLikelihood {
 		TreeLikelihood treelikelihood = new TreeLikelihood();
 		treelikelihood.setID(getID() + i);
 		treelikelihood.getOutputs().add(this);
-		SingleCategorySiteModel siteModel = new SingleCategorySiteModel(i, siteModelInput.get());
+		SingleCategorySiteModel siteModel = new SingleCategorySiteModel();
+		siteModel.initByName("category", i, "variableCategorySiteModel", m_siteModel, "substModel", m_siteModel.substModelInput.get());
 		
 		treelikelihood.initByName("data", dataInput.get(), 
 				"tree", treeInput.get(), 
@@ -84,7 +85,7 @@ public class VariableCategoryTreeLikelihood extends TreeLikelihood {
 		for (int i = 0; i < categoryCount; i++) {
 			TreeLikelihood tl = categoryLikelihoods.get(i);
 			tl.calculateLogP();
-			tl.getRootPartials();
+			rootPartials[i] = tl.getRootPartials();
 		}
 		
 		// integrate over category weights
@@ -146,6 +147,7 @@ public class VariableCategoryTreeLikelihood extends TreeLikelihood {
 
         for (int l = 1; l < categoryCount; l++) {
             u = 0;
+            v = 0;
             inPartials = rootPartials[l];
             for (int k = 0; k < nrOfPatterns; k++) {
                 for (int i = 0; i < nrOfStates; i++) {
@@ -170,6 +172,6 @@ public class VariableCategoryTreeLikelihood extends TreeLikelihood {
 
 	@Override
 	protected boolean requiresRecalculation() {
-		return super.requiresRecalculation();
+		return true;
 	}
 }
