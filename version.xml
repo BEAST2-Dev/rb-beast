@@ -27,6 +27,11 @@
 
         <provider classname="rbbeast.math.distributions.RBPrior"/>
         <provider classname="rbbeast.math.distributions.FreeRatePrior"/>
+
+        <provider classname="rbbeast.evolution.likelihood.VariableCategoryTreeLikelihood"/>
+        <provider classname="rbbeast.evolution.util.GetDimension"/>
+        <provider classname="rbbeast.evolution.operators.FreeRateDimensionMover"/>
+
     </service>
 
 

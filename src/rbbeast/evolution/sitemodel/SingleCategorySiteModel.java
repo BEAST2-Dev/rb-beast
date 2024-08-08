@@ -1,7 +1,6 @@
 package rbbeast.evolution.sitemodel;
 
 import beast.base.core.Description;
-import beast.base.core.Input;
 import beast.base.evolution.datatype.DataType;
 import beast.base.evolution.sitemodel.SiteModel;
 import beast.base.evolution.sitemodel.SiteModelInterface;
@@ -11,12 +10,13 @@ import beast.base.evolution.tree.Node;
 @Description("Site model representing a single category of a multi-catogry site model -- useful for VariableCategoryTreeLikelihood")
 public class SingleCategorySiteModel extends SiteModelInterface.Base {
 
-	private SiteModel siteModel;
+	private SiteModel.Base siteModel;
 	private int category;
 	
 	public SingleCategorySiteModel(int category, SiteModelInterface siteModelInterface) {
 		this.category = category;
-		this.siteModel = (SiteModel) siteModelInterface;
+		this.siteModel = (SiteModel.Base) siteModelInterface;
+		substModelInput.setValue(siteModel.substModelInput.get(), this);
 	}
 
 	@Override
@@ -50,7 +50,11 @@ public class SingleCategorySiteModel extends SiteModelInterface.Base {
 
 	@Override
 	public double[] getCategoryRates(Node node) {
-		return new double[] {siteModel.getRateForCategory(this.category, node)};
+		if (siteModel.getCategoryCount() > this.category) {
+			return new double[] {siteModel.getRateForCategory(this.category, node)};
+		} else {
+			return new double[] {0.0};
+		}
 	}
 
 	@Override

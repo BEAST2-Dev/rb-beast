@@ -7,6 +7,7 @@ import beast.base.core.Description;
 import beast.base.core.Input;
 import beast.base.core.ProgramStatus;
 import beast.base.evolution.likelihood.TreeLikelihood;
+import beast.base.evolution.sitemodel.SiteModel;
 import rbbeast.evolution.sitemodel.SingleCategorySiteModel;
 import rbbeast.evolution.sitemodel.VariableCategorySiteModel;
 
@@ -23,6 +24,7 @@ public class VariableCategoryTreeLikelihood extends TreeLikelihood {
 	
 	@Override
 	public void initAndValidate() {
+		m_siteModel = (SiteModel.Base) siteModelInput.get();
 		// revert to TreeLikelihood default behaviour when site model is not a VariableCategorySiteModel
 		if (!(m_siteModel instanceof VariableCategorySiteModel)) {
 			super.initAndValidate();

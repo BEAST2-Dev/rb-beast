@@ -15,6 +15,8 @@ import rbbeast.evolution.sitemodel.FreeRateModel;
 public class FreeRateLogger extends BEASTObject implements Loggable {
     public Input<FreeRateModel> modelInput =
             new Input<>("model", "free rate model so parameters can be accessed", Validate.REQUIRED);
+    public Input<Boolean> categoryCountOnlyInput =
+            new Input<>("categoryCountOnly", "only log the category count of the model, not the actual rates", false);
 	
     private RealParameter rates;
     private RealParameter weights;
@@ -29,17 +31,21 @@ public class FreeRateLogger extends BEASTObject implements Loggable {
 
 	@Override
 	public void init(PrintStream out) {
-		int n = rates.getDimension();
 		String partition = rates.getID();
 		if (partition.lastIndexOf('.') > 0) {
 			partition = partition.substring(partition.lastIndexOf('.'));
 		}
-		for (int i = 0; i < n ; i++) {
-			out.print("sortedRates" + partition + (i+1) + "\t");
-		}
-		if (weights.isEstimated()) {
+		if (categoryCountOnlyInput.get()) {
+			out.print("categoryCount" + partition + "\t");
+		} else {
+			int n = rates.getDimension();
 			for (int i = 0; i < n ; i++) {
-				out.print("sortedWeight" + partition + (i+1) + "\t");
+				out.print("sortedRates" + partition + (i+1) + "\t");
+			}
+			if (weights.isEstimated()) {
+				for (int i = 0; i < n ; i++) {
+					out.print("sortedWeight" + partition + (i+1) + "\t");
+				}
 			}
 		}
 	}
@@ -47,29 +53,33 @@ public class FreeRateLogger extends BEASTObject implements Loggable {
 	@Override
 	public void log(long sample, PrintStream out) {
 		int n = rates.getDimension();
-		double [] r = rates.getDoubleValues();
-		if (incremental) {
-			for (int i = 1; i < r.length; i++) {
-				r[i] += r[i-1];
+		if (categoryCountOnlyInput.get()) {
+			out.print(n + "\t");
+		} else {
+			double [] r = rates.getDoubleValues();
+			if (incremental) {
+				for (int i = 1; i < r.length; i++) {
+					r[i] += r[i-1];
+				}
 			}
-		}
-		int [] index = new int[n];
-		for (int i = 0; i < n; i++) {
-			index[i]= i;
-		}
-		HeapSort.sort(r, index);
-		double sum = 0;
-		for (double d : r) {
-			sum += d;
-		}
-		for (int i = 0; i < n ; i++) {
-			out.print(r[index[i]]/sum + "\t");
-		}
-		if (weights.isEstimated()) {
+			int [] index = new int[n];
+			for (int i = 0; i < n; i++) {
+				index[i]= i;
+			}
+			HeapSort.sort(r, index);
+			double sum = 0;
+			for (double d : r) {
+				sum += d;
+			}
 			for (int i = 0; i < n ; i++) {
-				out.print(weights.getArrayValue(index[i]) + "\t");
+				out.print(r[index[i]]/sum + "\t");
 			}
-		}		
+			if (weights.isEstimated()) {
+				for (int i = 0; i < n ; i++) {
+					out.print(weights.getArrayValue(index[i]) + "\t");
+				}
+			}
+		}
 	}
 
 	@Override

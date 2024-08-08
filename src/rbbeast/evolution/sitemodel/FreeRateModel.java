@@ -1,16 +1,20 @@
 package rbbeast.evolution.sitemodel;
 
+
 import beast.base.core.Description;
 import beast.base.core.Input;
 import beast.base.core.Input.Validate;
 import beast.base.inference.parameter.RealParameter;
 import beast.base.core.Log;
-import beast.base.evolution.sitemodel.SiteModel;
 import beast.base.evolution.substitutionmodel.SubstitutionModel;
 import beast.base.evolution.tree.Node;
 
-@Description("Lars Jermijn et al's free rate model")
-public class FreeRateModel extends SiteModel.Base {
+// Soubrier J, Steel M, Lee MS, Der Sarkissian C, Guindon S, Ho SY, Cooper A. The influence of rate heterogeneity among sites on the time dependence of molecular rates. Molecular biology and evolution. 2012 Nov 1;29(11):3345-58.
+// https://doi.org/10.1093/molbev/mss140
+// Le SQ, Dang CC, Gascuel O. Modeling protein evolution with several amino acid replacement matrices depending on site rates. Molecular biology and evolution. 2012 Oct 1;29(10):2921-36.
+// https://academic.oup.com/mbe/article/29/10/2921/1027701
+@Description("Bayesian variant of free rate model ")
+public class FreeRateModel extends VariableCategorySiteModel {
 
     public Input<RealParameter> muParameterInput = new Input<RealParameter>("mutationRate", "mutation rate (defaults to 1.0)");
     public Input<RealParameter> weightInput =
@@ -89,7 +93,7 @@ public class FreeRateModel extends SiteModel.Base {
 
     @Override
     protected void refresh() {
-        categoryCount = rateParameter.getDimension();
+        int categoryCount = rateParameter.getDimension();
 
         if (/*invarParameter != null && */invarParameter.getValue() > 0) {
             if (invarParameter.getValue() >= 1.0) {
@@ -119,7 +123,7 @@ public class FreeRateModel extends SiteModel.Base {
 
     @Override
     public int getCategoryCount() {
-        return categoryCount;
+        return rateParameter.getDimension();
     }
 
     @Override
@@ -214,6 +218,22 @@ public class FreeRateModel extends SiteModel.Base {
      * @param node
      */
     protected void calculateCategoryRates(final Node node) {
+        int categoryCount = rateParameter.getDimension();
+
+        if (/*invarParameter != null && */invarParameter.getValue() > 0) {
+            if (invarParameter.getValue() >= 1.0) {
+            	throw new RuntimeException("Wrong value for parameter " + invarParameter.getID() +
+            			". Proportion invariant should be in bewteen 0 and 1 (exclusive)");
+            }
+            if (hasPropInvariantCategory) {
+                categoryCount += 1;
+            }
+        }
+    	if (categoryRates.length != categoryCount) {
+    		categoryRates = new double[categoryCount];
+            categoryProportions = new double[categoryCount];
+    	}
+    	
         double propVariable = 1.0;
         int cat = 0;
 
@@ -268,26 +288,22 @@ public class FreeRateModel extends SiteModel.Base {
     @Override
     protected boolean requiresRecalculation() {
         // do explicit check whether any of the non-substitution model parameters changed
-        if (categoryCount > 1) {
-            if (rateParameter != null && rateParameter.somethingIsDirty() ||
-            		weightParameter.somethingIsDirty() ||
-                    muParameter.somethingIsDirty() ||
-                    invarParameter.somethingIsDirty()) {
-                ratesKnown = false;
-            }
+        if (rateParameter != null && rateParameter.somethingIsDirty() ||
+        		weightParameter.somethingIsDirty() ||
+                muParameter.somethingIsDirty() ||
+                invarParameter.somethingIsDirty()) {
+            ratesKnown = false;
         } else {
             if (muParameter.somethingIsDirty() || !hasPropInvariantCategory && invarParameter.somethingIsDirty()) {
                 ratesKnown = false;
             }
         }
-//    	ratesKnown = false;
+
         // we only get here if something is dirty in its inputs, so always return true
         return true;
     }
 
     protected boolean ratesKnown;
-
-    protected int categoryCount;
 
     protected double[] categoryRates;
 
