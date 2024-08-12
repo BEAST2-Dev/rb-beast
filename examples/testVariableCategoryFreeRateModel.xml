@@ -44,8 +44,8 @@ name="alignment">
                 </taxonset>
             </tree>
             <parameter id="birthRate.t:dna" spec="parameter.RealParameter" lower="0.0" name="stateNode">1.0</parameter>
-            <parameter id="FreeRateRates.s:dna" spec="parameter.RealParameter" dimension="4" lower="0.01" name="stateNode" upper="100.0">0.25</parameter>
-            <parameter id="FreeRateWeights.s:dna" spec="parameter.RealParameter" dimension="4" estimate="true" lower="0.001" name="stateNode" upper="100.0">0.25</parameter>
+            <parameter id="FreeRateRates.s:dna" spec="parameter.RealParameter" dimension="1" lower="0.01" name="stateNode" upper="100.0">1</parameter>
+            <parameter id="FreeRateWeights.s:dna" spec="parameter.RealParameter" dimension="1" estimate="true" lower="0.001" name="stateNode" upper="100.0">1</parameter>
 
             <parameter id="kappa.s:dna" spec="parameter.RealParameter" lower="0.0" name="stateNode">2.0</parameter>
             <parameter id="freqParameter.s:dna" spec="parameter.RealParameter" dimension="4" lower="0.0" name="stateNode" upper="1.0">0.25</parameter>
@@ -64,7 +64,7 @@ name="alignment">
                 </prior>
                 <prior id="FreeRatesCategoryCountPrior.s:dna" name="distribution">
                 	<x	spec="rbbeast.evolution.util.GetDimension" parameter="@FreeRateRates.s:dna"/>
-                    <distr spec="distribution.Poisson" lambda="0.5"/>
+                    <distr spec="distribution.Poisson" lambda="0.001"/>
                 </prior>
                 
                 <prior id="YuleBirthRatePrior.t:dna" name="distribution" x="@birthRate.t:dna">
@@ -159,6 +159,7 @@ name="alignment">
             <log idref="posterior"/>
             <log idref="likelihood"/>
             <log idref="prior"/>
+            <log idref="FreeRateLogger.s:dna"/>
         </logger>
         <logger id="treelog.t:dna" spec="Logger" fileName="$(filebase)-$(tree).trees" logEvery="1000" mode="tree">
             <log id="TreeWithMetaDataLogger.t:dna" spec="beast.base.evolution.TreeWithMetaDataLogger" tree="@Tree.t:dna"/>

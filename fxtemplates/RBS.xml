@@ -37,45 +37,6 @@
             <connect srcID='RBprior.s:$(n)'             targetID='prior' inputName='distribution' if='inlikelihood(RB.s:$(n))'>RB rate parameter of partition s:$(n)</connect>
         </subtemplate>
 
-
-<!-- Variable Selection substitution model -->
-<!--
-        <subtemplate id='VS' class='rbbeast.evolution.substitutionmodel.RB' mainid='VS.s:$(n)'
-		suppressInputs='rbbeast.evolution.substitutionmodel.RB.eigenSystem,
-						rbbeast.evolution.substitutionmodel.RB.count,
-						rbbeast.evolution.substitutionmodel.RB.rates,
-						rbbeast.evolution.substitutionmodel.VS.frequencies'>
-<![CDATA[
-    <substModel spec='rbbeast.evolution.substitutionmodel.RB' id='VS.s:$(n)'> 
-        <count spec='parameter.IntegerParameter' id='VScount.s:$(n)' value='5' lower='0' upper='5'/>
-        <rates spec='parameter.RealParameter' id='VSrates.s:$(n)' value='1' dimension='5' lower='0.01' upper='100.0'/>
-        <frequencies id='freqs.s:$(n)' spec='Frequencies'>
-            <data idref='$(n)'/>
-        </frequencies>
-    </substModel>
-
-    <distribution id='VSprior.s:$(n)' spec='beast.base.inference.distribution.Prior' x='@VSrates.s:$(n)'>
-        <distr spec="beast.base.inference.distribution.Gamma" alpha='0.2' beta='5.0'/>
-    </distribution>
-
-    <operator id='VSOperator.s:$(n)' spec='IntRandomWalkOperator' weight="9" windowSize='1' parameter='@VScount.s:$(n)'/>
-    <operator id='VSratescaler.s:$(n)' spec='ScaleOperator' scaleFactor="0.5" weight="9" parameter="@VSrates.s:$(n)"/>
-
-]]>
-
-            <connect srcID='VScount.s:$(n)'             targetID='state' inputName='stateNode' if='inlikelihood(VScount.s:$(n))'/>
-            <connect srcID='VSrates.s:$(n)'             targetID='state' inputName='stateNode' if='inlikelihood(VSrates.s:$(n))'/>
-
-            <connect srcID='VSOperator.s:$(n)'          targetID='mcmc' inputName='operator' if='inlikelihood(VScount.s:$(n)) and inlikelihood(VSrates.s:$(n)) '>Variable selection operator for dimension of VS of partition s:$(n)</connect>
-            <connect srcID='VSratescaler.s:$(n)'        targetID='mcmc' inputName='operator' if='inlikelihood(VSrates.s:$(n))'>Scale VS rate parameter of partition s:$(n)</connect>
-
-            <connect srcID='VScount.s:$(n)'             targetID='tracelog' inputName='log'  if='inlikelihood(VScount.s:$(n))'/>
-            <connect srcID='VSrates.s:$(n)'             targetID='tracelog' inputName='log'  if='inlikelihood(VSrates.s:$(n))'/>
-
-            <connect srcID='VSprior.s:$(n)'             targetID='prior' inputName='distribution' if='inlikelihood(VS.s:$(n))'>VS rate parameter of partition s:$(n)</connect>
-        </subtemplate>
-
--->
 </mergewith>
 </beast>
 
