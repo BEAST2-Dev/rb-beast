@@ -19,4 +19,19 @@ public interface MixtureLikelihoodCore {
 			double[] fPartials3, List<Integer> classes);
 
     public void calculatePartials(int iNodeIndex1, int iNodeIndex2, int iNodeIndex3, List<Integer> classes);
+
+
+	public void calculateStatesPartialsPruning(	int[] iStates1, double[] fMatrices1,
+			double[] fPartials2, double[] fMatrices2,
+			double[] fPartials3, int classCount);
+
+	public void calculateStatesStatesPruning(int[] iStates1, double[] fMatrices1,
+			int[] iStates2, double[] fMatrices2,
+			double[] fPartials3, int classCount);
+
+	public void calculatePartialsPartialsPruning(double[] fPartials1, double[] fMatrices1,
+			double[] fPartials2, double[] fMatrices2,
+			double[] fPartials3, int classCount);
+
+    public void calculatePartials(int iNodeIndex1, int iNodeIndex2, int iNodeIndex3, int classCount);
 }

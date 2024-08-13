@@ -83,7 +83,7 @@ name="alignment">
                 </prior>
             </distribution>
             <distribution id="likelihood" spec="CompoundDistribution" useThreads="true">
-                <distribution id="treeLikelihood.dna" spec="rbbeast.evolution.likelihood.VariableCategoryTreeLikelihood" data="@dna" tree="@Tree.t:dna">
+                <distribution id="treeLikelihood.dna" spec="rbbeast.evolution.likelihood.VariableCategoryTreeLikelihood2" data="@dna" tree="@Tree.t:dna">
                     <siteModel id="FreeRateModel.s:dna" spec="rbbeast.evolution.sitemodel.FreeRateModel" incremental="true" 
                     	rates="@FreeRateRates.s:dna"
                     	weights="@FreeRateWeights.s:dna"
