@@ -254,9 +254,9 @@ public class MixtureBeerLikelihoodCore extends BeerLikelihoodCore implements Mix
 												int[] iStates2, double[] fMatrices2,
 												double[] fPartials3, int classCount)
 	{
+		int v = 0;
 
 		for (int l = 0; l < classCount; l++) {
-			int v = nrOfStates * l * nrOfPatterns;
 
 			for (int k = 0; k < nrOfPatterns; k++) {
 
@@ -318,10 +318,10 @@ public class MixtureBeerLikelihoodCore extends BeerLikelihoodCore implements Mix
 
 		double sum, tmp;
 
+		int v = 0;
+		int u = 0;
 
 		for (int l = 0; l < classCount; l++) {
-			int v = nrOfStates * l * nrOfPatterns;
-			int u = v;
 			for (int k = 0; k < nrOfPatterns; k++) {
 
 				int state1 = iStates1[k];
@@ -376,10 +376,10 @@ public class MixtureBeerLikelihoodCore extends BeerLikelihoodCore implements Mix
 													double[] fPartials3, int classCount)
 	{
 		double sum1, sum2;
+		int v = 0;
+		int u = 0;
 
 		for (int l = 0; l < classCount; l++) {
-			int v = nrOfStates * l * nrOfPatterns;
-			int u = v;
 
 			for (int k = 0; k < nrOfPatterns; k++) {
 
@@ -438,4 +438,42 @@ public class MixtureBeerLikelihoodCore extends BeerLikelihoodCore implements Mix
             scalePartials(iNodeIndex3);
         }
     }
+	
+	@Override
+	public void integratePartialsMixture(int iNodeIndex, double[] fProportions, double[] fOutPartials,
+			double[] frequencies, double[] fPatternLogLikelihoods, int classCount) {
+
+		double[] fInPartials = partials[currentPartialsIndex[iNodeIndex]][iNodeIndex];
+        int u = 0;
+        int v = 0;
+        for (int k = 0; k < nrOfPatterns; k++) {
+            for (int i = 0; i < nrOfStates; i++) {
+                fOutPartials[u] = fInPartials[v] * fProportions[0] * frequencies[i];
+                u++;
+                v++;
+            }
+        }
+
+        for (int l = 1; l < classCount; l++) {
+            u = 0;
+            for (int k = 0; k < nrOfPatterns; k++) {
+                for (int i = 0; i < nrOfStates; i++) {
+                    fOutPartials[u] += fInPartials[v] * fProportions[l] * frequencies[i];
+                    u++;
+                    v++;
+                }
+            }
+        }
+	
+        v = 0;
+        for (int k = 0; k < nrOfPatterns; k++) {
+            double sum = 0.0;
+            for (int i = 0; i < nrOfStates; i++) {
+                sum += fOutPartials[v];
+                v++;
+            }
+            fPatternLogLikelihoods[k] = Math.log(sum) + getLogScalingFactor(k);
+        }
+	} // integratePartialsMixture
+
 }

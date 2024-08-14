@@ -44,8 +44,8 @@ name="alignment">
                 </taxonset>
             </tree>
             <parameter id="birthRate.t:dna" spec="parameter.RealParameter" lower="0.0" name="stateNode">1.0</parameter>
-            <parameter id="FreeRateRates.s:dna" spec="parameter.RealParameter" dimension="1" lower="0.01" name="stateNode" upper="100.0">1</parameter>
-            <parameter id="FreeRateWeights.s:dna" spec="parameter.RealParameter" dimension="1" estimate="true" lower="0.001" name="stateNode" upper="100.0">1</parameter>
+            <parameter id="FreeRateRates.s:dna" spec="parameter.RealParameter" dimension="2" lower="0.01" name="stateNode" upper="100.0">0.5</parameter>
+            <parameter id="FreeRateWeights.s:dna" spec="parameter.RealParameter" dimension="2" estimate="true" lower="0.001" name="stateNode" upper="100.0">0.5</parameter>
 
             <parameter id="kappa.s:dna" spec="parameter.RealParameter" lower="0.0" name="stateNode">2.0</parameter>
             <parameter id="freqParameter.s:dna" spec="parameter.RealParameter" dimension="4" lower="0.0" name="stateNode" upper="1.0">0.25</parameter>
@@ -64,7 +64,10 @@ name="alignment">
                 </prior>
                 <prior id="FreeRatesCategoryCountPrior.s:dna" name="distribution">
                 	<x	spec="rbbeast.evolution.util.GetDimension" parameter="@FreeRateRates.s:dna"/>
-                    <distr spec="distribution.Poisson" lambda="0.001"/>
+                	<!--
+                    <distr spec="distribution.Poisson" lambda="0.0001"/>
+                    -->
+                    <Exponential name="distr" mean="0.05"/>
                 </prior>
                 
                 <prior id="YuleBirthRatePrior.t:dna" name="distribution" x="@birthRate.t:dna">
@@ -111,15 +114,14 @@ name="alignment">
         <operator id="YuleModelBICEPSEpochAll.t:dna" spec="EpochFlexOperator" fromOldestTipOnly="false" scaleFactor="0.1" tree="@Tree.t:dna" weight="2.0"/>
         <operator id="YuleModelBICEPSTreeFlex.t:dna" spec="TreeStretchOperator" scaleFactor="0.01" tree="@Tree.t:dna" weight="2.0"/>
         
-        <operator id="FreeRatesRateExchanger.s:dna" spec="operator.DeltaExchangeOperator" delta="0.01" weight="1.0">
+        <operator id="FreeRatesRateExchanger.s:dna" spec="operator.DeltaExchangeOperator" delta="0.01" weight="0.05">
             <parameter idref="FreeRateRates.s:dna"/>
         </operator>
-        
         <operator id="FreeRateDimensionMover.s:dna" spec="rbbeast.evolution.operators.FreeRateDimensionMover" 
 	        rates="@FreeRateRates.s:dna"
 	        weights="@FreeRateWeights.s:dna"
 	        model="@FreeRateModel.s:dna"
-        	weight="1.0"/>
+        	weight="0.1"/>
         
         <operator id="KappaScaler.s:dna" spec="AdaptableOperatorSampler" weight="0.05">
             <parameter idref="kappa.s:dna"/>
