@@ -6,7 +6,7 @@ import beast.base.evolution.sitemodel.SiteModelInterface.Base;
 import beast.base.evolution.tree.Node;
 
 public class VariableCategorySiteModel extends Base {
-	final public Input<Integer> maxCategoryCountInput = new Input<>("maxCategoryCount", "maximum number of categories allowed", Validate.REQUIRED); 
+	// final public Input<Integer> maxCategoryCountInput = new Input<>("maxCategoryCount", "maximum number of categories allowed", Validate.REQUIRED); 
 
 	@Override
 	public void initAndValidate() {

@@ -67,7 +67,7 @@ name="alignment">
                 	<!--
                     <distr spec="distribution.Poisson" lambda="0.0001"/>
                     -->
-                    <Exponential name="distr" mean="0.05"/>
+                    <Exponential name="distr" mean="0.025"/>
                 </prior>
                 
                 <prior id="YuleBirthRatePrior.t:dna" name="distribution" x="@birthRate.t:dna">
@@ -86,11 +86,10 @@ name="alignment">
                 </prior>
             </distribution>
             <distribution id="likelihood" spec="CompoundDistribution" useThreads="true">
-                <distribution id="treeLikelihood.dna" spec="rbbeast.evolution.likelihood.VariableCategoryTreeLikelihood2" data="@dna" tree="@Tree.t:dna">
+                <distribution id="treeLikelihood.dna" spec="rbbeast.evolution.likelihood.VariableCategoryTreeLikelihood" data="@dna" tree="@Tree.t:dna">
                     <siteModel id="FreeRateModel.s:dna" spec="rbbeast.evolution.sitemodel.FreeRateModel" incremental="true" 
                     	rates="@FreeRateRates.s:dna"
-                    	weights="@FreeRateWeights.s:dna"
-                    	maxCategoryCount="10">
+                    	weights="@FreeRateWeights.s:dna">
                         <parameter id="mutationRate.s:dna" spec="parameter.RealParameter" estimate="false" lower="0.0" name="mutationRate">1.0</parameter>
                         <parameter id="proportionInvariant.s:dna" spec="parameter.RealParameter" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
                         <substModel id="hky.s:dna" spec="HKY" kappa="@kappa.s:dna">
@@ -121,6 +120,7 @@ name="alignment">
 	        rates="@FreeRateRates.s:dna"
 	        weights="@FreeRateWeights.s:dna"
 	        model="@FreeRateModel.s:dna"
+	        maxCategoryCount="10"
         	weight="0.1"/>
         
         <operator id="KappaScaler.s:dna" spec="AdaptableOperatorSampler" weight="0.05">
@@ -157,7 +157,7 @@ name="alignment">
             <log idref="kappa.s:dna"/>
             <log idref="freqParameter.s:dna"/>
         </logger>
-        <logger id="screenlog" spec="Logger" logEvery="1000">
+        <logger id="screenlog" spec="Logger" logEvery="100000">
             <log idref="posterior"/>
             <log idref="likelihood"/>
             <log idref="prior"/>

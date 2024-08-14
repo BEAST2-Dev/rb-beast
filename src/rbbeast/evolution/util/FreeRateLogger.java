@@ -13,20 +13,28 @@ import rbbeast.evolution.sitemodel.FreeRateModel;
 
 @Description("logger that logs rates in increasing order + logs associated weights")
 public class FreeRateLogger extends BEASTObject implements Loggable {
-    public Input<FreeRateModel> modelInput =
+    final public Input<FreeRateModel> modelInput =
             new Input<>("model", "free rate model so parameters can be accessed", Validate.REQUIRED);
-    public Input<Boolean> categoryCountOnlyInput =
+    final public Input<Boolean> categoryCountOnlyInput =
             new Input<>("categoryCountOnly", "only log the category count of the model, not the actual rates", false);
+    final public Input<Integer> maxCategoryCountInput = new Input<>("maxCategoryCount", "maximum number of categories allowed");
 	
     private RealParameter rates;
     private RealParameter weights;
     private boolean incremental;
+    private int maxCategoryCount;
     
 	@Override
 	public void initAndValidate() {
 		weights = modelInput.get().weightInput.get();
     	rates = modelInput.get().rateParameterInput.get();
     	incremental = modelInput.get().incrementalInput.get();
+    	if (!categoryCountOnlyInput.get() && maxCategoryCountInput.get() == null) {
+    		throw new IllegalArgumentException("maxCategoryCount must be specified if categoryCountOnly=true");
+    	}
+    	if (!categoryCountOnlyInput.get()) {
+    		maxCategoryCount = maxCategoryCountInput.get();
+    	}
 	}
 
 	@Override
@@ -38,14 +46,15 @@ public class FreeRateLogger extends BEASTObject implements Loggable {
 		if (categoryCountOnlyInput.get()) {
 			out.print("categoryCount" + partition + "\t");
 		} else {
-			int n = rates.getDimension();
-			for (int i = 0; i < n ; i++) {
-				out.print("sortedRates" + partition + (i+1) + "\t");
-			}
+			out.print("categoryCount" + partition + "\t");
+			int n = maxCategoryCount;
 			if (weights.isEstimated()) {
 				for (int i = 0; i < n ; i++) {
 					out.print("sortedWeight" + partition + (i+1) + "\t");
 				}
+			}
+			for (int i = 0; i < n ; i++) {
+				out.print("sortedRates" + partition + (i+1) + "\t");
 			}
 		}
 	}
@@ -56,6 +65,7 @@ public class FreeRateLogger extends BEASTObject implements Loggable {
 		if (categoryCountOnlyInput.get()) {
 			out.print(n + "\t");
 		} else {
+			out.print(n + "\t");
 			double [] r = rates.getDoubleValues();
 			if (incremental) {
 				for (int i = 1; i < r.length; i++) {
@@ -71,13 +81,20 @@ public class FreeRateLogger extends BEASTObject implements Loggable {
 			for (double d : r) {
 				sum += d;
 			}
-			for (int i = 0; i < n ; i++) {
-				out.print(r[index[i]]/sum + "\t");
-			}
+			n = Math.min(n, maxCategoryCount);
 			if (weights.isEstimated()) {
 				for (int i = 0; i < n ; i++) {
 					out.print(weights.getArrayValue(index[i]) + "\t");
 				}
+				for (int i = n; i < maxCategoryCount; i++) {
+					out.print(0.0 + "\t");
+				}
+			}
+			for (int i = 0; i < n ; i++) {
+				out.print(r[index[i]]/sum + "\t");
+			}
+			for (int i = n; i < maxCategoryCount; i++) {
+				out.print(0.0 + "\t");
 			}
 		}
 	}

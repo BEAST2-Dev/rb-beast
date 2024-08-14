@@ -10,12 +10,12 @@ import rbbeast.evolution.sitemodel.FreeRateModel;
 
 @Description("Proposal to expands or contracts rates and weights for free rate model")
 public class FreeRateDimensionMover extends Operator {
-    public Input<RealParameter> weightInput =
+	final public Input<RealParameter> weightInput =
             new Input<RealParameter>("weights", "weights of the various categories, should sum to 1", Validate.REQUIRED);
-    public Input<RealParameter> rateParameterInput =
+	final public Input<RealParameter> rateParameterInput =
             new Input<RealParameter>("rates", "rates for each of the categories, will be weighted and normalised to 1", Validate.REQUIRED);
-    public Input<FreeRateModel> modelInput = new Input<>("model", "free rate model where the weights and rates are used", Validate.REQUIRED);
-	
+	final public Input<FreeRateModel> modelInput = new Input<>("model", "free rate model where the weights and rates are used", Validate.REQUIRED);
+    final public Input<Integer> maxCategoryCountInput = new Input<>("maxCategoryCount", "maximum number of categories allowed", Validate.REQUIRED);
 
     private int maxCategoryCount;
     private RealParameter rates;
@@ -23,7 +23,7 @@ public class FreeRateDimensionMover extends Operator {
     
 	@Override
 	public void initAndValidate() {
-		maxCategoryCount = modelInput.get().maxCategoryCountInput.get();
+		maxCategoryCount = maxCategoryCountInput.get();
 		rates = rateParameterInput.get();
 		weights = weightInput.get();
 	}
