@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import beast.base.core.Description;
+import beast.base.core.Log;
 import beast.base.evolution.alignment.Alignment;
 import beast.base.evolution.likelihood.BeagleTreeLikelihood;
 import beast.base.evolution.likelihood.BeerLikelihoodCore;
@@ -14,7 +15,6 @@ import beast.base.evolution.likelihood.TreeLikelihood;
 import beast.base.evolution.sitemodel.SiteModel;
 import beast.base.evolution.tree.Node;
 import beast.base.evolution.tree.Tree;
-import rbbeast.evolution.sitemodel.VariableCategorySiteModel;
 
 @Description("Tree likelihood that allows the number of rate categories to change. "
 		+ "It uses a TreeLikelihood for each category, then integrates over the resulting root probabilites.")
@@ -29,6 +29,9 @@ public class VariableCategoryTreeLikelihood extends TreeLikelihood {
 		public boolean check() {
 			return requiresRecalculation();
 		}
+    	void makeFilthy() {
+    		hasDirt = Tree.IS_FILTHY;
+    	}
 	}
 	
 	@Override
@@ -59,15 +62,7 @@ public class VariableCategoryTreeLikelihood extends TreeLikelihood {
         // No Beagle instance was found, so we use the good old java likelihood core
         beagle = null;
 
-		
-		
-		// revert to TreeLikelihood default behaviour when site model is not a VariableCategorySiteModel
-		if (!(m_siteModel instanceof VariableCategorySiteModel)) {
-			super.initAndValidate();
-			return;
-		}
-
-		
+				
 		nrOfStates = dataInput.get().getMaxStateCount();
 		cores = new ArrayList<>();
 		cores.add(null);
@@ -99,6 +94,7 @@ public class VariableCategoryTreeLikelihood extends TreeLikelihood {
     }
 	
     private void initBeagle(int i) {
+    	Log.info("Initialising BEAGLE with " + i + " categories");
         while (beagles.size() <= i) {
         	beagles.add(null);
         }
@@ -116,7 +112,7 @@ public class VariableCategoryTreeLikelihood extends TreeLikelihood {
     }
 	
     private void initCore(int i) {
-    	System.err.println("Crearting likelihood core with " + i + " categories");
+    	System.err.println("Creating likelihood core with " + i + " categories");
         final int nodeCount = treeInput.get().getNodeCount();
         final int extNodeCount = nodeCount / 2 + 1;
         final int intNodeCount = nodeCount / 2;
@@ -231,7 +227,7 @@ public class VariableCategoryTreeLikelihood extends TreeLikelihood {
 	@Override
 	public void store() {
 		super.store();
-		setUpClasses();
+		// setUpClasses();
 	}
 	
 	@Override
@@ -243,6 +239,13 @@ public class VariableCategoryTreeLikelihood extends TreeLikelihood {
 
 	@Override
 	protected boolean requiresRecalculation() {
+        if (m_siteModel.getCategoryCount() != currentCategoryCount) {
+        	setUpClasses();
+        	if (beagle != null) {
+        		((MyBeagleTreeLikelihood)beagle).makeFilthy();
+        	}
+        	hasDirt = Tree.IS_FILTHY;
+        }
         if (beagle != null) {
             return ((MyBeagleTreeLikelihood)beagle).check();
         }
