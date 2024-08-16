@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import beast.base.core.Description;
+import beast.base.core.Input;
 import beast.base.core.Log;
 import beast.base.evolution.alignment.Alignment;
 import beast.base.evolution.likelihood.BeagleTreeLikelihood;
@@ -19,6 +20,7 @@ import beast.base.evolution.tree.Tree;
 @Description("Tree likelihood that allows the number of rate categories to change. "
 		+ "It uses a TreeLikelihood for each category, then integrates over the resulting root probabilites.")
 public class VariableCategoryTreeLikelihood extends TreeLikelihood {
+	final public Input<Boolean> useJavaInput = new Input<>("useJava", "only use java likelihood core, and do not attempt to use BEAGLE", false);
 	
 	private int nrOfStates;
 	private int currentCategoryCount;
@@ -31,6 +33,8 @@ public class VariableCategoryTreeLikelihood extends TreeLikelihood {
 		}
     	void makeFilthy() {
     		hasDirt = Tree.IS_FILTHY;
+    		updateSiteModel = true;
+    		updateSubstitutionModel = true;
     	}
 	}
 	
@@ -38,26 +42,34 @@ public class VariableCategoryTreeLikelihood extends TreeLikelihood {
 	public void initAndValidate() {
 		m_siteModel = (SiteModel.Base) siteModelInput.get();
 
+		if (!useJavaInput.get()) {
 		beagle = new MyBeagleTreeLikelihood();
-        try {
-	        beagle.initByName(
-                    "data", dataInput.get(), "tree", treeInput.get(), "siteModel", siteModelInput.get(),
-                    "branchRateModel", branchRateModelInput.get(), "useAmbiguities", m_useAmbiguities.get(), 
-                    "useTipLikelihoods", m_useTipLikelihoods.get(),"scaling", scaling.get().toString(),
-                    "rootFrequencies", rootFrequenciesInput.get());
-	        if (beagle.getBeagle() != null) {
-	        	
-	        	beagles = new ArrayList<>();
-	        	for (int i = 0; i < m_siteModel.getCategoryCount(); i++) {
-	        		beagles.add(null);
-	        	}
-	        	beagles.add((MyBeagleTreeLikelihood)beagle);
-	        	
-	            //a Beagle instance was found, so we use it
-	            return;
-	        }
-        } catch (Exception e) {
-			// ignore
+	        try {
+		        beagle.initByName(
+	                    "data", dataInput.get(), "tree", treeInput.get(), "siteModel", siteModelInput.get(),
+	                    "branchRateModel", branchRateModelInput.get(), "useAmbiguities", m_useAmbiguities.get(), 
+	                    "useTipLikelihoods", m_useTipLikelihoods.get(),"scaling", scaling.get().toString(),
+	                    "rootFrequencies", rootFrequenciesInput.get());
+		        if (beagle.getBeagle() != null) {
+		        	
+		        	beagles = new ArrayList<>();
+		        	for (int i = 0; i < m_siteModel.getCategoryCount(); i++) {
+		        		beagles.add(null);
+		        	}
+		        	beagles.add((MyBeagleTreeLikelihood)beagle);
+		        	
+		        	
+	//	            for (int i = 0; i < 10; i++) {
+	//	            	initBeagle(i);
+	//	            }
+	//	            setUpClasses();
+	
+		            //a Beagle instance was found, so we use it
+		            return;
+		        }
+	        } catch (Exception e) {
+				// ignore
+			}
 		}
         // No Beagle instance was found, so we use the good old java likelihood core
         beagle = null;
@@ -92,6 +104,18 @@ public class VariableCategoryTreeLikelihood extends TreeLikelihood {
     protected void initCore() {
 		// do nothing
     }
+	
+	
+//	@Override
+//	public double calculateLogP() {
+//		logP = super.calculateLogP();
+//		if (beagle != null) {
+//			Log.err.println(" BEAGLE: " + logP);
+//		} else {
+//			Log.err.print("Java: " + logP);
+//		}
+//		return logP;
+//	}
 	
     private void initBeagle(int i) {
     	Log.info("Initialising BEAGLE with " + i + " categories");
@@ -239,23 +263,22 @@ public class VariableCategoryTreeLikelihood extends TreeLikelihood {
 
 	@Override
 	protected boolean requiresRecalculation() {
+        hasDirt = Tree.IS_CLEAN;
+
+        boolean makeFilthy = false;
         if (m_siteModel.getCategoryCount() != currentCategoryCount) {
         	setUpClasses();
-        	if (beagle != null) {
-        		((MyBeagleTreeLikelihood)beagle).makeFilthy();
-        	}
+        	makeFilthy = true;
         	hasDirt = Tree.IS_FILTHY;
         }
         if (beagle != null) {
-            return ((MyBeagleTreeLikelihood)beagle).check();
+            boolean result = ((MyBeagleTreeLikelihood)beagle).check();
+            if (makeFilthy) {
+        		((MyBeagleTreeLikelihood)beagle).makeFilthy();            	
+            }
+            return result;
         }
 		
-        hasDirt = Tree.IS_CLEAN;
-        if (m_siteModel.getCategoryCount() != currentCategoryCount) {
-        	setUpClasses();
-            hasDirt = Tree.IS_FILTHY;
-            return true;
-        }
 
         if (dataInput.get().isDirtyCalculation()) {
             hasDirt = Tree.IS_FILTHY;
