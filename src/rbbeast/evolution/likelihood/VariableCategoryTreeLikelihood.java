@@ -243,8 +243,8 @@ public class VariableCategoryTreeLikelihood extends TreeLikelihood {
             likelihoodCore.setNodePartials(node.getNr(), partials);
 
         } else {
-            setPartials(node.getLeft(), patternCount);
-            setPartials(node.getRight(), patternCount);
+            setPartials(node.getLeft(), patternCount, likelihoodCore);
+            setPartials(node.getRight(), patternCount, likelihoodCore);
         }
     }
 	

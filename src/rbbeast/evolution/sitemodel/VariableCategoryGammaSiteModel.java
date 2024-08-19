@@ -15,6 +15,11 @@ public class VariableCategoryGammaSiteModel extends SiteModel {
     private int propInvarCount;
 
     @Override
+    public void initAndValidate() {
+    	super.initAndValidate();
+    }
+    
+    @Override
     protected void refresh() {
         propInvarCount = 0;
         if (shapeParameter != null) {
@@ -24,11 +29,9 @@ public class VariableCategoryGammaSiteModel extends SiteModel {
             		Log.warning.println("SiteModel: Invalid category count (" + categoryCount + ") Setting category count to 1");
             	}
                 categoryCount = 1;
-                propInvarCount = 1;
             }
         } else {
             categoryCount = 1;
-            propInvarCount = 1;
         }
 
         if (/*invarParameter != null && */invarParameter.getValue() > 0) {
@@ -38,6 +41,7 @@ public class VariableCategoryGammaSiteModel extends SiteModel {
             }
             if (hasPropInvariantCategory) {
                 categoryCount += 1;
+                propInvarCount = 1;
             }
         }
 
