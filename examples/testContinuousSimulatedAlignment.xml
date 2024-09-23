@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><beast beautitemplate='Standard' beautistatus='noAutoSetClockRate' namespace="beast.pkgmgmt:beast.base.core:beast.base.inference:beast.base.evolution.alignment:beast.base.evolution.tree.coalescent:beast.base.util:beast.base.math:beast.evolution.nuc:beast.base.evolution.operator:beast.base.inference.operator:beast.base.evolution.sitemodel:beast.base.evolution.substitutionmodel:beast.base.evolution.likelihood" required="" version="2.6">
+
+
+<data id="input_alignment" spec="Alignment" name="alignment"  dataType="nucleotide">
+    <plate var="n" range="t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33,t34,t35,t36,t37,t38,t39,t40,t41,t42,t43,t44,t45,t46,t47,t48,t49">
+        <sequence id="seq_$(n)" taxon="$(n)" totalcount="4" value="?"/>
+    </plate>
+</data>
+
+
+    <!-- The simulated sequence alignment. -->
+    <!-- shape is the shape parameter of the contuous gamma distribution with mean of 1 to draw rates from -->
+    <data spec='rbbeast.evolution.util.ContinuousGammaSimulatedAlignment' id="dna"
+          sequencelength="$(sl=500)" 
+          shape="0.5">
+
+      <!-- The true tree down which sequences are simulated. -->
+      <tree spec='beast.base.evolution.tree.TreeParser'
+            newick="(((((((t0:0.1984913189963926,t8:0.1984913189963926):1.548057374574963,((t2:0.35346692205000885,t33:0.35346692205000885):0.9061756260160649,(t31:0.603903125678352,t37:0.603903125678352):0.6557394223877235):0.4869061455052819):0.6352110720097199,(((((t6:0.32990337196756236,(t15:0.23367896940516708,t38:0.23367896940516708):0.09622440256239706):0.6133002927571773,(t14:0.4210515282319367,(t21:0.2189962794376754,t27:0.2189962794376754):0.2020552487942613):0.522152136492803):0.3830044054159938,t26:1.3262080701407335):0.3660461942299813,((t9:0.08435739699535816,t44:0.08435739699535816):1.220222584721041,((t16:0.15112724584159487,t18:0.15112724584159487):0.8253625664384199,t23:0.9764898122800147):0.32809016943638447):0.3876742826543156):0.3313737761490536,((t13:0.26544228837203754,t17:0.26544228837203754):1.3042071806037256,t25:1.5696494689757632):0.4539785715440052):0.3581317250613072):0.908722151463726,((((((t1:0.6259429840159623,t7:0.6259429840159623):0.17042239143356674,t22:0.796365375449529):0.5202283197064723,(((t11:0.39566583375122555,t40:0.39566583375122555):0.19450753533723564,t35:0.590173369088463):0.6147719626660617,t36:1.204945331754523):0.11164836340147843):0.17078374073685154,t32:1.4873774358928529):0.06677832848424892,(t3:1.3023711993755853,t42:1.3023711993755853):0.25178456500151647):1.3023806441099772,(((t10:0.017747183132362565,t20:0.017747183132362565):0.8187376948898706,t30:0.8364848780222331):0.9674480668214525,t45:1.8039329448436856):1.0526034636433934):0.4339455085577226):2.2670126803624466,(t4:2.814465363760415,((t12:1.249000770654618,((t24:0.9250482421687032,t46:0.9250482421687032):0.295465467817408,t43:1.2205137099861112):0.028487060668506814):0.0611461314998909,t41:1.3101469021545071):1.5043184616059078):2.7430292336468334):1.6083014428123459,((t34:1.21289111897757,t49:1.21289111897757):0.2287358012969669,(t47:0.6069632782363907,t48:0.6069632782363907):0.8346636420381461):5.724169119945059):2.283323340067967,((t5:1.5683449038959,t39:1.5683449038959):2.4618605052323925,((t19:0.16030511810201986,t28:0.16030511810201986):1.698249749295334,t29:1.8585548673973538):2.171650541730939):5.418913971159268):0.0"
+            IsLabelledNewick="true" adjustTipHeights="false"/>
+
+      <data idref="input_alignment"/>
+
+                <siteModel id="trueSiteModel" spec="SiteModel" gammaCategoryCount="1">
+                <parameter id="truemutationRate.s:dna" spec="parameter.RealParameter" estimate="false" name="mutationRate">1.0</parameter>
+                <parameter id="trueproportionInvariant.s:dna" spec="parameter.RealParameter" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
+                <substModel id="trueHKY.s:big2_barcs" spec="HKY" kappa="1.863473489245992">
+                    <frequencies id="trueFreqs.s:dna" spec="Frequencies" frequencies="0.22802457604040066 0.26896482463047916 0.25736884538624716 0.24564175394287302"/>
+				</substModel>
+      </siteModel>      
+      <branchRateModel id="trueStrictClock.c:dna" spec="beast.base.evolution.branchratemodel.StrictClockModel" clock.rate="0.10231921962293346"/>
+    </data>
+    
+<map name="Uniform" >beast.base.inference.distribution.Uniform</map>
+<map name="Exponential" >beast.base.inference.distribution.Exponential</map>
+<map name="LogNormal" >beast.base.inference.distribution.LogNormalDistributionModel</map>
+<map name="Normal" >beast.base.inference.distribution.Normal</map>
+<map name="Beta" >beast.base.inference.distribution.Beta</map>
+<map name="Gamma" >beast.base.inference.distribution.Gamma</map>
+<map name="LaplaceDistribution" >beast.base.inference.distribution.LaplaceDistribution</map>
+<map name="prior" >beast.base.inference.distribution.Prior</map>
+<map name="InverseGamma" >beast.base.inference.distribution.InverseGamma</map>
+<map name="OneOnX" >beast.base.inference.distribution.OneOnX</map>
+
+
+<!-- MCMC analysis under the discretised gamma rate heterogeneity model -->
+<run id="mcmc" spec="MCMC" chainLength="$(cl=1000000)">
+    <state spec="State" id="state" storeEvery="100000">
+        <tree id="Tree.t:dna" spec="beast.base.evolution.tree.Tree" name="stateNode">
+                <taxonset id="TaxonSet.dna" spec="TaxonSet">
+                    <alignment idref="dna"/>
+                </taxonset>
+        </tree>
+        <parameter id="clockRate.c:dna" spec="parameter.RealParameter" lower="0.0" upper="1.0" name="stateNode">1.0</parameter>
+        <parameter id="kappa.s:dna" spec="parameter.RealParameter" lower="0.0" name="stateNode">2.0</parameter>
+        <parameter id="birthRate.t:dna" spec="parameter.RealParameter" lower="0.0" upper="1.0" name="stateNode">0.2</parameter>
+        <parameter id="freqParameter.s:dna" spec="parameter.RealParameter" dimension="4" lower="0.0" name="stateNode" upper="1.0">0.25</parameter>
+        
+        <parameter id="gammaShape.s:dna" spec="parameter.RealParameter" lower="0.1" name="stateNode">1.0</parameter>
+    </state>
+
+
+
+
+    <distribution id="posterior" spec="beast.base.inference.CompoundDistribution">
+        <distribution id="prior" spec="beast.base.inference.CompoundDistribution">
+            
+            <distribution id="YuleModel.t:dna" spec="beast.base.evolution.speciation.YuleModel" birthDiffRate="@birthRate.t:dna" tree="@Tree.t:dna"/>
+            
+            <prior id="birthRatePrior.t:dna" name="distribution" x="@birthRate.t:dna">
+                <LogNormal id="LogNormalDistributionModel.2" meanInRealSpace="true" name="distr">
+                    <parameter id="RealParameter.9" spec="parameter.RealParameter" estimate="false" name="M">0.5</parameter>
+                    <parameter id="RealParameter.10" spec="parameter.RealParameter" estimate="false" lower="0.0" name="S">0.1</parameter>
+                </LogNormal>
+            </prior>
+            
+            <prior id="FrequenciesPrior.s:dna" name="distribution" x="@freqParameter.s:dna">
+                    <distr id="Dirichlet.4" spec="distribution.Dirichlet">
+                        <parameter id="RealParameter.469" spec="parameter.RealParameter" dimension="4" estimate="false" name="alpha">4.0 4.0 4.0 4.0</parameter>
+                    </distr>
+            </prior>
+            <prior id="GammaShapePrior.s:dna" name="distribution" x="@gammaShape.s:dna">
+                <Exponential id="Exponential.0" name="distr">
+                    <parameter id="RealParameter.0" spec="parameter.RealParameter" estimate="false" name="mean">1.0</parameter>
+                </Exponential>
+            </prior>
+            <prior id="KappaPrior.s:dna" name="distribution" x="@kappa.s:dna">
+                <LogNormal id="LogNormalDistributionModel.1" name="distr">
+                    <parameter id="RealParameter.7" spec="parameter.RealParameter" estimate="false" name="M">1.0</parameter>
+                    <parameter id="RealParameter.8" spec="parameter.RealParameter" estimate="false" name="S">1.25</parameter>
+                </LogNormal>
+            </prior>
+            <prior id="ClockPrior.t:dna" name="distribution">
+            	<x idref="clockRate.c:dna"/>
+            	<Normal mean="0.1" sigma="0.005" name="distr"/>
+            </prior>
+        </distribution>
+        <distribution id="likelihood" spec="beast.base.inference.CompoundDistribution" useThreads="true">
+            <distribution id="treeLikelihood.dna" spec="ThreadedTreeLikelihood" data="@dna" tree="@Tree.t:dna">
+                <siteModel id="SiteModel.s:dna" spec="SiteModel" gammaCategoryCount="4"
+                	 shape="@gammaShape.s:dna">
+                    <parameter id="mutationRate.s:dna" spec="parameter.RealParameter" estimate="false" name="mutationRate">1.0</parameter>
+                    <parameter id="proportionInvariant.s:dna" spec="parameter.RealParameter" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
+                    <substModel id="hky.s:dna" spec="HKY" kappa="@kappa.s:dna">
+                        <frequencies id="estimatedFreqs.s:dna" spec="Frequencies" frequencies="@freqParameter.s:dna"/>
+                    </substModel>
+                </siteModel>
+                <branchRateModel id="StrictClock.c:dna" spec="beast.base.evolution.branchratemodel.StrictClockModel">
+                	<clock.rate idref="clockRate.c:dna"/>
+                </branchRateModel>
+            </distribution>
+        </distribution>
+    </distribution>
+
+        <operator id="_KappaScaler.s:dna" spec="ScaleOperator" parameter="@kappa.s:dna" scaleFactor="0.5" weight="0.1"/>
+        <operator id="_birthRateScaler.t:dna" spec="ScaleOperator" parameter="@birthRate.t:dna" scaleFactor="0.5" weight="3.0"/>
+        <operator id="_FrequenciesExchanger.s:dna" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">
+            <parameter idref="freqParameter.s:dna"/>
+        </operator>
+
+        <operator id="_StrictClockRateScaler.c:dna" spec="kernel.BactrianScaleOperator" parameter="@clockRate.c:dna" scaleFactor="0.5" weight="3.0"/>
+
+        <operator id="_TreeRootScaler.t:dna" spec="kernel.BactrianScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@Tree.t:dna" upper="10.0" weight="3.0"/>
+        <operator id="_UniformOperator.t:dna" spec="kernel.BactrianNodeOperator" tree="@Tree.t:dna" weight="30.0"/>
+        <operator id="_SubtreeSlide.t:dna" spec="kernel.BactrianSubtreeSlide" tree="@Tree.t:dna" weight="15.0"/>
+        <operator id="_Narrow.t:dna" spec="Exchange" tree="@Tree.t:dna" weight="15.0"/>
+        <operator id="_Wide.t:dna" spec="Exchange" isNarrow="false" tree="@Tree.t:dna" weight="3.0"/>
+        <operator id="_WilsonBalding.t:dna" spec="WilsonBalding" tree="@Tree.t:dna" weight="3.0"/>
+        <operator id="_BICEPSEpochTop.t:dna" spec="EpochFlexOperator" scaleFactor="0.1" tree="@Tree.t:dna" weight="2.0"/>
+        <operator id="_BICEPSEpochAll.t:dna" spec="EpochFlexOperator" fromOldestTipOnly="false" scaleFactor="0.1" tree="@Tree.t:dna" weight="2.0"/>
+        <operator id="_BICEPSTreeFlex.t:dna" spec="TreeStretchOperator" scaleFactor="0.01" tree="@Tree.t:dna" weight="2.0"/>
+
+  	  	<operator id="_gammaShapeScaler.s:dna" spec="ScaleOperator" parameter="@gammaShape.s:dna" scaleFactor="0.5" weight="0.1"/>
+
+         <operator id="_strictClockUpDownOperator.c:dna" spec="UpDownOperator" scaleFactor="0.75" weight="3.0">
+             <down idref="birthRate.t:dna"/>
+             <up idref="clockRate.c:dna"/>
+             <down idref="Tree.t:dna"/>
+        </operator>
+
+
+    <logger id="tracelog" spec="Logger" fileName="$(filebase).log" logEvery="1000" model="@posterior" sanitiseHeaders="true" sort="smart">
+        <log idref="posterior"/>
+        <log idref="likelihood"/>
+        <log idref="prior"/>
+        <log idref="treeLikelihood.dna"/>
+        <log id="TreeHeight.t:dna" spec="beast.base.evolution.tree.TreeStatLogger" tree="@Tree.t:dna"/>
+        <log idref="kappa.s:dna"/>
+        <log idref="birthRate.t:dna"/>
+        <log idref="clockRate.c:dna"/>
+        <log idref="YuleModel.t:dna"/>
+        <log idref="freqParameter.s:dna"/>
+        <log idref="gammaShape.s:dna"/>
+    </logger>
+
+    <logger id="screenlog" spec="Logger" logEvery="100000">
+        <log idref="posterior"/>
+        <log idref="prior"/>
+    	<log idref="clockRate.c:dna"/>
+        <log id="treeheight" spec="beast.base.evolution.tree.TreeHeightLogger" tree="@Tree.t:dna"/>
+    </logger>
+
+    <logger id="treelog.t:dna" spec="Logger" fileName="$(filebase).trees" logEvery="1000" mode="tree">
+        <log id="TreeWithMetaDataLogger.t:dna" spec="beast.base.evolution.TreeWithMetaDataLogger" tree="@Tree.t:dna"/>
+    </logger>
+
+</run>
+
+</beast>
