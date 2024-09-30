@@ -1,14 +1,29 @@
 <beast version='2.0'
-       namespace='beast.app.beauti:beast.pkgmgmt:beast.base.core:beast.base.inference:beast.base.evolution.branchratemodel:beast.base.evolution.speciation:beast.base.evolution.tree.coalescent:beast.base.util:beast.base.math:beast.evolution.nuc:beast.base.evolution.operator:beast.base.inference.operator:beast.base.evolution.sitemodel:beast.base.evolution.substitutionmodel:beast.base.evolution.likelihood:beast.evolution:beast.base.math.distributions'
- 	   templateinfo='template for automatically splitting alignments into partitions,&lt;br> supporting tip-date analysis and calibrations'>
+       namespace='beastfx.app.beauti:beastfx.app.inputeditor:beast.pkgmgmt:beast.base.core:beast.base.inference:beast.base.evolution.branchratemodel:beast.base.evolution.speciation:beast.base.evolution.tree.coalescent:beast.base.util:beast.base.math:beast.evolution.nuc:beast.base.evolution.operator:beast.base.inference.operator:beast.base.evolution.sitemodel:beast.base.evolution.substitutionmodel:beast.base.evolution.likelihood:beast.evolution:beast.base.inference.distribution'
+	templateinfo='template for standard phylogenetic analysis,&lt;br> supporting tip-date analysis and calibrations'>
 
-<map name='connect'>beastfx.app.inputeditor.BeautiConnector</map>
-<map name='subtemplate'>beastfx.app.inputeditor.BeautiSubTemplate</map>
+<map name='connect' reserved='true'>beastfx.app.inputeditor.BeautiConnector</map>
+<map name='subtemplate' reserved='true'>beastfx.app.inputeditor.BeautiSubTemplate</map>
+<map name='Uniform'>beast.base.inference.distribution.Uniform</map>
+<map name='Normal'>beast.base.inference.distribution.Normal</map>
+<map name='OneOnX'>beast.base.inference.distribution.OneOnX</map>
+<map name='LogNormal'>beast.base.inference.distribution.LogNormalDistributionModel</map>
+<map name='Exponential'>beast.base.inference.distribution.Exponential</map>
+<map name='Gamma'>beast.base.inference.distribution.Gamma</map>
+<map name='Beta'>beast.base.inference.distribution.Beta</map>
+<map name='LaplaceDistribution'>beast.base.inference.distribution.LaplaceDistribution</map>
+<map name='InverseGamma'>beast.base.inference.distribution.InverseGamma</map>
+<map name='prior'>beast.base.inference.distribution.Prior</map>
 
     <beauticonfig spec='BeautiConfig'
         inputLabelMap='beast.base.inference.MCMC.operator=Operators,
 	        beast.base.inference.MCMC.logger=Loggers,
-			beast.base.evolution.sitemodel.SiteModel.mutationRate =Substitution Rate'
+			beast.base.evolution.sitemodel.SiteModel.mutationRate =Substitution Rate,
+			beast.base.evolution.speciation.YuleModel.birthDiffRate=Birth Rate,
+			beast.base.evolution.branchratemodel.UCRelaxedClockModel.clock.rate=Mean clock rate,
+			beast.base.evolution.branchratemodel.StrictClockModel.clock.rate=Mean clock rate,
+			beast.base.evolution.branchratemodel.RandomLocalClockModel.clock.rate=Mean clock rate
+			'
         inlinePlugins ='beast.base.inference.MCMC.distribution,
             beast.base.evolution.sitemodel.SiteModel.substModel,
             beast.base.evolution.tree.coalescent.ExponentialGrowth,
@@ -18,6 +33,9 @@
         collapsedPlugins ='beast.base.inference.MCMC.logger'
         suppressPlugins = 'beast.base.inference.MCMC.operator,
     		beast.base.inference.MCMC.operatorschedule,
+    		beast.base.inference.OperatorSchedule.subschedule,
+    		beast.base.inference.OperatorSchedule.operatorPattern,
+			beast.base.inference.OperatorSchedule.operator,
 	        beast.base.evolution.tree.coalescent.Coalescent.treeIntervals,
 	        beast.base.evolution.tree.coalescent.Coalescent.tree,
 	        beast.base.inference.MCMC.state,
@@ -33,21 +51,26 @@
 	        beast.base.evolution.tree.Tree.trait,
 	        beast.base.evolution.tree.Tree.taxa,
 	        beast.base.evolution.tree.Tree.taxonset,
+	        beast.base.evolution.tree.Tree.nodetype,
 	        beast.base.evolution.tree.coalescent.RandomTree.trait,
 	        beast.base.evolution.tree.coalescent.RandomTree.initial,
 	        beast.base.evolution.tree.coalescent.RandomTree.taxa,
 	        beast.base.evolution.tree.coalescent.RandomTree.taxonset,
 	        beast.base.evolution.tree.coalescent.RandomTree.estimate,
+	        beast.base.evolution.tree.coalescent.RandomTree.nodetype,
 	        beast.base.evolution.tree.TreeParser.initial,
 	        beast.base.evolution.tree.TreeParser.taxa,
 	        beast.base.evolution.tree.TreeParser.taxonset,
 	        beast.base.evolution.tree.TreeParser.trait,
 	        beast.base.evolution.tree.TreeParser.estimate,
+	        beast.base.evolution.tree.TreeParser.nodetype,
 	        beast.base.evolution.tree.ClusterTree.initial,
 	        beast.base.evolution.tree.ClusterTree.taxa,
 	        beast.base.evolution.tree.ClusterTree.taxonset,
 	        beast.base.evolution.tree.ClusterTree.trait,
 	        beast.base.evolution.tree.ClusterTree.estimate,
+	        beast.base.evolution.tree.ClusterTree.nodetype,
+	        beast.base.evolution.tree.ClusterTree.distance,
 	        beast.base.evolution.substitutionmodel.WAG.rates,
 	        beast.base.evolution.substitutionmodel.WAG.frequencies,
 	        beast.base.evolution.substitutionmodel.JTT.rates,
@@ -76,15 +99,97 @@
 	        beast.base.inference.Operator.weight,
             beast.base.inference.Logger.model,
             beast.base.evolution.tree.coalescent.BayesianSkyline.treeIntervals,
-            beast.base.evolution.tree.coalescent.BayesianSkyline.groupSizes,
-            beast.base.evolution.tree.coalescent.BayesianSkyline.popSizes,
-			beast.evolution.likelihood.PartitionProvider.alignment,
-			beast.evolution.likelihood.PartitionProvider.siteModel,
-			beast.evolution.likelihood.PartitionProvider.partitionLengths
+            beast.base.evolution.tree.coalescent.BayesianSkyline.tree,
+            beast.base.evolution.speciation.YuleModel.originHeight,
+            beast.base.inference.parameter.RealParameter.keys,
+            beast.base.inference.parameter.BooleanParameter.keys,
+            beast.base.inference.parameter.IntegerParameter.keys,
+            beast.base.inference.parameter.CompoundRealParameter.keys,
+            rbbeast.evolution.likelihood.PartitionProvider.alignment
             '
-        buttonLabelMap='beast.app.beauti.BeautiInitDlg.&gt;&gt; details=Edit parameters'
+        hmc='BirthDeath/index/,
+RandomTree/rootHeight/,
+RandomTree/adjustTreeNodeHeights/,
+StrictClock/clock.rate/,
+FrequenciesExchanger/weightvector/,
+FrequenciesExchanger/delta/,
+FrequenciesExchanger/integer/,
+FrequenciesExchanger/weight/,
+FrequenciesExchanger/autoOptimize/,
+BayesianSkyline/index/,
+ConstantPopulation0/popSize/,
+mcmc/numInitializationAttempts/,
+mcmc/preBurnin/,
+mcmc/storeEvery/,
+mcmc/operatorschedule/,
+mcmc/chainLength/,
+mcmc/sampleFromPrior/,
+tracelog/fileName/,
+tracelog/sort/,
+tracelog/sanitiseHeaders/,
+tracelog/logEvery/,
+tracelog/mode/,
+ExtendedBayesianSkyline/index/,
+CalibratedYuleModel/index/,
+treeLikelihood/siteModel/,
+treeLikelihood/branchRateModel/,
+OperatorSchedule/detailedRejection/,
+OperatorSchedule/autoOptimizeDelay/,
+OperatorSchedule/transform/,
+OperatorSchedule/weight/,
+OperatorSchedule/weightIsPercentage/,
+OperatorSchedule/autoOptimize/,
+screenlog/fileName/,
+screenlog/sort/,
+screenlog/sanitiseHeaders/,
+screenlog/logEvery/,
+screenlog/mode/,
+CoalescentExponential/index/,
+NewickTree/adjustTipHeights/,
+NewickTree/newick/,
+NewickTree/IsLabelledNewick/,
+NewickTree/adjustTreeNodeHeights/,
+NewickTree/offset/,
+NewickTree/threshold/,
+NewickTree/scale/,
+NewickTree/binarizeMultifurcations/,
+NewickTree/singlechild/,
+MarkovChainedPopSizes/reverse/,
+MarkovChainedPopSizes/parameter/,
+MarkovChainedPopSizes/uselog/,
+MarkovChainedPopSizes/jeffreys/,
+MarkovChainedPopSizes/shape/,
+MarkovChainedPopSizes/initialMean/,
+MarkovChainedPopSizes/useLogNormal/,
+Standard/Operators/,
+Standard/Priors/,
+Standard/Clock_Model/,
+Standard/MCMC/,
+Standard/Partitions/,
+Standard/Tip_Dates/,
+Standard/Site_Model/,
+Standard/Initialization/,
+Standard/Starting_tree/,
+birthRate/estimate/,
+birthRate/dimension/,
+birthRate/lower/,
+birthRate/minordimension/,
+birthRate/keys/,
+birthRate/upper/,
+treelog/fileName/,
+treelog/sort/,
+treelog/sanitiseHeaders/,
+treelog/logEvery/,
+treelog/mode/,
+CoalescentConstant/index/,
+YuleModel/index/,
+ClusterTree/clock.rate/,
+ClusterTree/adjustTreeNodeHeights/,
+ClusterTree/clusterType/,
+'
+        buttonLabelMap='beastfx.app.beauti.BeautiInitDlg.&gt;&gt; details=Edit parameters'
     >
-        <!--disableMenus='Mode'-->
+       <!--disableMenus='Mode'-->
 
         <panel spec='BeautiPanelConfig' panelname="Partitions" tiptext="Data Partitions"
             path='distribution/distribution[id="likelihood"]/distribution/data'
@@ -146,7 +251,7 @@
 
 		<alignmentProvider id="Add Alignment" spec='BeautiAlignmentProvider' template='@AutoPartitionTemplate'/>
 
-        <partitiontemplate id='AutoPartitionTemplate' spec='BeautiSubTemplate' class='beast.base.evolution.likelihood.TreeLikelihood' mainid='mcmc'>
+        <partitiontemplate id='AutoPartitionTemplate' spec='BeautiSubTemplate' class='rbbeast.evolution.likelihood.PartitionedTreeLikelihood' mainid='mcmc'>
 <![CDATA[
             <!-- site model                                                              -->
             <plugin spec='SiteModel' id="SiteModel.s:$(n)" gammaCategoryCount='0'>
@@ -158,11 +263,11 @@
 
 			<parameter id='partitionLengths.$(n)' spec='beast.base.inference.parameter.IntegerParameter' value='300 300 298' lower='100'/>
 
-	        <distribution id="treeLikelihood.$(n)" spec="PartitionedTreeLikelihood" useAmbiguities="false">
+	        <distribution id="treeLikelihood.$(n)" spec="rbbeast.evolution.likelihood.PartitionedTreeLikelihood" useAmbiguities="false">
                 <data idref="$(n)"/>
                 <tree idref="Tree.t:$(n)"/>
 			    <siteModel idref='SiteModel.s:$(n)'/>
-				<partitionProvider id='partitionProvider.$(n)' spec='beast.evolution.likelihood.PartitionProvider' alignment="@$(n)" numPartitions='3'>
+				<partitionProvider id='partitionProvider.$(n)' spec='rbbeast.evolution.likelihood.PartitionProvider' alignment="@$(n)" numPartitions='3'>
 					<partitionLengths idref='partitionLengths.$(n)'/>
 					<!--<plate var='n' range='&partitions;'> -->
 					<!--</plate>-->
@@ -226,7 +331,7 @@
 			<operator id='StrictClockRateScaler.c:$(n)' spec='ScaleOperator' scaleFactor="0.75" weight="3" parameter='@clockRate.c:$(n)'/>
 			<!-- need updown operator for clockRate?!? Also in SubstModel.xml -->
 
-			<log id='PartitionPositionLogger.$(n)' spec='beast.evolution.likelihood.PartitionPositionLogger' partitionLengths='@partitionLengths.$(n)'/>
+			<log id='PartitionPositionLogger.$(n)' spec='rbbeast.evolution.likelihood.PartitionPositionLogger' partitionLengths='@partitionLengths.$(n)'/>
 
 ]]>
             <connect srcID='treeLikelihood.$(n)'              targetID='likelihood' inputName='distribution' if="isInitializing"/>
@@ -352,7 +457,6 @@
         <logger id='screenlog' logEvery="1000">
 	        <!--model idref='posterior'/-->
             <log idref="posterior"/>
-      	    <ESS spec='ESS' name='log' arg="@posterior"/>
             <log idref="likelihood"/>
             <log idref="prior"/>
         </logger>

@@ -4,6 +4,7 @@ package rbbeast.evolution.likelihood;
 import java.util.ArrayList;
 import java.util.List;
 
+import beagle.Beagle;
 import beast.base.core.Description;
 import beast.base.core.Input;
 import beast.base.core.Log;
@@ -36,6 +37,10 @@ public class VariableCategoryTreeLikelihood extends TreeLikelihood {
     		updateSiteModel = true;
     		updateSubstitutionModel = true;
     	}
+    	@Override
+    	public Beagle getBeagle() {
+    		return beagle;
+    	}
 	}
 	
 	@Override
@@ -50,7 +55,7 @@ public class VariableCategoryTreeLikelihood extends TreeLikelihood {
 	                    "branchRateModel", branchRateModelInput.get(), "useAmbiguities", m_useAmbiguities.get(), 
 	                    "useTipLikelihoods", m_useTipLikelihoods.get(),"scaling", scaling.get().toString(),
 	                    "rootFrequencies", rootFrequenciesInput.get());
-		        if (beagle.getBeagle() != null) {
+		        if (((MyBeagleTreeLikelihood)beagle).getBeagle() != null) {
 		        	
 		        	beagles = new ArrayList<>();
 		        	for (int i = 0; i < m_siteModel.getCategoryCount(); i++) {

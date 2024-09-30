@@ -32,6 +32,7 @@
         <provider classname="rbbeast.evolution.util.GetDimension"/>
         <provider classname="rbbeast.evolution.operators.FreeRateDimensionMover"/>
         <provider classname="rbbeast.evolution.sitemodel.VariableCategoryGammaSiteModel"/>
+        <provider classname="rbbeast.evolution.sitemodel.SkewedGammaSiteModel"/>
 
     </service>
 
