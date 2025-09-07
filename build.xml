@@ -196,6 +196,7 @@
 		</copy>
 		<copy todir="${package_dir}/fxtemplates">
 			<fileset file="fxtemplates/RBS.xml" />
+			<fileset file="fxtemplates/FreeRateModel.xml" />
 			<fileset file="fxtemplates/AutoPartition.xml" />
 		</copy>
 
