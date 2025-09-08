@@ -4,7 +4,7 @@
 
     <mergewith point='aux-sitemodel-panels'>
 
-        <subtemplate id='Free rate model' class='freerate.evolution.sitemodel.FreeRateModel' mainid='FreeRateModel.s:$(n)'
+        <subtemplate id='Free rate model' class='rbbeast.evolution.sitemodel.FreeRateModel' mainid='FreeRateModel.s:$(n)'
 			>
             <![CDATA[
 
@@ -18,7 +18,7 @@
                 <distr spec="distribution.Dirichlet" alpha="4.0 4.0 4.0 4.0"/>
         </prior>
 
-        <siteModel id="FreeRateModel.s:$(n)" spec="freerate.evolution.sitemodel.FreeRateModel" rates='@FreeRateRates.s:$(n)' weights='@FreeRateWeights.s:$(n)'
+        <siteModel id="FreeRateModel.s:$(n)" spec="rbbeast.evolution.sitemodel.FreeRateModel" rates='@FreeRateRates.s:$(n)' weights='@FreeRateWeights.s:$(n)'
             incremental="true">
             <parameter id="mutationRate.s:$(n)" spec="parameter.RealParameter" estimate="false" name="mutationRate">1.0</parameter>
             <parameter id="proportionInvariant.s:$(n)" spec="parameter.RealParameter" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
@@ -32,7 +32,7 @@
 	        <parameter idref="FreeRateRates.s:$(n)"/>
     	</operator>
 
-        <log id="FreeRateLogger.s:$(n)" spec="freerate.evolution.util.FreeRateLogger" model="@FreeRateModel.s:$(n)"/>
+        <log id="FreeRateLogger.s:$(n)" spec="rbbeast.evolution.util.FreeRateLogger" model="@FreeRateModel.s:$(n)" maxCategoryCount="10"/>
 
             ]]>
 
