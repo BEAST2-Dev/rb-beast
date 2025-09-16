@@ -4,6 +4,8 @@ Package for [BEAST 2](http://beast2.org).
 
 This package contains the reversible jump based substitution model (but bModelTest is recommended instead) and the AutoPartition model described in
 
+NB: for the Free rate model, use the [FreeRateModel](https://github.com/BEAST2-Dev/FreeRateModel) package.
+
 Evolutionary rates and HBV: issues of rate estimation with Bayesian molecular methods
 R Bouckaert, MV Alvarado-Mora, JRR Pinho
 Antiviral therapy 18 (3_part_2), 497-504

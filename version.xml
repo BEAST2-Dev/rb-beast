@@ -1,4 +1,4 @@
-<package name='RBS' version='1.5.1'>
+<package name='RBS' version='1.5.2'>
          <depends on='BEAST.base' atleast='2.7.0'/>
          <depends on='BEAST.app' atleast='2.7.0'/>
 
@@ -9,36 +9,26 @@
         <provider classname="rbbeast.evolution.likelihood.PartitionProvider"/>
         <provider classname="rbbeast.evolution.likelihood.PartitionProviderByCodon"/>
 
-        <provider classname="rbbeast.evolution.operators.FreeRateOperator"/>
         <provider classname="rbbeast.evolution.operators.RBOperator"/>
         <provider classname="rbbeast.evolution.operators.RBScaleOperator"/>
 
         <provider classname="rbbeast.evolution.sitemodel.DefaultMixtureSiteModel"/>
-        <provider classname="rbbeast.evolution.sitemodel.FreeRateModel"/>
         <provider classname="rbbeast.evolution.sitemodel.MixtureSiteModel"/>
         <provider classname="rbbeast.evolution.sitemodel.MixtureSubstModel"/>
 
         <provider classname="rbbeast.evolution.substitutionmodel.RB"/>
         <provider classname="rbbeast.evolution.substitutionmodel.VS"/>
 
-        <provider classname="rbbeast.evolution.util.FreeRateLogger"/>
         <provider classname="rbbeast.evolution.util.ContinuousGammaSimulatedAlignment"/>
         
 
         <provider classname="rbbeast.math.distributions.RBPrior"/>
-        <provider classname="rbbeast.math.distributions.FreeRatePrior"/>
 
         <provider classname="rbbeast.evolution.likelihood.VariableCategoryTreeLikelihood"/>
         <provider classname="rbbeast.evolution.util.GetDimension"/>
-        <provider classname="rbbeast.evolution.operators.FreeRateDimensionMover"/>
         <provider classname="rbbeast.evolution.sitemodel.VariableCategoryGammaSiteModel"/>
         <provider classname="rbbeast.evolution.sitemodel.SkewedGammaSiteModel"/>
 
-    </service>
-
-
-	<service type="beastfx.app.inputeditor.InputEditor">
-		<provider classname="rbbeast.beauti.FreeRateModelInputEditor"/>
     </service>
 
 
